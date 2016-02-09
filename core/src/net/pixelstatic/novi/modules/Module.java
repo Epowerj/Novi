@@ -6,6 +6,7 @@ public abstract class Module {
 	Novi novi;
 
 	public abstract void Update();
+	public void Init(){}
 
 	public Module(Novi n) {
 		this.novi = n;

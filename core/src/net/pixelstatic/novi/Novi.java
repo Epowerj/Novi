@@ -7,22 +7,23 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+import net.pixelstatic.novi.entities.Player;
 import net.pixelstatic.novi.modules.Input;
 import net.pixelstatic.novi.modules.Module;
 import net.pixelstatic.novi.modules.Renderer;
 
 public class Novi extends ApplicationAdapter {
-	HashMap<String, Module> modules = new HashMap<String, Module>();
-	SpriteBatch batch;
+	public HashMap<String, Module> modules = new HashMap<String, Module>();
+	public SpriteBatch batch;
+	public Player player;
 
 	@Override
 	public void create() {
 		batch = new SpriteBatch();
-
 		CreateModule(Renderer.class);
 		CreateModule(Input.class);
-
 		Gdx.input.setInputProcessor(GetModule(Input.class));
+		for(Module m : modules.values()) m.Init(); //initialize modules
 	}
 
 	@Override
@@ -30,7 +31,7 @@ public class Novi extends ApplicationAdapter {
 		Gdx.gl.glClearColor(0, 0, 1, 0);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		batch.begin();
-
+		//update all modules
 		for (Module m : modules.values()) {
 			m.Update();
 		}
