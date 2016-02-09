@@ -24,10 +24,10 @@ public class Input extends Module implements InputProcessor{
 		if(Gdx.input.isKeyPressed(Keys.ESCAPE)) Gdx.app.exit();
 		float angle = -9;
 		
-		if(Gdx.input.isKeyPressed(Keys.W)) angle = 90;
+		if(Gdx.input.isKeyPressed(Keys.W) || Gdx.input.isKeyPressed(Keys.COMMA)) angle = 90;
 		if(Gdx.input.isKeyPressed(Keys.A)) angle = 180;
-		if(Gdx.input.isKeyPressed(Keys.S)) angle = 270;
-		if(Gdx.input.isKeyPressed(Keys.D)) angle = 0;
+		if(Gdx.input.isKeyPressed(Keys.S) || Gdx.input.isKeyPressed(Keys.O)) angle = 270;
+		if(Gdx.input.isKeyPressed(Keys.D) || Gdx.input.isKeyPressed(Keys.E)) angle = 0;
 		if(angle > -1)player.move(angle);
 		
 		/*
