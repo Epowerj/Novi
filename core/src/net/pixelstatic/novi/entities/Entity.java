@@ -5,6 +5,7 @@ import java.util.HashMap;
 public abstract class Entity{
     static long lastid;
     static HashMap<Long, Entity> entities = new HashMap<Long, Entity>();
+    
     private long id;
     float x,y;
     

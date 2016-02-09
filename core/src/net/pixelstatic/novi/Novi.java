@@ -2,29 +2,26 @@ package net.pixelstatic.novi;
 
 import java.util.HashMap;
 
-import net.pixelstatic.novi.modules.Input;
-import net.pixelstatic.novi.modules.Module;
-import net.pixelstatic.novi.modules.Renderer;
-
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+
+import net.pixelstatic.novi.modules.Input;
+import net.pixelstatic.novi.modules.Module;
+import net.pixelstatic.novi.modules.Renderer;
 
 public class Novi extends ApplicationAdapter {
 	HashMap<String, Module> modules = new HashMap<String, Module>();
 	SpriteBatch batch;
 
-	public void CreateModules() {
-		CreateModule(Renderer.class);
-		CreateModule(Input.class);
-	}
-
 	@Override
 	public void create() {
 		batch = new SpriteBatch();
-		CreateModules();
+
+		CreateModule(Renderer.class);
+		CreateModule(Input.class);
+
 		Gdx.input.setInputProcessor(GetModule(Input.class));
 	}
 
@@ -49,9 +46,9 @@ public class Novi extends ApplicationAdapter {
 		return modules.get(name);
 	}
 
-	public void CreateModule(Class<? extends Module> c) {
+	public void CreateModule(Class<? extends Module> module) {
 		try {
-			modules.put(c.getSimpleName().toLowerCase(), c.getConstructor(this.getClass()).newInstance(this));
+			modules.put(module.getSimpleName().toLowerCase(), module.getConstructor(this.getClass()).newInstance(this));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
