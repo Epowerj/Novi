@@ -17,11 +17,13 @@ public class Player extends FlyingEntity{
 	@Override
 	public void Update(){
 		UpdateVelocity();
+		velocity.limit(maxvelocity);
 		if(reload > 0) reload -= delta();
 	}
 	
 	public void move(float angle){
-		MoveToward(velocity.angle(), angle);
+		velocity.add(new Vector2(1f,1f).setAngle(angle).setLength(speed));
+		//MoveToward(velocity.angle(), angle);
 	}
 
 	public void accelerate(){
@@ -71,8 +73,16 @@ public class Player extends FlyingEntity{
 	float BackwardDistance(float angle1, float angle2){
 		return 360 - ForwardDistance(angle1, angle2);
 	}
+	
+	float angleDist(float a, float b){
+		return Math.min(ForwardDistance(a,b), BackwardDistance(a,b));
+	}
 
 	void MoveToward(float angle, float to){
+		if(Math.abs(angleDist(angle, to)) < turnspeed){
+			velocity.setAngle(to);
+			return;
+		}
 		if(angle > to){
 			if(BackwardDistance(angle, to) > ForwardDistance(angle, to)){
 				turn( -1);

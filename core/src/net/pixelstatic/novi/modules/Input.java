@@ -24,10 +24,15 @@ public class Input extends Module implements InputProcessor{
 		if(Gdx.input.isKeyPressed(Keys.ESCAPE)) Gdx.app.exit();
 		float angle = -9;
 		
-		if(Gdx.input.isKeyPressed(Keys.W) || Gdx.input.isKeyPressed(Keys.COMMA)) angle = 90;
-		if(Gdx.input.isKeyPressed(Keys.A)) angle = 180;
-		if(Gdx.input.isKeyPressed(Keys.S) || Gdx.input.isKeyPressed(Keys.O)) angle = 270;
-		if(Gdx.input.isKeyPressed(Keys.D) || Gdx.input.isKeyPressed(Keys.E)) angle = 0;
+		if(up()) angle = 90;
+		if(left()) angle = 180;
+		if(down()) angle = 270;
+		if(right()) angle = 0;
+		if(up() && right()) angle = 45;
+		if(up() && left()) angle = 135;
+		if(down() && right()) angle = 315;
+		if(down() && left()) angle = 225;
+		
 		if(angle > -1)player.move(angle);
 		
 		/*
@@ -40,6 +45,22 @@ public class Input extends Module implements InputProcessor{
 		if(Gdx.input.isButtonPressed(Buttons.LEFT) && player.reload <= 0){
 			player.shoot();
 		}
+	}
+	
+	boolean left(){
+		return Gdx.input.isKeyPressed(Keys.A);
+	}
+	
+	boolean right(){
+		return Gdx.input.isKeyPressed(Keys.D) || Gdx.input.isKeyPressed(Keys.E);
+	}
+	
+	boolean up(){
+		return Gdx.input.isKeyPressed(Keys.W) || Gdx.input.isKeyPressed(Keys.COMMA);
+	}
+	
+	boolean down(){
+		return Gdx.input.isKeyPressed(Keys.S) || Gdx.input.isKeyPressed(Keys.O);
 	}
 
 	@Override
