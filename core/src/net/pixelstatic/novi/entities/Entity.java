@@ -2,9 +2,12 @@ package net.pixelstatic.novi.entities;
 
 import java.util.HashMap;
 
+import net.pixelstatic.novi.modules.Renderer;
+
 public abstract class Entity{
     static long lastid;
     public static HashMap<Long, Entity> entities = new HashMap<Long, Entity>();
+    public static Renderer renderer; // renderer reference for drawing things
     private long id;
     public float x,y;
     

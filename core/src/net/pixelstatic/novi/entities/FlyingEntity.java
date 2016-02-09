@@ -9,6 +9,8 @@ public abstract class FlyingEntity extends Entity{
 	
 	//updates velocity and position
 	void UpdateVelocity(){
-		
+		x += velocity.x;
+		y += velocity.y;
+		velocity.scl(1f - drag);
 	}
 }
