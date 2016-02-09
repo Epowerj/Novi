@@ -11,7 +11,6 @@ import net.pixelstatic.novi.modules.*;
 public class Novi extends ApplicationAdapter {
 	public HashMap<String, Module> modules = new HashMap<String, Module>();
 	
-
 	@Override
 	public void create() {
 		createModule(Renderer.class);
