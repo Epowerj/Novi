@@ -3,12 +3,12 @@ package net.pixelstatic.novi.entities;
 public class Bullet extends FlyingEntity{
 
 	@Override
-	void Update(){
+	public void Update(){
 		UpdateVelocity();
 	}
 
 	@Override
-	void Draw(){
+	public void Draw(){
 		
 	}
 

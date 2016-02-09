@@ -5,18 +5,25 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Input.Keys;
 
 import net.pixelstatic.novi.Novi;
+import net.pixelstatic.novi.entities.Player;
 
 public class Input extends Module implements InputProcessor {
+	Player player; //player object from ClientData module
+	
 	public Input(Novi n) {
 		super(n);
+	}
+	
+	public void Init(){
+		player = GetModule(ClientData.class).player;
 	}
 
 	@Override
 	public void Update() {
-		if(Gdx.input.isKeyPressed(Keys.W)) novi.player.accelerate();
-		if(Gdx.input.isKeyPressed(Keys.A)) novi.player.turn(1f);
-		if(Gdx.input.isKeyPressed(Keys.S)) novi.player.deccelerate();
-		if(Gdx.input.isKeyPressed(Keys.D)) novi.player.turn(-1f);
+		if(Gdx.input.isKeyPressed(Keys.W)) player.accelerate();
+		if(Gdx.input.isKeyPressed(Keys.A)) player.turn(1f);
+		if(Gdx.input.isKeyPressed(Keys.S)) player.deccelerate();
+		if(Gdx.input.isKeyPressed(Keys.D)) player.turn(-1f);
 	}
 
 	@Override

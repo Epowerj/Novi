@@ -4,12 +4,12 @@ import java.util.HashMap;
 
 public abstract class Entity{
     static long lastid;
-    static HashMap<Long, Entity> entities = new HashMap<Long, Entity>();
+    public static HashMap<Long, Entity> entities = new HashMap<Long, Entity>();
     private long id;
     public float x,y;
     
-    abstract void Update();
-    abstract void Draw();
+    abstract public void Update();
+    abstract public void Draw();
     
     public void AddSelf(){
     	entities.put(id, this);

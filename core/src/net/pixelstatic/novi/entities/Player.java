@@ -3,7 +3,7 @@ package net.pixelstatic.novi.entities;
 public class Player extends FlyingEntity{
 	
 	@Override
-	void Update(){
+	public void Update(){
 		UpdateVelocity();
 	}
 	
@@ -20,7 +20,7 @@ public class Player extends FlyingEntity{
 	}
 
 	@Override
-	void Draw(){
+	public void Draw(){
 		
 	}
 
