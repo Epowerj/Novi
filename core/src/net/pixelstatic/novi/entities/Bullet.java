@@ -1,5 +1,6 @@
 package net.pixelstatic.novi.entities;
 
+
 public class Bullet extends FlyingEntity{
 
 	@Override
@@ -9,7 +10,7 @@ public class Bullet extends FlyingEntity{
 
 	@Override
 	public void Draw(){
-		
+		renderer.layer("bullet", x, y);
 	}
 
 }

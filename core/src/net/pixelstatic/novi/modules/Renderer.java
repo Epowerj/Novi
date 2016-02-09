@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 
 import net.pixelstatic.novi.Novi;
+import net.pixelstatic.novi.entities.Entity;
 import net.pixelstatic.novi.entities.Player;
 import net.pixelstatic.novi.sprites.Layer;
 import net.pixelstatic.novi.sprites.LayerList;
@@ -28,6 +29,7 @@ public class Renderer extends Module {
 		batch = new SpriteBatch();
 		atlas = new NoviAtlas(Gdx.files.internal("sprites/Novi.pack"));
 		layers = new LayerList();
+		Entity.renderer = this;
 	}
 	
 	public void Init(){
@@ -37,13 +39,14 @@ public class Renderer extends Module {
 	
 	@Override
 	public void Update() {
-		updateCamera();
+		
 		batch.setProjectionMatrix(camera.combined); //make the batch use the camera projection
+		drawWorld();
 		clearScreen();
 		batch.begin();
-		drawWorld();
 		drawLayers();
 		batch.end();
+		updateCamera();
 	}
 	
 	void clearScreen(){
@@ -71,7 +74,7 @@ public class Renderer extends Module {
 	}
 	
 	public void onResize(int width, int height) {
-		camera.setToOrtho(true, width / scale, height/ scale); //resize camera
+		camera.setToOrtho(false, width / scale, height/ scale); //resize camera
 	}
 	
 	
