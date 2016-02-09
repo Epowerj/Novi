@@ -5,7 +5,6 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.MathUtils;
 
 import net.pixelstatic.novi.Novi;
 import net.pixelstatic.novi.entities.Entity;
@@ -38,7 +37,7 @@ public class Renderer extends Module {
 	
 	@Override
 	public void Update() {
-		
+		updateCamera();
 		batch.setProjectionMatrix(camera.combined); //make the batch use the camera projection
 		drawWorld();
 		clearScreen();
@@ -81,9 +80,18 @@ public class Renderer extends Module {
 		return layers.addLayer().set(region, x, y);
 	}
 	
+	public void zoom(float amount){
+		if(camera.zoom + amount < 0) return;
+		camera.zoom += amount;
+	}
+	
 	//utility/shortcut draw method
 	public void draw(String region, float x, float y){
 		batch.draw(atlas.findRegion(region), x - atlas.RegionWidth(region) / 2, y - atlas.RegionHeight(region) / 2);
+	}
+	
+	public void draw(String region, float x, float y, float rotation){
+		batch.draw(atlas.findRegion(region), x - atlas.RegionWidth(region) / 2, y - atlas.RegionHeight(region) / 2, atlas.RegionWidth(region) / 2, atlas.RegionHeight(region) / 2, atlas.RegionWidth(region), atlas.RegionHeight(region), 1f, 1f, rotation);
 	}
 
 }
