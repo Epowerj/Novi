@@ -1,6 +1,8 @@
 package net.pixelstatic.novi.modules;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.Input.Keys;
 
 import net.pixelstatic.novi.Novi;
 
@@ -11,7 +13,10 @@ public class Input extends Module implements InputProcessor {
 
 	@Override
 	public void Update() {
-
+		if(Gdx.input.isKeyPressed(Keys.W)) novi.player.accelerate();
+		if(Gdx.input.isKeyPressed(Keys.A)) novi.player.turn(1f);
+		if(Gdx.input.isKeyPressed(Keys.S)) novi.player.deccelerate();
+		if(Gdx.input.isKeyPressed(Keys.D)) novi.player.turn(-1f);
 	}
 
 	@Override

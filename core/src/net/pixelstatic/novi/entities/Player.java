@@ -6,6 +6,18 @@ public class Player extends FlyingEntity{
 	void Update(){
 		UpdateVelocity();
 	}
+	
+	public void accelerate(){
+		
+	}
+	
+	public void deccelerate(){
+		
+	}
+	
+	public void turn(float amount){
+		
+	}
 
 	@Override
 	void Draw(){

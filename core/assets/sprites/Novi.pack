@@ -1,0 +1,36 @@
+
+Novi.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+tiles/tile
+  rotate: false
+  xy: 1, 1
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+
+Novi2.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+ships/ship
+  rotate: false
+  xy: 1, 1
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+
+Novi3.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+projectiles/bullet
+  rotate: false
+  xy: 1, 1
+  size: 5, 7
+  orig: 5, 7
+  offset: 0, 0
+  index: -1

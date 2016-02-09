@@ -19,6 +19,7 @@ public class Novi extends ApplicationAdapter {
 
 	@Override
 	public void create() {
+		player = new Player();
 		batch = new SpriteBatch();
 		createModule(Renderer.class);
 		createModule(Input.class);
@@ -44,6 +45,10 @@ public class Novi extends ApplicationAdapter {
 	public void resize(int width, int height) {
 		if(batch != null)
 			getModule(Renderer.class).onResize(width, height); //pass on to Renderer
+	}
+	
+	public static void log(Object o){
+		System.out.println(o);
 	}
 
 	public <T extends Module> T getModule(Class<T> c) {

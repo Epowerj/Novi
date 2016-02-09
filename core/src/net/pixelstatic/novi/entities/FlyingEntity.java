@@ -7,6 +7,7 @@ public abstract class FlyingEntity extends Entity{
 	float drag = 0.08f;
 	Vector2 velocity = new Vector2();
 	
+	//updates velocity and position
 	void UpdateVelocity(){
 		
 	}
