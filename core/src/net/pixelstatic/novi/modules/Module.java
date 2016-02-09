@@ -6,6 +6,7 @@ public abstract class Module {
 	Novi novi;
 
 	public abstract void Update();
+	
 	public void Init(){}
 
 	public Module(Novi n) {
@@ -13,10 +14,10 @@ public abstract class Module {
 	}
 
 	public <T extends Module> T GetModule(Class<T> c) {
-		return novi.GetModule(c);
+		return novi.getModule(c);
 	}
 
 	public Module GetModule(String name) {
-		return novi.GetModule(name);
+		return novi.getModule(name);
 	}
 }

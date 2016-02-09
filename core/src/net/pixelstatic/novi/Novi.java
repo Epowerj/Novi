@@ -20,9 +20,9 @@ public class Novi extends ApplicationAdapter {
 	@Override
 	public void create() {
 		batch = new SpriteBatch();
-		CreateModule(Renderer.class);
-		CreateModule(Input.class);
-		Gdx.input.setInputProcessor(GetModule(Input.class));
+		createModule(Renderer.class);
+		createModule(Input.class);
+		Gdx.input.setInputProcessor(getModule(Input.class));
 		for(Module m : modules.values()) m.Init(); //initialize modules
 	}
 
@@ -31,6 +31,7 @@ public class Novi extends ApplicationAdapter {
 		Gdx.gl.glClearColor(0, 0, 1, 0);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		batch.begin();
+		
 		//update all modules
 		for (Module m : modules.values()) {
 			m.Update();
@@ -38,16 +39,22 @@ public class Novi extends ApplicationAdapter {
 
 		batch.end();
 	}
-
-	public <T extends Module> T GetModule(Class<T> c) {
-		return c.cast(modules.get(c.getClass().getSimpleName().toLowerCase()));
+	
+	@Override
+	public void resize(int width, int height) {
+		if(batch != null)
+			getModule(Renderer.class).onResize(width, height); //pass on to Renderer
 	}
 
-	public Module GetModule(String name) {
+	public <T extends Module> T getModule(Class<T> c) {
+		return c.cast(modules.get(c.getSimpleName().toLowerCase()));
+	}
+
+	public Module getModule(String name) {
 		return modules.get(name);
 	}
 
-	public void CreateModule(Class<? extends Module> module) {
+	public void createModule(Class<? extends Module> module) {
 		try {
 			modules.put(module.getSimpleName().toLowerCase(), module.getConstructor(this.getClass()).newInstance(this));
 		} catch (Exception e) {

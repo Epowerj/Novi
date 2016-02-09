@@ -12,9 +12,9 @@ public class Renderer extends Module {
 	BitmapFont font; //a font for displaying text
 	OrthographicCamera camera; //a camera, seems self explanatory
 	
-	public Renderer(Novi n) {
-		super(n);
-		batch = n.batch;
+	public Renderer(Novi novi) {
+		super(novi);
+		batch = novi.batch;
 	}
 	
 	public void Init(){
@@ -24,6 +24,10 @@ public class Renderer extends Module {
 	@Override
 	public void Update() {
 		
+	}
+	
+	public void onResize(int width, int height) {
+		//TODO
 	}
 
 }
