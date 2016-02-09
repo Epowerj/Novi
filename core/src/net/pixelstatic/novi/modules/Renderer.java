@@ -54,7 +54,7 @@ public class Renderer extends Module {
 	}
 	
 	void drawWorld(){
-		layer("ship", player.x, player.y);
+		layer("tile", 0, 0);
 	}
 	
 	//sorts layer list, draws all layers and clears it
