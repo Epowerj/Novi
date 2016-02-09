@@ -2,6 +2,8 @@ package net.pixelstatic.novi.entities;
 
 import java.util.HashMap;
 
+import com.badlogic.gdx.Gdx;
+
 import net.pixelstatic.novi.modules.Renderer;
 
 public abstract class Entity{
@@ -24,6 +26,10 @@ public abstract class Entity{
     
     public long GetID(){
     	return id;
+    }
+    
+    public float delta(){
+    	return Gdx.graphics.getDeltaTime() * 60f;
     }
     
     public Entity(){

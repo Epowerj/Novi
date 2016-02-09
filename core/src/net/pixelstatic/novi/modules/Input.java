@@ -1,6 +1,7 @@
 package net.pixelstatic.novi.modules;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Input.Keys;
 
@@ -21,10 +22,24 @@ public class Input extends Module implements InputProcessor{
 	@Override
 	public void Update(){
 		if(Gdx.input.isKeyPressed(Keys.ESCAPE)) Gdx.app.exit();
+		float angle = -9;
+		
+		if(Gdx.input.isKeyPressed(Keys.W)) angle = 90;
+		if(Gdx.input.isKeyPressed(Keys.A)) angle = 180;
+		if(Gdx.input.isKeyPressed(Keys.S)) angle = 270;
+		if(Gdx.input.isKeyPressed(Keys.D)) angle = 0;
+		if(angle > -1)player.move(angle);
+		
+		/*
+		if(Gdx.input.isKeyPressed(Keys.ESCAPE)) Gdx.app.exit();
 		if(Gdx.input.isKeyPressed(Keys.W)) player.accelerate();
-		if(Gdx.input.isKeyPressed(Keys.A)) player.turn(1f);
+		if(Gdx.input.isKeyPressed(Keys.A)) player.moveLeft();
 		if(Gdx.input.isKeyPressed(Keys.S)) player.deccelerate();
-		if(Gdx.input.isKeyPressed(Keys.D)) player.turn( -1f);
+		if(Gdx.input.isKeyPressed(Keys.D)) player.moveRight();
+		*/
+		if(Gdx.input.isButtonPressed(Buttons.LEFT) && player.reload <= 0){
+			player.shoot();
+		}
 	}
 
 	@Override
@@ -47,7 +62,6 @@ public class Input extends Module implements InputProcessor{
 
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button){
-		player.shoot();
 		return true;
 	}
 
