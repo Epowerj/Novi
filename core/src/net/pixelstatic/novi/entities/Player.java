@@ -1,10 +1,10 @@
 package net.pixelstatic.novi.entities;
 
-public class Player extends Entity{
-
+public class Player extends FlyingEntity{
+	
 	@Override
 	void Update(){
-		
+		UpdateVelocity();
 	}
 
 	@Override
