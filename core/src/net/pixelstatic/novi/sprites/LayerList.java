@@ -1,36 +1,45 @@
 package net.pixelstatic.novi.sprites;
 
+import java.util.Arrays;
+import java.util.Comparator;
 
+import net.pixelstatic.novi.Novi;
+
+//class for storing and sorting layers
 public class LayerList{
+	private Layer[] layerpool;
 	public Layer[] layers;
-	static int maxsize = 6600;
-	public int count, lastcount;
+	static int maxsize = 2600;
+	public int count, lastcount, poolcount;
 	boolean outofbounds;
-	//this class is one big TODO
-	/*
+
 	public LayerList(){
 		layers = new Layer[maxsize];
+		layerpool = new Layer[maxsize];
+		for(int i = 0;i < maxsize;i ++){
+			layerpool[i] = new Layer();
+		}
 	}
 
-	public LayerList(int size){
-		layers = new Layer[size];
-		maxsize = size;
+	public Layer addLayer(){
+		if(poolcount >= maxsize - 1){
+			Novi.log("--CRITICAL:-- Layer pool index out of bounds!");
+			return null;
+		}
+		Layer layer = layerpool[poolcount ++];
+		layer.clear();
+		add(layer);
+		return layer;
 	}
 
-	public void add(Layer l){
+	private void add(Layer l){
 		if(l == null || count >= maxsize - 1){
-			if( !outofbounds) Home.log("--WARNING:-- Layer index out of bounds!");
+			if( !outofbounds) Novi.log("--WARNING:-- Layer index out of bounds!");
 			outofbounds = true;
 			return;
 		}
 		layers[count] = l;
 		count ++;
-	}
-
-	public synchronized void add(ArrayList<Layer> layers){
-		for(Layer l : layers){
-			add(l);
-		}
 	}
 
 	public synchronized void sort(){
@@ -58,6 +67,6 @@ public class LayerList{
 		lastcount = count;
 		count = 0;
 		outofbounds = false;
+		poolcount = 0;
 	}
-	*/
 }
