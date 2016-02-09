@@ -30,8 +30,9 @@ public class Renderer extends Module {
 		layers = new LayerList();
 	}
 	
-	void drawWorld(){
-		layer("ship", player.x, player.y);
+	public void Init(){
+		camera = new OrthographicCamera(Gdx.graphics.getWidth() / scale, Gdx.graphics.getHeight()/ scale);
+		player = GetModule(ClientData.class).player;
 	}
 	
 	@Override
@@ -45,6 +46,15 @@ public class Renderer extends Module {
 		batch.end();
 	}
 	
+	void clearScreen(){
+		Gdx.gl.glClearColor(0, 0, 1, 0);
+		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+	}
+	
+	void drawWorld(){
+		layer("ship", player.x, player.y);
+	}
+	
 	//sorts layer list, draws all layers and clears it
 	void drawLayers(){
 		layers.sort();
@@ -53,11 +63,6 @@ public class Renderer extends Module {
 			layer.Draw(this);
 		}
 		layers.clear();
-	}
-	
-	public void Init(){
-		camera = new OrthographicCamera(Gdx.graphics.getWidth() / scale, Gdx.graphics.getHeight()/ scale);
-		player = GetModule(ClientData.class).player;
 	}
 	
 	void updateCamera(){
@@ -69,10 +74,6 @@ public class Renderer extends Module {
 		camera.setToOrtho(true, width / scale, height/ scale); //resize camera
 	}
 	
-	void clearScreen(){
-		Gdx.gl.glClearColor(0, 0, 1, 0);
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-	}
 	
 	public Layer layer(String region, float x, float y){
 		return layers.addLayer().set(region, x, y);
