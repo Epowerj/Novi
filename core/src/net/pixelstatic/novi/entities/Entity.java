@@ -12,18 +12,18 @@ public abstract class Entity{
     abstract void Draw();
     
     public void AddSelf(){
-	entities.put(id, this);
+    	entities.put(id, this);
     }
     
     public void RemoveSelf(){
-	entities.remove(this.id);
+    	entities.remove(this.id);
     }
     
     public long GetID(){
-	return id;
+    	return id;
     }
     
     public Entity(){
-	id = lastid++;
+    	id = lastid++;
     }
 }

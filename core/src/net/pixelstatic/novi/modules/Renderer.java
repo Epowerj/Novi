@@ -2,15 +2,15 @@ package net.pixelstatic.novi.modules;
 
 import net.pixelstatic.novi.Novi;
 
-public class Renderer extends Module{
+public class Renderer extends Module {
 
-    public Renderer(Novi n){
-	super(n);
-    }
+	public Renderer(Novi n) {
+		super(n);
+	}
 
-    @Override
-    public void Update(){
-	
-    }
+	@Override
+	public void Update() {
+
+	}
 
 }
