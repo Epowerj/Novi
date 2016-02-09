@@ -71,7 +71,7 @@ public class Input extends Module implements InputProcessor{
 
 	@Override
 	public boolean scrolled(int amount){
-		// TODO Auto-generated method stub
+		GetModule(Renderer.class).zoom(amount / 10f);
 		return false;
 	}
 

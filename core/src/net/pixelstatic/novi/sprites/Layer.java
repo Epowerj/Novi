@@ -3,11 +3,15 @@ package net.pixelstatic.novi.sprites;
 import net.pixelstatic.novi.modules.Renderer;
 
 public class Layer implements Comparable<Layer>{
-	float layer, x, y;
+	float layer, x, y, rotation;
 	String region;
 	
 	public void Draw(Renderer renderer){
-		renderer.draw(region, x, y);
+		if(rotation == 0){
+			renderer.draw(region, x, y);
+		}else{
+			renderer.draw(region, x, y, rotation);
+		}
 	}
 	
 	public Layer(){
@@ -25,6 +29,11 @@ public class Layer implements Comparable<Layer>{
 		return this;
 	}
 	
+	public Layer setRotation(float rotation){
+		this.rotation = rotation;
+		return this;
+	}
+	
 	public Layer set(String region, float x, float y){
 		this.region = region;
 		this.x = x;
@@ -37,6 +46,7 @@ public class Layer implements Comparable<Layer>{
 		layer = 0;
 		x = 0;
 		y = 0;
+		rotation = 0;
 	}
 
 	@Override

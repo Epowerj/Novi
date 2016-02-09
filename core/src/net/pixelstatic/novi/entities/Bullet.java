@@ -2,7 +2,9 @@ package net.pixelstatic.novi.entities;
 
 
 public class Bullet extends FlyingEntity{
-
+	{
+		drag = 0;
+	}
 	@Override
 	public void Update(){
 		UpdateVelocity();
@@ -10,7 +12,7 @@ public class Bullet extends FlyingEntity{
 
 	@Override
 	public void Draw(){
-		renderer.layer("bullet", x, y);
+		renderer.layer("bullet", x, y).setLayer(0.5f).setRotation(velocity.angle() - 90);
 	}
 
 }
