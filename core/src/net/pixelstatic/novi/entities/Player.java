@@ -5,12 +5,14 @@ import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.math.Vector2;
 
 public class Player extends FlyingEntity{
+	//TODO should be constant or private
 	public boolean shooting, valigned = true; //used for aligning the rotation after you shoot and let go of the mouse
 	public float speed = 0.2f;
-	public float turnspeed = 4f;
+	public float turnspeed = 10f;
 	public float maxvelocity = 4f;
 	public float shootspeed = 5;
 	public float rotation = 0;
+	public float kiteDebuffMultiplier = 180f;
 	public float reload;
 
 	{
@@ -26,7 +28,7 @@ public class Player extends FlyingEntity{
 
 	public float kiteChange(){
 		if( !shooting) return 1f;
-		return 1f - angleDist(rotation, velocity.angle()) / 360f;
+		return 1f - angleDist(rotation, velocity.angle()) / kiteDebuffMultiplier;
 	}
 
 	public void move(float angle){
