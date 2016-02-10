@@ -1,15 +1,18 @@
 package net.pixelstatic.novi.entities;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.math.Vector2;
 
 public class Player extends FlyingEntity{
-	float speed = 0.2f;
-	float turnspeed = 7f;
-	float maxvelocity = 4f;
-	float shootspeed = 5;
+	public boolean shooting, valigned = true; //used for aligning the rotation after you shoot and let go of the mouse
+	public float speed = 0.2f;
+	public float turnspeed = 4f;
+	public float maxvelocity = 4f;
+	public float shootspeed = 5;
+	public float rotation = 0;
 	public float reload;
-	
+
 	{
 		drag = 0.01f;
 	}
@@ -17,19 +20,24 @@ public class Player extends FlyingEntity{
 	@Override
 	public void Update(){
 		UpdateVelocity();
-		velocity.limit(maxvelocity);
+		velocity.limit(maxvelocity * kiteChange());
 		if(reload > 0) reload -= delta();
 	}
-	
+
+	public float kiteChange(){
+		if( !shooting) return 1f;
+		return 1f - angleDist(rotation, velocity.angle()) / 360f;
+	}
+
 	public void move(float angle){
-		velocity.add(new Vector2(1f,1f).setAngle(angle).setLength(speed));
+		velocity.add(new Vector2(1f, 1f).setAngle(angle).setLength(speed));
 		//MoveToward(velocity.angle(), angle);
 	}
 
 	public void accelerate(){
 		//MoveToward(velocity.angle(), 90);
-			if(velocity.isZero()) velocity.y = speed;
-			if(velocity.len() < maxvelocity)velocity.setLength(velocity.len() + speed);
+		if(velocity.isZero()) velocity.y = speed;
+		if(velocity.len() < maxvelocity) velocity.setLength(velocity.len() + speed);
 	}
 
 	public void deccelerate(){
@@ -47,13 +55,14 @@ public class Player extends FlyingEntity{
 	}
 
 	public void turn(float amount){
-		velocity.setAngle(velocity.angle() + amount*turnspeed);
+		velocity.setAngle(velocity.angle() + amount * turnspeed);
 		if(velocity.isZero()) velocity.y = speed;
-		if(velocity.len() < maxvelocity)velocity.setLength(velocity.len() + speed);
+		if(velocity.len() < maxvelocity) velocity.setLength(velocity.len() + speed);
 	}
 
 	public void shoot(){
-		Vector2 v = new Vector2(Gdx.input.getX() - Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() - Gdx.input.getY() - Gdx.graphics.getHeight() / 2);
+		//Vector2 v = new Vector2(Gdx.input.getX() - Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() - Gdx.input.getY() - Gdx.graphics.getHeight() / 2);
+		Vector2 v = new Vector2(1f, 1f).setAngle(rotation);
 		Bullet b = new Bullet();
 		b.x = x;
 		b.y = y;
@@ -73,34 +82,15 @@ public class Player extends FlyingEntity{
 	float BackwardDistance(float angle1, float angle2){
 		return 360 - ForwardDistance(angle1, angle2);
 	}
-	
-	float angleDist(float a, float b){
-		return Math.min(ForwardDistance(a,b), BackwardDistance(a,b));
-	}
 
-	void MoveToward(float angle, float to){
-		if(Math.abs(angleDist(angle, to)) < turnspeed){
-			velocity.setAngle(to);
-			return;
-		}
-		if(angle > to){
-			if(BackwardDistance(angle, to) > ForwardDistance(angle, to)){
-				turn( -1);
-			}else{
-				turn(1);
-			}
-		}else{
-			if(BackwardDistance(angle, to) < ForwardDistance(angle, to)){
-				turn( -1);
-			}else{
-				turn(1);
-			}
-		}
+	float angleDist(float a, float b){
+		return Math.min(ForwardDistance(a, b), BackwardDistance(a, b));
 	}
 
 	@Override
 	public void Draw(){
-		renderer.layer("ship", x, y).setLayer(1).setRotation(velocity.angle() - 90);
+		float rotation = (!shooting && valigned) ? velocity.angle() - 90 : this.rotation - 90;
+		renderer.layer("ship", x, y).setLayer(1).setRotation(rotation);
 	}
 
 }
