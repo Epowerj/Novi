@@ -97,7 +97,7 @@ public class Player extends FlyingEntity implements Syncable{
 
 	@Override
 	public SyncBuffer writeSync(){
-		return new PlayerSyncBuffer(GetID(), x, y, getSpriteRotation(), velocity);
+		return new PlayerSyncBuffer(GetID(), x, y, rotation, velocity);
 	}
 
 	@Override
