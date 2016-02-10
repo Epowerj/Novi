@@ -1,2 +1,3 @@
-# Novi
-Top-down shooter
+# Project Novi
+
+A top-down flying shooter with simple mechanics and colorful graphics.
