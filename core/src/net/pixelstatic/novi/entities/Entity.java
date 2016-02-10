@@ -5,9 +5,10 @@ import java.util.HashMap;
 import net.pixelstatic.novi.modules.Renderer;
 
 import com.badlogic.gdx.Gdx;
+import com.esotericsoftware.kryonet.Server;
 
 public abstract class Entity{
-    static long lastid;
+    static private long lastid;
     public static HashMap<Long, Entity> entities = new HashMap<Long, Entity>();
     public static Renderer renderer; // renderer reference for drawing things
     private long id;
@@ -20,8 +21,13 @@ public abstract class Entity{
     	
     }
     
-    public void AddSelf(){
+    public void SendSelf(Server server){
+    	server.sendToAllTCP(this);
+    }
+    
+    public Entity AddSelf(){
     	entities.put(id, this);
+    	return this;
     }
     
     public void RemoveSelf(){
@@ -32,6 +38,7 @@ public abstract class Entity{
     	RemoveSelf();
     	this.id = newid;
     	AddSelf();
+    	lastid = id+1;
     }
     
     public long GetID(){
