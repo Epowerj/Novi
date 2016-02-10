@@ -2,9 +2,9 @@ package net.pixelstatic.novi.entities;
 
 import java.util.HashMap;
 
-import com.badlogic.gdx.Gdx;
-
 import net.pixelstatic.novi.modules.Renderer;
+
+import com.badlogic.gdx.Gdx;
 
 public abstract class Entity{
     static long lastid;
@@ -16,12 +16,22 @@ public abstract class Entity{
     abstract public void Update();
     abstract public void Draw();
     
+    public void onRecieve(){
+    	
+    }
+    
     public void AddSelf(){
     	entities.put(id, this);
     }
     
     public void RemoveSelf(){
     	entities.remove(this.id);
+    }
+    
+    public void resetID(long newid){
+    	RemoveSelf();
+    	this.id = newid;
+    	AddSelf();
     }
     
     public long GetID(){

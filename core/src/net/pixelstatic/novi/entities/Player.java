@@ -5,7 +5,6 @@ import net.pixelstatic.novi.utils.Angles;
 import com.badlogic.gdx.math.Vector2;
 
 public class Player extends FlyingEntity{
-	//TODO should be constant or private
 	public static final boolean spin = false; //whee!
 	public static final float speed = 0.2f;
 	public static final float turnspeed = 10f;
@@ -26,6 +25,7 @@ public class Player extends FlyingEntity{
 		velocity.limit(maxvelocity * kiteChange());
 		if(reload > 0) reload -= delta();
 		if(rotation > 360f && !spin) rotation -= 360f;
+		if(rotation < 0f && !spin) rotation += 360f;
 		if(shooting){
 			rotation = Angles.MoveToward(rotation, Angles.mouseAngle(), turnspeed);
 		}else{
