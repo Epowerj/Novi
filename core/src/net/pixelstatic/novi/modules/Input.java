@@ -4,11 +4,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.math.Vector2;
 
 import net.pixelstatic.novi.Novi;
 import net.pixelstatic.novi.entities.Player;
-import net.pixelstatic.novi.utils.Angles;
 
 public class Input extends Module implements InputProcessor{
 	Player player; //player object from ClientData module

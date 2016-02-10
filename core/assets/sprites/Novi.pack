@@ -3,6 +3,18 @@ Novi.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
+error/error
+  rotate: false
+  xy: 1, 1
+  size: 8, 8
+  orig: 8, 8
+  offset: 0, 0
+  index: -1
+
+Novi2.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
 tiles/tile
   rotate: false
   xy: 1, 1
@@ -11,7 +23,7 @@ tiles/tile
   offset: 0, 0
   index: -1
 
-Novi2.png
+Novi3.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
@@ -23,7 +35,7 @@ ships/ship
   offset: 0, 0
   index: -1
 
-Novi3.png
+Novi4.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none

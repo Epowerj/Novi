@@ -9,12 +9,12 @@ public class ClientData extends Module{
 	public ClientData(Novi n){
 		super(n);
 		player = new Player();
+		player.client = true;
 		player.AddSelf();
 	}
 
 	@Override
 	public void Update(){
-
+		
 	}
-
 }
