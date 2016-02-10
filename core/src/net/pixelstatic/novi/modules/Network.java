@@ -2,7 +2,7 @@ package net.pixelstatic.novi.modules;
 
 import net.pixelstatic.novi.Novi;
 import net.pixelstatic.novi.entities.Entity;
-import net.pixelstatic.novi.packets.DataPacket;
+import net.pixelstatic.novi.network.packets.DataPacket;
 
 import com.badlogic.gdx.Gdx;
 import com.esotericsoftware.kryonet.Client;
