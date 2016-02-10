@@ -1,5 +1,7 @@
 package net.pixelstatic.novi.network;
 
+import java.util.HashMap;
+
 import net.pixelstatic.novi.entities.*;
 import net.pixelstatic.novi.network.packets.*;
 
@@ -12,11 +14,15 @@ public class Registrator{
 		k.register(DataPacket.class);
 		k.register(PositionPacket.class);
 		k.register(WorldUpdatePacket.class);
+		k.register(EntityRemovePacket.class);
 		k.register(SyncBuffer.class);
+		k.register(PlayerSyncBuffer.class);
 		k.register(Entity.class);
 		k.register(FlyingEntity.class);
 		k.register(Bullet.class);
 		k.register(Player.class);
 		k.register(Vector2.class);
+		k.register(HashMap.class);
+		k.register(Long.class);
 	}
 }

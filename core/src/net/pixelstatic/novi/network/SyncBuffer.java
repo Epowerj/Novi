@@ -9,4 +9,8 @@ public class SyncBuffer{
 		this.x = x;
 		this.y = y;
 	}
+	
+	public SyncBuffer(){
+		
+	}
 }

@@ -21,6 +21,11 @@ public abstract class Entity{
     	
     }
     
+    public void setPosition(float x, float y){
+    	this.x = x;
+    	this.y = y;
+    }
+    
     public void SendSelf(Server server){
     	server.sendToAllTCP(this);
     }
@@ -43,6 +48,18 @@ public abstract class Entity{
     
     public long GetID(){
     	return id;
+    }
+    
+    public static Entity getEntity(long id){
+    	return entities.get(id);
+    }
+    
+    public static boolean entityExists(long id){
+    	return entities.get(id) != null;
+    }
+    
+    public void serverUpdate(){
+    	
     }
     
     public float delta(){

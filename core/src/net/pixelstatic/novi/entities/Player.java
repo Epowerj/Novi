@@ -1,16 +1,20 @@
 package net.pixelstatic.novi.entities;
 
+import net.pixelstatic.novi.network.*;
+import net.pixelstatic.novi.server.NoviServer;
 import net.pixelstatic.novi.utils.Angles;
 
 import com.badlogic.gdx.math.Vector2;
 
-public class Player extends FlyingEntity{
+public class Player extends FlyingEntity implements Syncable{
 	public static final boolean spin = false; //whee!
 	public static final float speed = 0.2f;
 	public static final float turnspeed = 10f;
 	public static final float maxvelocity = 4f;
 	public static final float shootspeed = 5;
 	public static final float kiteDebuffMultiplier = 0.7f;
+	public transient int connectionid;
+	public transient boolean client = false;
 	public boolean shooting, valigned = true; //used for aligning the rotation after you shoot and let go of the mouse
 	public float rotation = 0;
 	public float reload;
@@ -22,6 +26,7 @@ public class Player extends FlyingEntity{
 	@Override
 	public void Update(){
 		UpdateVelocity();
+		if(NoviServer.active) return; //don't want to do stuff like getting the mouse angle on the server, do we?
 		velocity.limit(maxvelocity * kiteChange());
 		if(reload > 0) reload -= delta();
 		if(rotation > 360f && !spin) rotation -= 360f;
@@ -29,8 +34,8 @@ public class Player extends FlyingEntity{
 		if(shooting){
 			rotation = Angles.MoveToward(rotation, Angles.mouseAngle(), turnspeed);
 		}else{
-			if( !valigned) rotation = Angles.MoveToward(rotation, velocity.angle(), turnspeed); 
 			//align player rotation to velocity rotation
+			if( !valigned) rotation = Angles.MoveToward(rotation, velocity.angle(), turnspeed); 
 		}
 	}
 
@@ -80,11 +85,28 @@ public class Player extends FlyingEntity{
 		b.AddSelf();
 		reload = shootspeed;
 	}
+	
+	public float getSpriteRotation(){
+		return ( !shooting && valigned) ? velocity.angle() - 90 : this.rotation - 90;
+	}
 
 	@Override
 	public void Draw(){
-		float rotation = ( !shooting && valigned) ? velocity.angle() - 90 : this.rotation - 90;
-		renderer.layer("ship", x, y).setLayer(1).setRotation(rotation);
+		renderer.layer("ship", x, y).setLayer(1).setRotation(client ? getSpriteRotation() : rotation);
+	}
+
+	@Override
+	public SyncBuffer writeSync(){
+		return new PlayerSyncBuffer(GetID(), x, y, getSpriteRotation(), velocity);
+	}
+
+	@Override
+	public void readSync(SyncBuffer buffer){
+		PlayerSyncBuffer sync = (PlayerSyncBuffer)buffer;
+		x = sync.x;
+		y = sync.y;
+		rotation = sync.rotation;
+		velocity = sync.velocity;
 	}
 
 }

@@ -2,7 +2,7 @@ package net.pixelstatic.novi.modules;
 
 import net.pixelstatic.novi.Novi;
 import net.pixelstatic.novi.entities.Entity;
-import net.pixelstatic.novi.network.Registrator;
+import net.pixelstatic.novi.network.*;
 import net.pixelstatic.novi.network.packets.*;
 
 import com.badlogic.gdx.Gdx;
@@ -15,7 +15,7 @@ public class Network extends Module{
 	Client client;
 
 	public void Init(){
-		if(!connect) return;
+		if( !connect) return;
 		try{
 			client = new Client();
 			Registrator.register(client.getKryo());
@@ -32,17 +32,41 @@ public class Network extends Module{
 		}
 	}
 
+	public void sendUpdate(){
+		PositionPacket pos = new PositionPacket();
+		pos.x = GetModule(ClientData.class).player.x;
+		pos.y = GetModule(ClientData.class).player.y;
+		pos.rotation = GetModule(ClientData.class).player.getSpriteRotation();
+		client.sendTCP(pos);
+	}
+
 	class Listen extends Listener{
 		@Override
 		public void received(Connection connection, Object object){
-			if(object instanceof DataPacket){
-				DataPacket data = (DataPacket)object;
-				GetModule(ClientData.class).player.resetID(data.playerid);;
-				Novi.log("Recieved data packet.");
-			}else if(object instanceof Entity){
-				Entity entity = (Entity)object;
-				entity.onRecieve();
-				entity.AddSelf();
+			try{
+				if(object instanceof DataPacket){
+					DataPacket data = (DataPacket)object;
+					GetModule(ClientData.class).player.resetID(data.playerid);
+					Entity.entities = data.entities;
+					GetModule(ClientData.class).player.AddSelf();
+					Novi.log("Recieved data packet.");
+				}else if(object instanceof Entity){
+					Entity entity = (Entity)object;
+					entity.onRecieve();
+					entity.AddSelf();
+				}else if(object instanceof EntityRemovePacket){
+					EntityRemovePacket remove = (EntityRemovePacket)object;
+					Entity.entities.remove(remove.id);
+				}else if(object instanceof WorldUpdatePacket){
+					WorldUpdatePacket packet = (WorldUpdatePacket)object;
+					for(long key : packet.updates.keySet()){
+						
+						((Syncable)Entity.getEntity(key)).readSync(packet.updates.get(key));;
+					}
+				}
+			}catch(Exception e){
+				e.printStackTrace();
+				Novi.log("Packet recieve error!");
 			}
 		}
 	}
@@ -53,7 +77,7 @@ public class Network extends Module{
 
 	@Override
 	public void Update(){
-
+		sendUpdate();
 	}
 
 }
