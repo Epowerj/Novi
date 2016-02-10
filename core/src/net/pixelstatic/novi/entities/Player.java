@@ -1,18 +1,19 @@
 package net.pixelstatic.novi.entities;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.Buttons;
+import net.pixelstatic.novi.utils.Angles;
+
 import com.badlogic.gdx.math.Vector2;
 
 public class Player extends FlyingEntity{
 	//TODO should be constant or private
+	public static final boolean spin = false; //whee!
+	public static final float speed = 0.2f;
+	public static final float turnspeed = 10f;
+	public static final float maxvelocity = 4f;
+	public static final float shootspeed = 5;
+	public static final float kiteDebuffMultiplier = 0.7f;
 	public boolean shooting, valigned = true; //used for aligning the rotation after you shoot and let go of the mouse
-	public float speed = 0.2f;
-	public float turnspeed = 10f;
-	public float maxvelocity = 4f;
-	public float shootspeed = 5;
 	public float rotation = 0;
-	public float kiteDebuffMultiplier = 180f;
 	public float reload;
 
 	{
@@ -24,11 +25,18 @@ public class Player extends FlyingEntity{
 		UpdateVelocity();
 		velocity.limit(maxvelocity * kiteChange());
 		if(reload > 0) reload -= delta();
+		if(rotation > 360f && !spin) rotation -= 360f;
+		if(shooting){
+			rotation = Angles.MoveToward(rotation, Angles.mouseAngle(), turnspeed);
+		}else{
+			if( !valigned) rotation = Angles.MoveToward(rotation, velocity.angle(), turnspeed); 
+			//align player rotation to velocity rotation
+		}
 	}
 
 	public float kiteChange(){
 		if( !shooting) return 1f;
-		return 1f - angleDist(rotation, velocity.angle()) / kiteDebuffMultiplier;
+		return 1f - Angles.angleDist(rotation, velocity.angle()) / (180f  * 1f/ kiteDebuffMultiplier);
 	}
 
 	public void move(float angle){
@@ -73,25 +81,9 @@ public class Player extends FlyingEntity{
 		reload = shootspeed;
 	}
 
-	float ForwardDistance(float angle1, float angle2){
-		if(angle1 > angle2){
-			return angle1 - angle2;
-		}else{
-			return angle2 - angle1;
-		}
-	}
-
-	float BackwardDistance(float angle1, float angle2){
-		return 360 - ForwardDistance(angle1, angle2);
-	}
-
-	float angleDist(float a, float b){
-		return Math.min(ForwardDistance(a, b), BackwardDistance(a, b));
-	}
-
 	@Override
 	public void Draw(){
-		float rotation = (!shooting && valigned) ? velocity.angle() - 90 : this.rotation - 90;
+		float rotation = ( !shooting && valigned) ? velocity.angle() - 90 : this.rotation - 90;
 		renderer.layer("ship", x, y).setLayer(1).setRotation(rotation);
 	}
 
