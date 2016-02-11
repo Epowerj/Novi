@@ -105,12 +105,9 @@ public class Player extends FlyingEntity implements Syncable{
 	@Override
 	public void readSync(SyncBuffer buffer){
 		PlayerSyncBuffer sync = (PlayerSyncBuffer)buffer;
-	//	x = sync.x;
-		//y = sync.y;
-		//Novi.log(velocity);
-		rotation = sync.rotation;
+		//rotation = sync.rotation;
 		velocity = sync.velocity;
-		data.push(sync.x, sync.y, velocity.x, velocity.y);
+		data.push(this, sync.x, sync.y, sync.rotation);
 	}
 
 }
