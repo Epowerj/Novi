@@ -1,5 +1,6 @@
 package net.pixelstatic.novi.entities;
 
+import net.pixelstatic.novi.items.*;
 import net.pixelstatic.novi.network.*;
 import net.pixelstatic.novi.server.NoviServer;
 import net.pixelstatic.novi.utils.*;
@@ -8,12 +9,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Queue;
 
 public class Player extends FlyingEntity implements Syncable{
-	public static final boolean spin = false; //whee!
-	public static final float speed = 0.2f;
-	public static final float turnspeed = 10f;
-	public static final float maxvelocity = 4f;
-	public static final float shootspeed = 5;
-	public static final float kiteDebuffMultiplier = 0.7f;
 	public transient int connectionid;
 	public transient boolean client = false;
 	public boolean shooting, valigned = true; //used for aligning the rotation after you shoot and let go of the mouse
@@ -21,6 +16,8 @@ public class Player extends FlyingEntity implements Syncable{
 	public float reload;
 	transient InterpolationData data = new InterpolationData();
 	public transient Queue<InputType> inputqueue;
+	
+	private transient Ship ship = new ArrowheadShip();
 
 	{
 		drag = 0.01f;
@@ -31,18 +28,18 @@ public class Player extends FlyingEntity implements Syncable{
 		UpdateVelocity();
 		if(!client)data.update(this);
 		if(NoviServer.active) return; //don't want to do stuff like getting the mouse angle on the server, do we?
-		velocity.limit(maxvelocity * kiteChange());
+		velocity.limit(ship.getMaxvelocity() * kiteChange());
 		if(reload > 0) reload -= delta();
-		if(rotation > 360f && !spin) rotation -= 360f;
-		if(rotation < 0f && !spin) rotation += 360f;
+		if(rotation > 360f && !ship.getSpin()) rotation -= 360f;
+		if(rotation < 0f && !ship.getSpin()) rotation += 360f;
 		if(shooting){
-			rotation = Angles.MoveToward(rotation, Angles.mouseAngle(), turnspeed);
+			rotation = Angles.MoveToward(rotation, Angles.mouseAngle(), ship.getTurnspeed());
 		}else{
 			//align player rotation to velocity rotation
-			if( !valigned) rotation = Angles.MoveToward(rotation, velocity.angle(), turnspeed);
+			if( !valigned) rotation = Angles.MoveToward(rotation, velocity.angle(), ship.getTurnspeed());
 		}
 	}
-	
+
 	@Override
 	public void serverUpdate(){
 		while(inputqueue.size > 0){
@@ -58,7 +55,7 @@ public class Player extends FlyingEntity implements Syncable{
 			b.y = y;
 			b.velocity.set(v.setLength(4f));
 			b.AddSelf().SendSelf();
-			reload = shootspeed;
+			reload = ship.getShootspeed();
 		}
 	}
 	
@@ -68,49 +65,21 @@ public class Player extends FlyingEntity implements Syncable{
 
 	public float kiteChange(){
 		if( !shooting) return 1f;
-		return 1f - Angles.angleDist(rotation, velocity.angle()) / (180f * 1f / kiteDebuffMultiplier);
+		return 1f - Angles.angleDist(rotation, velocity.angle()) / (180f * 1f / ship.getKiteDebuffMultiplier());
 	}
 
 	public void move(float angle){
-		velocity.add(new Vector2(1f, 1f).setAngle(angle).setLength(speed));
-		//MoveToward(velocity.angle(), angle);
+		velocity.add(new Vector2(1f, 1f).setAngle(angle).setLength(ship.getSpeed()));
 	}
-
-	public void accelerate(){
-		//MoveToward(velocity.angle(), 90);
-		if(velocity.isZero()) velocity.y = speed;
-		if(velocity.len() < maxvelocity) velocity.setLength(velocity.len() + speed);
-	}
-
-	public void deccelerate(){
-		velocity.setLength(velocity.len() * 0.95f);
-	}
-
-	public void moveLeft(){
-		//MoveToward(velocity.angle(), 180);
-		velocity.setAngle(velocity.angle() + turnspeed);
-	}
-
-	public void moveRight(){
-		//MoveToward(velocity.angle(), 0);
-		velocity.setAngle(velocity.angle() - turnspeed);
-	}
-
-	public void turn(float amount){
-		velocity.setAngle(velocity.angle() + amount * turnspeed);
-		if(velocity.isZero()) velocity.y = speed;
-		if(velocity.len() < maxvelocity) velocity.setLength(velocity.len() + speed);
-	}
-
+	
 	public void shoot(){
-		//Vector2 v = new Vector2(Gdx.input.getX() - Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() - Gdx.input.getY() - Gdx.graphics.getHeight() / 2);
 		Vector2 v = new Vector2(1f, 1f).setAngle(rotation);
 		Bullet b = new Bullet();
 		b.x = x;
 		b.y = y;
 		b.velocity.set(v.setLength(4f));
 		b.AddSelf();
-		reload = shootspeed;
+		reload = ship.getShootspeed();
 	}
 
 	public float getSpriteRotation(){
@@ -130,7 +99,6 @@ public class Player extends FlyingEntity implements Syncable{
 	@Override
 	public void readSync(SyncBuffer buffer){
 		PlayerSyncBuffer sync = (PlayerSyncBuffer)buffer;
-		//rotation = sync.rotation;
 		velocity = sync.velocity;
 		data.push(this, sync.x, sync.y, sync.rotation);
 	}
