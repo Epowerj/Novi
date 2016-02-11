@@ -40,6 +40,10 @@ public class NoviServer{
 			}
 		}).start();
 	}
+	
+	public float delta(){
+		return updater.delta();
+	}
 
 	class Listen extends Listener{
 		NoviServer novi;
@@ -72,7 +76,7 @@ public class NoviServer{
 					//server.sendToAllExceptTCP(connection.getID(), connect);
 				}else if(object instanceof InputPacket){
 					InputPacket packet = (InputPacket)object;
-					getPlayer(connection.getID()).inputqueue.addLast(packet.input);;
+					getPlayer(connection.getID()).input.inputEvent(packet.input);
 				}else if(object instanceof PositionPacket){
 					PositionPacket position = (PositionPacket)object;
 					getPlayer(connection.getID()).setPosition(position.x, position.y);

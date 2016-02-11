@@ -64,7 +64,7 @@ public abstract class Entity{
     }
     
     public float delta(){
-    	return Gdx.graphics.getDeltaTime() * 60f;
+    	return server == null ? (Gdx.graphics.getDeltaTime() * 60f) : server.delta();
     }
     
     public Entity(){

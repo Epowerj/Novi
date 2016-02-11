@@ -33,19 +33,9 @@ public class Input extends Module implements InputProcessor{
 		if(up() && left()) angle = 135;
 		if(down() && right()) angle = 315;
 		if(down() && left()) angle = 225;
-		
 		if(angle > -1)player.move(angle);
-		
-		/*
-		if(Gdx.input.isKeyPressed(Keys.ESCAPE)) Gdx.app.exit();
-		if(Gdx.input.isKeyPressed(Keys.W)) player.accelerate();
-		if(Gdx.input.isKeyPressed(Keys.A)) player.moveLeft();
-		if(Gdx.input.isKeyPressed(Keys.S)) player.deccelerate();
-		if(Gdx.input.isKeyPressed(Keys.D)) player.moveRight();
-		*/
 		if(Gdx.input.isButtonPressed(Buttons.LEFT)){
 			player.shooting = true;
-			//if(player.reload <= 0)player.shoot();
 		}else{
 			player.shooting = false;
 		}

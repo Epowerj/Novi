@@ -26,6 +26,10 @@ public class NoviUpdater{
 			}
 		}
 	}
+	
+	public float delta(){
+		return 1f / (fps / 60f);
+	}
 
 	public void run(){
 		long lastLoopTime = System.nanoTime();

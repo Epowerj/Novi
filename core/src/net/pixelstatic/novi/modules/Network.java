@@ -9,7 +9,7 @@ import com.badlogic.gdx.Gdx;
 import com.esotericsoftware.kryonet.*;
 
 public class Network extends Module{
-	public static final String ip = "2605:a000:110d:4020:e9b5:e12e:4cd0:7f9e";
+	public static final String ip = "2605:a000:110d:4020:f1f5:e9b2:398c:cd8d";
 	public static final int port = 7576;
 	public boolean connect = true;
 	Client client;
