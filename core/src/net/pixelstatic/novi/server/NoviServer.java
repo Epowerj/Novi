@@ -19,6 +19,7 @@ public class NoviServer{
 
 	void createServer(){
 		createUpdater();
+		Entity.server = this;
 		try{
 			server = new Server();
 			Registrator.register(server.getKryo());
@@ -69,6 +70,9 @@ public class NoviServer{
 					players.put(connection.getID(), player.GetID());
 					Novi.log(connection.getRemoteAddressTCP().getAddress().toString() + " has joined.");
 					//server.sendToAllExceptTCP(connection.getID(), connect);
+				}else if(object instanceof InputPacket){
+					InputPacket packet = (InputPacket)object;
+					getPlayer(connection.getID()).inputqueue.addLast(packet.input);;
 				}else if(object instanceof PositionPacket){
 					PositionPacket position = (PositionPacket)object;
 					getPlayer(connection.getID()).setPosition(position.x, position.y);

@@ -1,12 +1,13 @@
 package net.pixelstatic.novi.modules;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.Buttons;
-import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.Input.Keys;
-
 import net.pixelstatic.novi.Novi;
 import net.pixelstatic.novi.entities.Player;
+import net.pixelstatic.novi.network.packets.InputPacket;
+import net.pixelstatic.novi.utils.InputType;
+
+import com.badlogic.gdx.*;
+import com.badlogic.gdx.Input.Buttons;
+import com.badlogic.gdx.Input.Keys;
 
 public class Input extends Module implements InputProcessor{
 	Player player; //player object from ClientData module
@@ -44,7 +45,7 @@ public class Input extends Module implements InputProcessor{
 		*/
 		if(Gdx.input.isButtonPressed(Buttons.LEFT)){
 			player.shooting = true;
-			if(player.reload <= 0)player.shoot();
+			//if(player.reload <= 0)player.shoot();
 		}else{
 			player.shooting = false;
 		}
@@ -64,6 +65,12 @@ public class Input extends Module implements InputProcessor{
 
 	boolean down(){
 		return Gdx.input.isKeyPressed(Keys.S) || Gdx.input.isKeyPressed(Keys.O);
+	}
+	
+	void SendInput(InputType type){
+		InputPacket input = new InputPacket();
+		input.input = type;
+		GetModule(Network.class).client.sendTCP(input);
 	}
 
 	@Override
@@ -88,11 +95,13 @@ public class Input extends Module implements InputProcessor{
 	public boolean touchDown(int screenX, int screenY, int pointer, int button){
 		player.rotation = player.velocity.angle();
 		player.valigned = false;
+		SendInput(InputType.CLICK_DOWN);
 		return true;
 	}
 
 	@Override
 	public boolean touchUp(int screenX, int screenY, int pointer, int button){
+		SendInput(InputType.CLICK_UP);
 		return false;
 	}
 

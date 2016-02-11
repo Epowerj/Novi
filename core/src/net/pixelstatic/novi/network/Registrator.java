@@ -5,6 +5,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import net.pixelstatic.novi.entities.*;
 import net.pixelstatic.novi.network.packets.*;
+import net.pixelstatic.novi.utils.InputType;
 
 import com.badlogic.gdx.math.Vector2;
 import com.esotericsoftware.kryo.Kryo;
@@ -16,8 +17,10 @@ public class Registrator{
 		k.register(PositionPacket.class);
 		k.register(WorldUpdatePacket.class);
 		k.register(EntityRemovePacket.class);
+		k.register(InputPacket.class);
 		k.register(SyncBuffer.class);
 		k.register(PlayerSyncBuffer.class);
+		k.register(InputType.class);
 		k.register(Entity.class);
 		k.register(FlyingEntity.class);
 		k.register(Bullet.class);

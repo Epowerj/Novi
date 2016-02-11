@@ -3,11 +3,12 @@ package net.pixelstatic.novi.entities;
 import java.util.concurrent.ConcurrentHashMap;
 
 import net.pixelstatic.novi.modules.Renderer;
+import net.pixelstatic.novi.server.NoviServer;
 
 import com.badlogic.gdx.Gdx;
-import com.esotericsoftware.kryonet.Server;
 
 public abstract class Entity{
+	static public NoviServer server;
     static private long lastid;
     public static ConcurrentHashMap<Long, Entity> entities = new ConcurrentHashMap<Long, Entity>();
     public static Renderer renderer; // renderer reference for drawing things
@@ -26,8 +27,8 @@ public abstract class Entity{
     	this.y = y;
     }
     
-    public void SendSelf(Server server){
-    	server.sendToAllTCP(this);
+    public void SendSelf(){
+    	server.server.sendToAllTCP(this);
     }
     
     public Entity AddSelf(){

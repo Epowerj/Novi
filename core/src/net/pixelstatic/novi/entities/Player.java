@@ -5,6 +5,7 @@ import net.pixelstatic.novi.server.NoviServer;
 import net.pixelstatic.novi.utils.*;
 
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Queue;
 
 public class Player extends FlyingEntity implements Syncable{
 	public static final boolean spin = false; //whee!
@@ -19,6 +20,7 @@ public class Player extends FlyingEntity implements Syncable{
 	public float rotation = 0;
 	public float reload;
 	transient InterpolationData data = new InterpolationData();
+	public transient Queue<InputType> inputqueue;
 
 	{
 		drag = 0.01f;
@@ -39,6 +41,29 @@ public class Player extends FlyingEntity implements Syncable{
 			//align player rotation to velocity rotation
 			if( !valigned) rotation = Angles.MoveToward(rotation, velocity.angle(), turnspeed);
 		}
+	}
+	
+	@Override
+	public void serverUpdate(){
+		while(inputqueue.size > 0){
+			serverInput(inputqueue.removeFirst());
+		}
+	}
+	
+	void serverInput(InputType type){
+		if(type.equals(InputType.CLICK_DOWN)){
+			Vector2 v = new Vector2(1f, 1f).setAngle(rotation);
+			Bullet b = new Bullet();
+			b.x = x;
+			b.y = y;
+			b.velocity.set(v.setLength(4f));
+			b.AddSelf().SendSelf();
+			reload = shootspeed;
+		}
+	}
+	
+	public Player(){
+		if(NoviServer.active) inputqueue = new Queue<InputType>(6);
 	}
 
 	public float kiteChange(){
