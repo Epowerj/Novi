@@ -29,7 +29,7 @@ public class NoviUpdater{
 
 	public void run(){
 		long lastLoopTime = System.nanoTime();
-		final int TARGET_FPS = 30;
+		final int TARGET_FPS = 10;
 		final long OPTIMAL_TIME = 1000000000 / TARGET_FPS;
 
 		// keep looping round til the game ends

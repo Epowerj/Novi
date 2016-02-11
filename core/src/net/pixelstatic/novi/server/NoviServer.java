@@ -73,6 +73,7 @@ public class NoviServer{
 					PositionPacket position = (PositionPacket)object;
 					getPlayer(connection.getID()).setPosition(position.x, position.y);
 					getPlayer(connection.getID()).rotation = position.rotation;
+					getPlayer(connection.getID()).velocity = position.velocity;
 				}
 			}catch(Exception e){
 				e.printStackTrace();

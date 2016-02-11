@@ -1,6 +1,7 @@
 package net.pixelstatic.novi.network;
 
 import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 import net.pixelstatic.novi.entities.*;
 import net.pixelstatic.novi.network.packets.*;
@@ -23,6 +24,7 @@ public class Registrator{
 		k.register(Player.class);
 		k.register(Vector2.class);
 		k.register(HashMap.class);
+		k.register(ConcurrentHashMap.class);
 		k.register(Long.class);
 	}
 }

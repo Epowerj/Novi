@@ -1,6 +1,6 @@
 package net.pixelstatic.novi.entities;
 
-import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 import net.pixelstatic.novi.modules.Renderer;
 
@@ -9,7 +9,7 @@ import com.esotericsoftware.kryonet.Server;
 
 public abstract class Entity{
     static private long lastid;
-    public static HashMap<Long, Entity> entities = new HashMap<Long, Entity>();
+    public static ConcurrentHashMap<Long, Entity> entities = new ConcurrentHashMap<Long, Entity>();
     public static Renderer renderer; // renderer reference for drawing things
     private long id;
     public float x,y;

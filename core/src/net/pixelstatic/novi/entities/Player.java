@@ -2,7 +2,7 @@ package net.pixelstatic.novi.entities;
 
 import net.pixelstatic.novi.network.*;
 import net.pixelstatic.novi.server.NoviServer;
-import net.pixelstatic.novi.utils.Angles;
+import net.pixelstatic.novi.utils.*;
 
 import com.badlogic.gdx.math.Vector2;
 
@@ -18,6 +18,7 @@ public class Player extends FlyingEntity implements Syncable{
 	public boolean shooting, valigned = true; //used for aligning the rotation after you shoot and let go of the mouse
 	public float rotation = 0;
 	public float reload;
+	transient InterpolationData data = new InterpolationData();
 
 	{
 		drag = 0.01f;
@@ -26,6 +27,7 @@ public class Player extends FlyingEntity implements Syncable{
 	@Override
 	public void Update(){
 		UpdateVelocity();
+		if(!client)data.update(this);
 		if(NoviServer.active) return; //don't want to do stuff like getting the mouse angle on the server, do we?
 		velocity.limit(maxvelocity * kiteChange());
 		if(reload > 0) reload -= delta();
@@ -35,13 +37,13 @@ public class Player extends FlyingEntity implements Syncable{
 			rotation = Angles.MoveToward(rotation, Angles.mouseAngle(), turnspeed);
 		}else{
 			//align player rotation to velocity rotation
-			if( !valigned) rotation = Angles.MoveToward(rotation, velocity.angle(), turnspeed); 
+			if( !valigned) rotation = Angles.MoveToward(rotation, velocity.angle(), turnspeed);
 		}
 	}
 
 	public float kiteChange(){
 		if( !shooting) return 1f;
-		return 1f - Angles.angleDist(rotation, velocity.angle()) / (180f  * 1f/ kiteDebuffMultiplier);
+		return 1f - Angles.angleDist(rotation, velocity.angle()) / (180f * 1f / kiteDebuffMultiplier);
 	}
 
 	public void move(float angle){
@@ -85,7 +87,7 @@ public class Player extends FlyingEntity implements Syncable{
 		b.AddSelf();
 		reload = shootspeed;
 	}
-	
+
 	public float getSpriteRotation(){
 		return ( !shooting && valigned) ? velocity.angle() - 90 : this.rotation - 90;
 	}
@@ -103,10 +105,12 @@ public class Player extends FlyingEntity implements Syncable{
 	@Override
 	public void readSync(SyncBuffer buffer){
 		PlayerSyncBuffer sync = (PlayerSyncBuffer)buffer;
-		x = sync.x;
-		y = sync.y;
+	//	x = sync.x;
+		//y = sync.y;
+		//Novi.log(velocity);
 		rotation = sync.rotation;
 		velocity = sync.velocity;
+		data.push(sync.x, sync.y, velocity.x, velocity.y);
 	}
 
 }

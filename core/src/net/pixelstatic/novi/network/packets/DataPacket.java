@@ -1,10 +1,10 @@
 package net.pixelstatic.novi.network.packets;
 
-import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 import net.pixelstatic.novi.entities.Entity;
 
 public class DataPacket{
 	public long playerid;
-	public HashMap<Long, Entity> entities;
+	public ConcurrentHashMap<Long, Entity> entities;
 }

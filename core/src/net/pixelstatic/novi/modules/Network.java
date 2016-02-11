@@ -37,6 +37,7 @@ public class Network extends Module{
 		pos.x = GetModule(ClientData.class).player.x;
 		pos.y = GetModule(ClientData.class).player.y;
 		pos.rotation = GetModule(ClientData.class).player.getSpriteRotation();
+		pos.velocity = GetModule(ClientData.class).player.velocity;
 		client.sendTCP(pos);
 	}
 
