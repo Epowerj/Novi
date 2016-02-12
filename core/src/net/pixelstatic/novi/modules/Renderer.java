@@ -51,6 +51,7 @@ public class Renderer extends Module {
 	
 	void drawWorld(){
 		//TODO draw world / background
+		layer("error", 0, 0);
 	}
 	
 	//sorts layer list, draws all layers and clears it
