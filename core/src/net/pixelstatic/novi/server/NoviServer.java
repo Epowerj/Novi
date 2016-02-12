@@ -20,7 +20,7 @@ public class NoviServer{
 	void createServer(){
 		createUpdater();
 		Entity.server = this;
-		new Target().AddSelf();
+		addEntities();
 		try{
 			server = new Server();
 			Registrator.register(server.getKryo());
@@ -117,5 +117,9 @@ public class NoviServer{
 	public static void main(String[] args){
 		active = true;
 		new NoviServer().createServer();
+	}
+	
+	private void addEntities(){
+		new Target().AddSelf();
 	}
 }
