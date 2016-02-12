@@ -1,6 +1,5 @@
 package net.pixelstatic.novi.utils;
 
-import net.pixelstatic.novi.Novi;
 import net.pixelstatic.novi.entities.*;
 
 import com.badlogic.gdx.math.Vector2;
@@ -41,7 +40,6 @@ public class InputHandler{
 	
 	public void update(){
 		if(player.reload > 0)  player.reload -= Entity.server.delta();
-		Novi.log(player.rotation);
 		if(mouseDown() && player.reload <= 0){
 			Vector2 v = new Vector2(1f, 1f).setAngle(player.rotation + 90);
 			Bullet b = new Bullet();

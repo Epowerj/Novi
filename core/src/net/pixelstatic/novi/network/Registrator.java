@@ -28,6 +28,8 @@ public class Registrator{
 		k.register(Entity.class);
 		k.register(FlyingEntity.class);
 		k.register(Bullet.class);
+		k.register(ExplosionEffect.class);
+		k.register(Target.class);
 		k.register(Player.class);
 		k.register(Vector2.class);
 		k.register(HashMap.class);

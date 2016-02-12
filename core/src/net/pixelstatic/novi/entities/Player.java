@@ -19,14 +19,14 @@ public class Player extends FlyingEntity implements Syncable{
 	private transient Ship ship = new ArrowheadShip();
 
 	{
-		drag = 0.01f;
+		material.drag = 0.01f;
 	}
 
 	@Override
 	public void Update(){
-		UpdateVelocity();
 		if(NoviServer.active) return; //don't want to do stuff like getting the mouse angle on the server, do we?
 		if(!client)data.update(this);
+		UpdateVelocity();
 		velocity.limit(ship.getMaxvelocity() * kiteChange());
 		if(reload > 0) reload -= delta();
 		if(rotation > 360f && !ship.getSpin()) rotation -= 360f;
@@ -38,6 +38,12 @@ public class Player extends FlyingEntity implements Syncable{
 			if( !valigned) rotation = Angles.MoveToward(rotation, velocity.angle(), ship.getTurnspeed());
 		}
 	}
+	
+	//don't want to hit other players or other bullets
+	public boolean collides(SolidEntity other){
+		return super.collides(other) && !(other instanceof Player || other instanceof Bullet);
+	}
+	
 	
 	public Ship getShip(){
 		return ship;

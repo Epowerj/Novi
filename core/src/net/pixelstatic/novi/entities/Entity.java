@@ -22,9 +22,10 @@ public abstract class Entity{
     	
     }
     
-    public void setPosition(float x, float y){
+    public Entity setPosition(float x, float y){
     	this.x = x;
     	this.y = y;
+    	return this;
     }
     
     public void SendSelf(){

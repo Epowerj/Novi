@@ -1,17 +1,12 @@
 package net.pixelstatic.novi.modules;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-
 import net.pixelstatic.novi.Novi;
-import net.pixelstatic.novi.entities.Entity;
-import net.pixelstatic.novi.entities.Player;
-import net.pixelstatic.novi.sprites.Layer;
-import net.pixelstatic.novi.sprites.LayerList;
-import net.pixelstatic.novi.sprites.NoviAtlas;
+import net.pixelstatic.novi.entities.*;
+import net.pixelstatic.novi.sprites.*;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.*;
+import com.badlogic.gdx.graphics.g2d.*;
 
 public class Renderer extends Module {
 	SpriteBatch batch; //novi's batch
@@ -54,7 +49,7 @@ public class Renderer extends Module {
 	}
 	
 	void drawWorld(){
-		layer("tile", 0, 0);
+		
 	}
 	
 	//sorts layer list, draws all layers and clears it

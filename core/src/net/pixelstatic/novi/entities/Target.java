@@ -1,6 +1,10 @@
 package net.pixelstatic.novi.entities;
 
-public class Target extends Entity{
+public class Target extends SolidEntity{
+	
+	public Target(){
+		material.getRectangle().setSize(20);
+	}
 
 	@Override
 	public void Update(){
@@ -9,7 +13,7 @@ public class Target extends Entity{
 
 	@Override
 	public void Draw(){
-		renderer.layer("error", x, y);
+		renderer.layer("tile", x, y);
 	}
 
 }

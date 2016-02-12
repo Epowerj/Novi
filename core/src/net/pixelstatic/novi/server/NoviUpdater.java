@@ -1,5 +1,7 @@
 package net.pixelstatic.novi.server;
 
+import java.util.HashSet;
+
 import net.pixelstatic.novi.entities.*;
 import net.pixelstatic.novi.network.Syncable;
 import net.pixelstatic.novi.network.packets.WorldUpdatePacket;
@@ -7,73 +9,72 @@ import net.pixelstatic.novi.network.packets.WorldUpdatePacket;
 public class NoviUpdater{
 	NoviServer server;
 	private boolean isRunning = true;
-	int fps;
+	final int maxfps = 30;
+	float delta = 1f;
 	long lastFpsTime;
-	
+	HashSet<Long> collided = new HashSet<Long>(); //used for storing collisions each frame so entities don't collide twice
 
-	void Loop(float delta){
+	void Loop(){
+		collided.clear();
 		for(Entity entity : Entity.entities.values()){
 			entity.Update();
 			entity.serverUpdate();
+			if(entity instanceof SolidEntity){
+				checkCollisions((SolidEntity)entity);
+			}
 			if(entity instanceof Player){
-				WorldUpdatePacket worldupdate = new WorldUpdatePacket();
-				for(Entity other : Entity.entities.values()){
-					if(other.equals(entity) || !(other instanceof Syncable)) continue;
-					Syncable sync = (Syncable)other;
-					worldupdate.updates.put(other.GetID(), sync.writeSync());
-				}
-				server.server.sendToTCP(((Player)entity).connectionid, worldupdate);
+				sendSync((Player)entity);
 			}
 		}
 	}
-	
+
+	void checkCollisions(SolidEntity entity){
+		for(Entity other : Entity.entities.values()){
+			if( !other.equals(entity) && other instanceof SolidEntity && !collided.contains(other.GetID())){
+				SolidEntity othersolid = (SolidEntity)other;
+				if(othersolid.collides(entity)){
+					collisionEvent(entity, othersolid);
+					collided.add(entity.GetID());
+				}
+			}
+		}
+	}
+
+	void collisionEvent(SolidEntity entitya, SolidEntity entityb){
+		entitya.collisionEvent(entityb);
+		entityb.collisionEvent(entitya);
+	}
+
+	void sendSync(Player player){
+		WorldUpdatePacket worldupdate = new WorldUpdatePacket();
+		for(Entity other : Entity.entities.values()){
+			if(other.equals(player) || !(other instanceof Syncable)) continue;
+			Syncable sync = (Syncable)other;
+			worldupdate.updates.put(other.GetID(), sync.writeSync());
+		}
+		server.server.sendToTCP(player.connectionid, worldupdate);
+	}
+
 	public float delta(){
-		return 1f / (fps / 60f);
+		return delta;
 	}
 
 	public void run(){
-		long lastLoopTime = System.nanoTime();
-		final int TARGET_FPS = 10;
-		final long OPTIMAL_TIME = 1000000000 / TARGET_FPS;
-
-		// keep looping round til the game ends
+		int fpsmillis = 1000 / maxfps;
 		while(isRunning){
-			// work out how long its been since the last update, this
-			// will be used to calculate how far the entities should
-			// move this loop
-			long now = System.nanoTime();
-			long updateLength = now - lastLoopTime;
-			lastLoopTime = now;
-			double delta = updateLength / ((double)OPTIMAL_TIME);
-
-			// update the frame counter
-			lastFpsTime += updateLength;
-			fps ++;
-
-			// update our FPS counter if a second has passed since
-			// we last recorded
-			if(lastFpsTime >= 1000000000){
-				//System.out.println("(FPS: " + fps + ")");
-				lastFpsTime = 0;
-				fps = 0;
-			}
-
-			// update the game logic
-			Loop((float)delta);
-
-			// we want each frame to take 10 milliseconds, to do this
-			// we've recorded when we started the frame. We add 10 milliseconds
-			// to this and then factor in the current time to give 
-			// us our final value to wait for
-			// remember this is in ms, whereas our lastLoopTime etc. vars are in ns.
+			long start = System.currentTimeMillis();
+			Loop();
+			long end = System.currentTimeMillis();
+			delta = (fpsmillis - (end - start)) / 1000f * 60f;
 			try{
-				Thread.sleep((lastLoopTime - System.nanoTime() + OPTIMAL_TIME) / 1000000);
+				if(end - start <= fpsmillis) Thread.sleep(fpsmillis - (end - start));
 			}catch(Exception e){
-
+				e.printStackTrace();
 			}
 		}
+
 	}
-	
+
 	public NoviUpdater(NoviServer server){
 		this.server = server;
 	}

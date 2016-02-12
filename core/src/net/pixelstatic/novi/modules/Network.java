@@ -17,7 +17,8 @@ public class Network extends Module{
 	public void Init(){
 		if( !connect) return;
 		try{
-			client = new Client();
+			int buffer = (int)Math.pow(2, 5);
+			client = new Client(8192*buffer, 8192*buffer);
 			Registrator.register(client.getKryo());
 			client.addListener(new Listen());
 			client.start();
@@ -55,6 +56,7 @@ public class Network extends Module{
 					Entity entity = (Entity)object;
 					entity.onRecieve();
 					entity.AddSelf();
+					//Novi.log("recieved entity of type " + entity.getClass().getSimpleName());
 				}else if(object instanceof EntityRemovePacket){
 					EntityRemovePacket remove = (EntityRemovePacket)object;
 					Entity.entities.remove(remove.id);
