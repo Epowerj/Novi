@@ -2,11 +2,15 @@ package net.pixelstatic.novi.sprites;
 
 import net.pixelstatic.novi.modules.Renderer;
 
+import com.badlogic.gdx.graphics.Color;
+
 public class Layer implements Comparable<Layer>{
+	Color color = Color.WHITE;
 	float layer, x, y, rotation;
 	String region;
 	
 	public void Draw(Renderer renderer){
+		renderer.batch.setColor(color);
 		if(rotation == 0){
 			renderer.draw(region, x, y);
 		}else{
@@ -29,6 +33,11 @@ public class Layer implements Comparable<Layer>{
 		return this;
 	}
 	
+	public Layer setColor(Color c){
+		color = c;
+		return this;
+	}
+	
 	public Layer setRotation(float rotation){
 		this.rotation = rotation;
 		return this;
@@ -47,6 +56,7 @@ public class Layer implements Comparable<Layer>{
 		x = 0;
 		y = 0;
 		rotation = 0;
+		color = Color.WHITE;
 	}
 
 	@Override

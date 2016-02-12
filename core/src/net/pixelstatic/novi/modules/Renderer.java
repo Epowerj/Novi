@@ -9,7 +9,7 @@ import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.*;
 
 public class Renderer extends Module {
-	SpriteBatch batch; //novi's batch
+	public SpriteBatch batch; //novi's batch
 	BitmapFont font; //a font for displaying text
 	OrthographicCamera camera; //a camera, seems self explanatory
 	NoviAtlas atlas; //texture atlas
@@ -44,7 +44,8 @@ public class Renderer extends Module {
 	}
 	
 	void clearScreen(){
-		Gdx.gl.glClearColor(0, 0, 1, 0);
+		Color clear = Color.SKY.cpy().sub(0.1f, 0.1f, 0.1f, 0f);
+		Gdx.gl.glClearColor(clear.r, clear.g, clear.b, 0);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 	}
 	

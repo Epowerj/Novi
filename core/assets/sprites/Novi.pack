@@ -6,8 +6,8 @@ repeat: none
 effects/explosion
   rotate: false
   xy: 1, 1
-  size: 10, 10
-  orig: 10, 10
+  size: 14, 14
+  orig: 14, 14
   offset: 0, 0
   index: -1
 

@@ -1,7 +1,6 @@
 package net.pixelstatic.novi.sprites;
 
-import java.util.Arrays;
-import java.util.Comparator;
+import java.util.*;
 
 import net.pixelstatic.novi.Novi;
 
@@ -61,7 +60,7 @@ public class LayerList{
 	}
 
 	public synchronized void clear(){
-		for(int i = 0;i < lastcount && i < maxsize;i ++){
+		for(int i = 0;i < maxsize;i ++){
 			layers[i] = null;
 		}
 		lastcount = count;
