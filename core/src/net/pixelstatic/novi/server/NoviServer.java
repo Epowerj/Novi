@@ -18,7 +18,6 @@ public class NoviServer{
 	public NoviUpdater updater; //this runs and updates the game objects
 
 	void createServer(){
-		createUpdater();
 		Entity.server = this;
 		addEntities();
 		try{
@@ -31,6 +30,7 @@ public class NoviServer{
 		}catch(Exception e){
 			e.printStackTrace();
 		}
+		createUpdater();
 	}
 
 	void createUpdater(){

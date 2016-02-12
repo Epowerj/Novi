@@ -3,11 +3,15 @@ package net.pixelstatic.novi.entities;
 
 
 public class Bullet extends FlyingEntity{
+	int life, lifetime = 100;
 	{
 		material.drag = 0;
+		material.getRectangle().setSize(2);
 	}
 	@Override
 	public void Update(){
+		life += delta();
+		if(life >= lifetime) RemoveSelf();
 		UpdateVelocity();
 	}
 

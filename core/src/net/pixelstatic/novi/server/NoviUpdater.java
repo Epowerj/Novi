@@ -10,12 +10,12 @@ public class NoviUpdater{
 	NoviServer server;
 	private boolean isRunning = true;
 	final int maxfps = 30;
+	int frameid;
 	float delta = 1f;
 	long lastFpsTime;
 	HashSet<Long> collided = new HashSet<Long>(); //used for storing collisions each frame so entities don't collide twice
 
 	void Loop(){
-		collided.clear();
 		for(Entity entity : Entity.entities.values()){
 			entity.Update();
 			entity.serverUpdate();
@@ -64,13 +64,17 @@ public class NoviUpdater{
 		while(isRunning){
 			long start = System.currentTimeMillis();
 			Loop();
+			frameid ++;
+			//if(frame % 60 == 0)Novi.log(delta + " | " + Entity.entities.size());
 			long end = System.currentTimeMillis();
-			delta = (fpsmillis - (end - start)) / 1000f * 60f;
+			
 			try{
 				if(end - start <= fpsmillis) Thread.sleep(fpsmillis - (end - start));
 			}catch(Exception e){
 				e.printStackTrace();
 			}
+			long sleepend = System.currentTimeMillis();
+			delta = (sleepend - start) / 1000f * 60f;
 		}
 
 	}
