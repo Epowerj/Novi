@@ -61,7 +61,7 @@ public abstract class Entity{
     }
     
     public void serverUpdate(){
-    	
+    	//do nothing
     }
     
     public float delta(){

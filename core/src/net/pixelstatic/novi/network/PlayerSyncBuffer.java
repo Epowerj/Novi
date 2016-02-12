@@ -13,6 +13,6 @@ public class PlayerSyncBuffer extends SyncBuffer{
 	}
 	
 	public PlayerSyncBuffer(){
-		
+		//empty constructor
 	}
 }

@@ -50,7 +50,7 @@ public class Renderer extends Module {
 	}
 	
 	void drawWorld(){
-		
+		//TODO draw world / background
 	}
 	
 	//sorts layer list, draws all layers and clears it
@@ -88,7 +88,13 @@ public class Renderer extends Module {
 	}
 	
 	public void draw(String region, float x, float y, float rotation){
-		batch.draw(atlas.findRegion(region), x - atlas.RegionWidth(region) / 2, y - atlas.RegionHeight(region) / 2, atlas.RegionWidth(region) / 2, atlas.RegionHeight(region) / 2, atlas.RegionWidth(region), atlas.RegionHeight(region), 1f, 1f, rotation);
+		batch.draw(atlas.findRegion(region), 
+				x - atlas.RegionWidth(region) / 2, 
+				y - atlas.RegionHeight(region) / 2, 
+				atlas.RegionWidth(region) / 2, 
+				atlas.RegionHeight(region) / 2, 
+				atlas.RegionWidth(region), 
+				atlas.RegionHeight(region), 1f, 1f, rotation);
 	}
 
 }

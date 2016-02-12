@@ -10,6 +10,7 @@ import com.badlogic.gdx.math.Vector2;
 public class Player extends FlyingEntity implements Syncable{
 	public transient int connectionid;
 	public transient boolean client = false;
+	
 	public boolean shooting, valigned = true; //used for aligning the rotation after you shoot and let go of the mouse
 	public float rotation = 0;
 	public float reload;
@@ -26,11 +27,13 @@ public class Player extends FlyingEntity implements Syncable{
 	public void Update(){
 		if(NoviServer.active) return; //don't want to do stuff like getting the mouse angle on the server, do we?
 		if(!client)data.update(this);
+		
 		UpdateVelocity();
 		velocity.limit(ship.getMaxvelocity() * kiteChange());
 		if(reload > 0) reload -= delta();
 		if(rotation > 360f && !ship.getSpin()) rotation -= 360f;
 		if(rotation < 0f && !ship.getSpin()) rotation += 360f;
+		
 		if(shooting){
 			rotation = Angles.MoveToward(rotation, Angles.mouseAngle(), ship.getTurnspeed());
 		}else{
@@ -59,8 +62,13 @@ public class Player extends FlyingEntity implements Syncable{
 	}
 
 	public float kiteChange(){
-		if( !shooting) return 1f;
-		return 1f - Angles.angleDist(rotation, velocity.angle()) / (180f * 1f / ship.getKiteDebuffMultiplier());
+		if(!shooting){
+			return 1f;
+		}else{
+			return 1f - 
+					Angles.angleDist(rotation, velocity.angle()) / 
+					(180f * 1f / ship.getKiteDebuffMultiplier());
+		}
 	}
 
 	public void move(float angle){

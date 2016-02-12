@@ -23,15 +23,6 @@ public class InputHandler{
 			mousedown = false;
 		}
 		lastinput = type;
-		/*
-		Vector2 v = new Vector2(1f, 1f).setAngle(rotation);
-		Bullet b = new Bullet();
-		b.x = x;
-		b.y = y;
-		b.velocity.set(v.setLength(4f));
-		b.AddSelf().SendSelf();
-		reload = ship.getShootspeed();
-		*/
 	}
 	
 	boolean mouseDown(){
@@ -49,8 +40,5 @@ public class InputHandler{
 			b.AddSelf().SendSelf();
 			player.reload = player.getShip().getShootspeed();
 		}
-		//while(inputqueue.size > 0){
-		//	serverInput(inputqueue.removeFirst());
-		//}
 	}
 }

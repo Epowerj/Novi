@@ -8,7 +8,7 @@ public abstract class Effect extends Entity{
 	
 	@Override
 	public final void Update(){
-		life+= delta();
+		life += delta();
 		if(life > lifetime) RemoveSelf();
 	}
 	
