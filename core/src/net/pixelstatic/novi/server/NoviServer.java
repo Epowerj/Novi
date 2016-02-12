@@ -32,7 +32,7 @@ public class NoviServer{
 			e.printStackTrace();
 		}
 	}
-	
+
 	void createUpdater(){
 		updater = new NoviUpdater(this);
 		new Thread(new Runnable(){
@@ -41,7 +41,7 @@ public class NoviServer{
 			}
 		}).start();
 	}
-	
+
 	public float delta(){
 		return updater.delta();
 	}
@@ -64,18 +64,22 @@ public class NoviServer{
 		public void received(Connection connection, Object object){
 			try{
 				if(object instanceof ConnectPacket){
-					//ConnectPacket connect = (ConnectPacket)object;
-					Player player = new Player();
-					player.connectionid = connection.getID();
-					DataPacket data = new DataPacket();
-					data.playerid = player.GetID();
-					data.entities = Entity.entities;
-					connection.sendTCP(data);
-					server.sendToAllExceptTCP(connection.getID(), player.AddSelf());
-					players.put(connection.getID(), player.GetID());
-					Novi.log("player id: " + player.GetID() + " connection id: " + connection.getID());
-					Novi.log(connection.getRemoteAddressTCP().getAddress().toString() + " has joined.");
-					//server.sendToAllExceptTCP(connection.getID(), connect);
+					try{
+						Player player = new Player();
+						player.connectionid = connection.getID();
+						DataPacket data = new DataPacket();
+						data.playerid = player.GetID();
+						data.entities = Entity.entities;
+						connection.sendTCP(data);
+						server.sendToAllExceptTCP(connection.getID(), player.AddSelf());
+						players.put(connection.getID(), player.GetID());
+						Novi.log("player id: " + player.GetID() + " connection id: " + connection.getID());
+						Novi.log(connection.getRemoteAddressTCP().getAddress().toString() + " has joined.");
+					}catch(Exception e){
+						e.printStackTrace();
+						Novi.log("Critical error: failed sending player!");
+						System.exit(1);
+					}
 				}else if(object instanceof InputPacket){
 					InputPacket packet = (InputPacket)object;
 					getPlayer(connection.getID()).input.inputEvent(packet.input);
