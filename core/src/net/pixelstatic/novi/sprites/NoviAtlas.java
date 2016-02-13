@@ -25,14 +25,14 @@ public class NoviAtlas extends TextureAtlas{
 			}
 			r.name = new String(r.name);
 		}
-		error = super.findRegion("error");
+		error = findRegion("error");
 	}
 	//returns error texture if region not found
 	@Override
 	public AtlasRegion findRegion(String name){
 		AtlasRegion r = regionmap.get(name);
-		if(r != null) return r;
-		return error;
+		if(r == null) return error;
+		return r;
 	}
 
 	public float RegionHeight(String name){
