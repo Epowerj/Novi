@@ -9,7 +9,7 @@ import com.badlogic.gdx.Gdx;
 import com.esotericsoftware.kryonet.*;
 
 public class Network extends Module{
-	public static final String ip = "2605:a000:110d:4020:f1f5:e9b2:398c:cd8d";
+	public static final String ip = "2605:a000:110d:4020:2dbc:ec5a:c537:1f86";
 	public static final int port = 7576;
 	public boolean connect = true;
 	Client client;
@@ -24,6 +24,7 @@ public class Network extends Module{
 			client.start();
 			client.connect(50000, ip, port, port);
 			ConnectPacket packet = new ConnectPacket();
+			packet.name = System.getProperty("user.name");
 			client.sendTCP(packet);
 			Novi.log("Connecting to server..");
 		}catch(Exception e){

@@ -55,9 +55,9 @@ public class NoviServer{
 
 		@Override
 		public void disconnected(Connection connection){
+			Novi.log(getPlayer(connection.getID()).name + " has disconnected.");
 			removeEntity(getPlayer(connection.getID()));
 			players.remove(connection.getID());
-			Novi.log("Someone has disconnected.");
 		}
 
 		@Override
@@ -65,8 +65,10 @@ public class NoviServer{
 			try{
 				if(object instanceof ConnectPacket){
 					try{
+						ConnectPacket connect= (ConnectPacket)object;
 						Player player = new Player();
 						player.connectionid = connection.getID();
+						player.name = connect.name;
 						DataPacket data = new DataPacket();
 						data.playerid = player.GetID();
 						data.entities = Entity.entities;
@@ -74,7 +76,7 @@ public class NoviServer{
 						server.sendToAllExceptTCP(connection.getID(), player.AddSelf());
 						players.put(connection.getID(), player.GetID());
 						Novi.log("player id: " + player.GetID() + " connection id: " + connection.getID());
-						Novi.log(connection.getRemoteAddressTCP().getAddress().toString() + " has joined.");
+						Novi.log(player.name + " has joined.");
 					}catch(Exception e){
 						e.printStackTrace();
 						Novi.log("Critical error: failed sending player!");

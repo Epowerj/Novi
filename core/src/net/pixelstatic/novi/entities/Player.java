@@ -3,13 +3,16 @@ package net.pixelstatic.novi.entities;
 import net.pixelstatic.novi.items.*;
 import net.pixelstatic.novi.network.*;
 import net.pixelstatic.novi.server.NoviServer;
+import net.pixelstatic.novi.sprites.LayerType;
 import net.pixelstatic.novi.utils.*;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 
 public class Player extends FlyingEntity implements Syncable{
 	public transient int connectionid;
 	public transient boolean client = false;
+	public String name;
 	
 	public boolean shooting, valigned = true; //used for aligning the rotation after you shoot and let go of the mouse
 	public float rotation = 0;
@@ -92,6 +95,7 @@ public class Player extends FlyingEntity implements Syncable{
 	@Override
 	public void Draw(){
 		renderer.layer("ship", x, y).setLayer(1).setRotation(client ? getSpriteRotation() : rotation);
+		if(!client) renderer.layer(x, y +14 ).setScale(0.2f).setColor(Color.GOLD).setLayer(2f).setType(LayerType.TEXT).setText(name); //draw player name
 	}
 
 	@Override

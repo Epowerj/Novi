@@ -10,19 +10,21 @@ import com.badlogic.gdx.graphics.g2d.*;
 
 public class Renderer extends Module {
 	public SpriteBatch batch; //novi's batch
-	BitmapFont font; //a font for displaying text
+	public BitmapFont font; //a font for displaying text
+	GlyphLayout layout; // used for getting font bounds
 	OrthographicCamera camera; //a camera, seems self explanatory
 	NoviAtlas atlas; //texture atlas
 	LayerList layers;
 	int scale = 5; //camera zoom/scale
 	Player player; //player object from ClientData module
 	
-	
 	public Renderer(Novi novi) {
 		super(novi);
 		batch = new SpriteBatch();
 		atlas = new NoviAtlas(Gdx.files.internal("sprites/Novi.pack"));
 		layers = new LayerList();
+		font = new BitmapFont(Gdx.files.internal("fonts/font.fnt"));
+		layout = new GlyphLayout();
 		Entity.renderer = this;
 	}
 	
@@ -78,9 +80,18 @@ public class Renderer extends Module {
 		return layers.addLayer().set(region, x, y);
 	}
 	
+	public Layer layer(float x, float y){
+		return layers.addLayer().setPosition(x, y);
+	}
+	
 	public void zoom(float amount){
 		if(camera.zoom + amount < 0) return;
 		camera.zoom += amount;
+	}
+	
+	public GlyphLayout getBounds(String text){
+		layout.setText(font, text);
+		return layout;
 	}
 	
 	//utility/shortcut draw method
