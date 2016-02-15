@@ -1,10 +1,14 @@
 package net.pixelstatic.novi.entities;
 
+import net.pixelstatic.novi.items.ProjectileType;
+
+
 
 
 public class Bullet extends FlyingEntity{
 	int life, lifetime = 100;
 	public Entity shooter;
+	public ProjectileType type = ProjectileType.bullet;
 	
 	{
 		material.drag = 0;
@@ -13,13 +17,13 @@ public class Bullet extends FlyingEntity{
 	@Override
 	public void Update(){
 		life += delta();
-		if(life >= lifetime) RemoveSelf();
+		if(life >= type.getLifetime()) RemoveSelf();
 		UpdateVelocity();
 	}
 
 	@Override
 	public void Draw(){
-		renderer.layer("bullet", x, y).setLayer(0.5f).setRotation(velocity.angle() - 90);
+		type.draw(this, renderer);
 	}
 	
 	public Bullet setShooter(Entity entity){
