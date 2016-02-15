@@ -1,6 +1,7 @@
-package net.pixelstatic.novi.utils;
+package net.pixelstatic.novi.server;
 
 import net.pixelstatic.novi.entities.*;
+import net.pixelstatic.novi.utils.InputType;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Queue;
@@ -36,6 +37,7 @@ public class InputHandler{
 			Bullet b = new Bullet();
 			b.x = player.x;
 			b.y = player.y;
+			b.setShooter(player);
 			b.velocity.set(v.setLength(4f));
 			b.AddSelf().SendSelf();
 			player.reload = player.getShip().getShootspeed();

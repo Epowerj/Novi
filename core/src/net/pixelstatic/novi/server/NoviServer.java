@@ -21,7 +21,7 @@ public class NoviServer{
 		Entity.server = this;
 		addEntities();
 		try{
-			server = new Server();
+			server = new Server(16384*16, 16384*16);
 			Registrator.register(server.getKryo());
 			server.addListener(new Listen(this));
 			server.start();

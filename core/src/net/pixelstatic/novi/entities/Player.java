@@ -2,14 +2,14 @@ package net.pixelstatic.novi.entities;
 
 import net.pixelstatic.novi.items.*;
 import net.pixelstatic.novi.network.*;
-import net.pixelstatic.novi.server.NoviServer;
+import net.pixelstatic.novi.server.*;
 import net.pixelstatic.novi.sprites.LayerType;
 import net.pixelstatic.novi.utils.*;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 
-public class Player extends FlyingEntity implements Syncable{
+public class Player extends DestructibleEntity implements Syncable{
 	public transient int connectionid;
 	public transient boolean client = false;
 	public String name;
@@ -24,6 +24,8 @@ public class Player extends FlyingEntity implements Syncable{
 
 	{
 		material.drag = 0.01f;
+		material.getRectangle().setSize(6);
+		health = ship.getMaxhealth();
 	}
 
 	@Override
@@ -47,7 +49,7 @@ public class Player extends FlyingEntity implements Syncable{
 	
 	//don't want to hit other players or other bullets
 	public boolean collides(SolidEntity other){
-		return super.collides(other) && !(other instanceof Player || other instanceof Bullet);
+		return super.collides(other) && !(other instanceof Player || (other instanceof Bullet && ((Bullet)other).shooter instanceof Player));
 	}
 	
 	
@@ -96,6 +98,18 @@ public class Player extends FlyingEntity implements Syncable{
 	public void Draw(){
 		renderer.layer("ship", x, y).setLayer(1).setRotation(client ? getSpriteRotation() : rotation);
 		if(!client) renderer.layer(x, y +14 ).setScale(0.2f).setColor(Color.GOLD).setLayer(2f).setType(LayerType.TEXT).setText(name); //draw player name
+	}
+	
+	//dying is currently disabled
+	@Override
+	public void deathEvent(){
+		health = ship.getMaxhealth();
+	}
+	
+	//don't want the player entity getting removed
+	@Override
+	public boolean removeOnDeath(){
+		return false;
 	}
 
 	@Override

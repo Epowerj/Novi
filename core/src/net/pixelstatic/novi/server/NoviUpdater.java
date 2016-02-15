@@ -30,7 +30,8 @@ public class NoviUpdater{
 
 	void checkCollisions(SolidEntity entity){
 		for(Entity other : Entity.entities.values()){
-			if( !other.equals(entity) && other instanceof SolidEntity && !collided.contains(other.GetID())){
+			if(!inRange(entity,other,10 + entity.material.getRectangle().width) || other.equals(entity) && !(other instanceof SolidEntity)) continue;
+			if(!collided.contains(other.GetID())){
 				SolidEntity othersolid = (SolidEntity)other;
 				if(othersolid.collides(entity)){
 					collisionEvent(entity, othersolid);
@@ -38,6 +39,10 @@ public class NoviUpdater{
 				}
 			}
 		}
+	}
+	
+	boolean inRange(Entity a, Entity b, float rad){
+		return Math.abs(a.x - b.x) < rad && Math.abs(a.y - b.y) < rad;
 	}
 
 	void collisionEvent(SolidEntity entitya, SolidEntity entityb){

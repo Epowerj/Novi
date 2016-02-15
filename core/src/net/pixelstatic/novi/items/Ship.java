@@ -7,6 +7,7 @@ public abstract class Ship extends Item {
 	protected float maxvelocity;
 	protected float shootspeed;
 	protected float kiteDebuffMultiplier;
+	protected int maxHealth = 100;
 
 	public Ship(String itemName, int itemId) {
 		super(itemName, itemId);
@@ -30,6 +31,10 @@ public abstract class Ship extends Item {
 	
 	public float getShootspeed(){
 		return shootspeed;
+	}
+	
+	public int getMaxhealth(){
+		return maxHealth;
 	}
 	
 	public float getKiteDebuffMultiplier(){
