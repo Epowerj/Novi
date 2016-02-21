@@ -79,7 +79,7 @@ public class Player extends DestructibleEntity implements Syncable{
 	public void move(float angle){
 		velocity.add(new Vector2(1f, 1f).setAngle(angle).setLength(ship.getSpeed()));
 	}
-	
+	/*
 	public void shoot(){
 		Vector2 v = new Vector2(1f, 1f).setAngle(rotation);
 		Bullet b = new Bullet();
@@ -89,7 +89,7 @@ public class Player extends DestructibleEntity implements Syncable{
 		b.AddSelf();
 		reload = ship.getShootspeed();
 	}
-
+*/
 	public float getSpriteRotation(){
 		return ( !shooting && valigned) ? velocity.angle() - 90 : this.rotation - 90;
 	}

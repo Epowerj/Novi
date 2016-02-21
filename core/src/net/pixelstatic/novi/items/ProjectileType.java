@@ -8,7 +8,15 @@ public enum ProjectileType{
 		public void draw(Bullet bullet, Renderer renderer){
 			renderer.layer("bullet", bullet.x, bullet.y).setLayer(0.5f).setRotation(bullet.velocity.angle() - 90);
 		}
+		
+		public int getLifetime(){
+			return 60;
+		}
 	};
+	
+	public float getSpeed(){
+		return 4;
+	}
 	
 	public int getLifetime(){
 		return 100;

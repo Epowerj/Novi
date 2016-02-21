@@ -2,9 +2,6 @@ package net.pixelstatic.novi.entities;
 
 import net.pixelstatic.novi.items.ProjectileType;
 
-
-
-
 public class Bullet extends FlyingEntity{
 	int life, lifetime = 100;
 	public Entity shooter;
@@ -14,6 +11,23 @@ public class Bullet extends FlyingEntity{
 		material.drag = 0;
 		material.getRectangle().setSize(2);
 	}
+	
+	@SuppressWarnings("unused")
+	private Bullet(){
+		
+	}
+	
+	public Bullet(float rotation){
+		if(server != null)
+			initVelocity(rotation);
+	}
+	
+	public Bullet(ProjectileType type, float rotation){
+		this.type = type;
+		if(server != null)
+			initVelocity(rotation);
+	}
+	
 	@Override
 	public void Update(){
 		life += delta();
@@ -29,6 +43,13 @@ public class Bullet extends FlyingEntity{
 	public Bullet setShooter(Entity entity){
 		shooter = entity;
 		return this;
+	}
+	
+	//sets velocity to speed of projectile type
+	private void initVelocity(float rotation){
+		velocity.x = 1f;
+		velocity.setLength(type.getSpeed());
+		velocity.setAngle(rotation);
 	}
 	
 	//don't want to hit players or other bullets

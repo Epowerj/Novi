@@ -3,7 +3,7 @@ package net.pixelstatic.novi.entities;
 import net.pixelstatic.novi.network.*;
 import net.pixelstatic.novi.utils.InterpolationData;
 
-import com.badlogic.gdx.math.*;
+import com.badlogic.gdx.math.MathUtils;
 
 public class Target extends DestructibleEntity implements Syncable{
 	transient InterpolationData data = new InterpolationData();
@@ -21,12 +21,10 @@ public class Target extends DestructibleEntity implements Syncable{
 	public void serverUpdate(){
 		x += Math.sin(y / 10f + 2) * delta();
 		y += Math.sin(x / 10f + 2) * delta();
-		Vector2 v = new Vector2(1f, 1f).setToRandomDirection();
-		Bullet b = new Bullet();
+		Bullet b = new Bullet(MathUtils.random(0,360f));
 		b.x = x;
 		b.y = y;
 		b.setShooter(this);
-		b.velocity.set(v.setLength(4f));
 		b.AddSelf().SendSelf();
 	}
 

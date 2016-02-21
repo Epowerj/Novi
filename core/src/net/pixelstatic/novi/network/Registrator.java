@@ -24,6 +24,7 @@ public class Registrator{
 		k.register(Ship.class);
 		k.register(ArrowheadShip.class);
 		k.register(Item.class);
+		k.register(ProjectileType.class);
 		k.register(InputType.class);
 		k.register(Entity.class);
 		k.register(FlyingEntity.class);

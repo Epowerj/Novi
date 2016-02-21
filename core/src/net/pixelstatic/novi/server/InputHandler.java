@@ -34,7 +34,7 @@ public class InputHandler{
 		if(player.reload > 0)  player.reload -= Entity.server.delta();
 		if(mouseDown() && player.reload <= 0){
 			Vector2 v = new Vector2(1f, 1f).setAngle(player.rotation + 90);
-			Bullet b = new Bullet();
+			Bullet b = new Bullet(v.angle());
 			b.x = player.x;
 			b.y = player.y;
 			b.setShooter(player);
