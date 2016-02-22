@@ -2,11 +2,11 @@ package net.pixelstatic.novi;
 
 import java.util.HashMap;
 
-import com.badlogic.gdx.ApplicationAdapter;
-import com.badlogic.gdx.Gdx;
-
-import net.pixelstatic.novi.entities.*;
+import net.pixelstatic.novi.entities.Entity;
 import net.pixelstatic.novi.modules.*;
+import net.pixelstatic.novi.modules.Input;
+
+import com.badlogic.gdx.*;
 
 public class Novi extends ApplicationAdapter {
 	public HashMap<String, Module> modules = new HashMap<String, Module>();
@@ -17,6 +17,7 @@ public class Novi extends ApplicationAdapter {
 		createModule(Input.class);
 		createModule(Network.class);
 		createModule(ClientData.class);
+		createModule(World.class);
 		Gdx.input.setInputProcessor(getModule(Input.class));
 		for(Module m : modules.values()) m.Init(); //initialize modules
 	}

@@ -92,7 +92,7 @@ public class Input extends Module implements InputProcessor{
 	@Override
 	public boolean touchUp(int screenX, int screenY, int pointer, int button){
 		SendInput(InputType.CLICK_UP);
-		if(player.velocity.isZero(0.0001f)){
+		if(player.velocity.isZero(0.01f)){
 			player.velocity.x = 0.01f;
 			player.velocity.setAngle(player.rotation);
 		}

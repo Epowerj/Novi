@@ -7,10 +7,12 @@ import net.pixelstatic.novi.sprites.*;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.*;
+import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 
 public class Renderer extends Module {
 	public SpriteBatch batch; //novi's batch
 	public BitmapFont font; //a font for displaying text
+	public OrthogonalTiledMapRenderer maprenderer; //used for rendering the map
 	GlyphLayout layout; // used for getting font bounds
 	OrthographicCamera camera; //a camera, seems self explanatory
 	NoviAtlas atlas; //texture atlas
@@ -39,9 +41,13 @@ public class Renderer extends Module {
 		batch.setProjectionMatrix(camera.combined); //make the batch use the camera projection
 		drawWorld();
 		clearScreen();
+		batch.setColor(Color.WHITE);
+		maprenderer.setView(camera);
+		maprenderer.render();
 		batch.begin();
 		drawLayers();
 		batch.end();
+	
 		updateCamera();
 	}
 	
