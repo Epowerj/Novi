@@ -36,10 +36,10 @@ public class Network extends Module{
 
 	public void sendUpdate(){
 		PositionPacket pos = new PositionPacket();
-		pos.x = GetModule(ClientData.class).player.x;
-		pos.y = GetModule(ClientData.class).player.y;
-		pos.rotation = GetModule(ClientData.class).player.getSpriteRotation();
-		pos.velocity = GetModule(ClientData.class).player.velocity;
+		pos.x = getModule(ClientData.class).player.x;
+		pos.y = getModule(ClientData.class).player.y;
+		pos.rotation = getModule(ClientData.class).player.getSpriteRotation();
+		pos.velocity = getModule(ClientData.class).player.velocity;
 		client.sendTCP(pos);
 	}
 
@@ -49,9 +49,9 @@ public class Network extends Module{
 			try{
 				if(object instanceof DataPacket){
 					DataPacket data = (DataPacket)object;
-					GetModule(ClientData.class).player.resetID(data.playerid);
+					getModule(ClientData.class).player.resetID(data.playerid);
 					Entity.entities = data.entities;
-					GetModule(ClientData.class).player.AddSelf();
+					getModule(ClientData.class).player.AddSelf();
 					Novi.log("Recieved data packet.");
 				}else if(object instanceof Entity){
 					Entity entity = (Entity)object;

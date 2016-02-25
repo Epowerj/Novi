@@ -1,7 +1,10 @@
 package net.pixelstatic.novi.utils;
 
+import net.pixelstatic.novi.entities.Entity;
+import net.pixelstatic.novi.modules.Renderer;
+
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.*;
 
 public class Angles{
 	static public float ForwardDistance(float angle1, float angle2){
@@ -43,7 +46,12 @@ public class Angles{
 	}
 
 	static public float mouseAngle(){
-		Vector2 v = new Vector2(Gdx.input.getX() - Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() - Gdx.input.getY() - Gdx.graphics.getHeight() / 2);
+		float x = 0,y = 0;
+		Renderer renderer = Entity.renderer;
+		Vector3 vector = renderer.camera.project(new Vector3(renderer.player.x, renderer.player.y, 0));
+		x = vector.x;
+		y = vector.y;
+		Vector2 v = new Vector2(Gdx.input.getX() - x, Gdx.graphics.getHeight() - Gdx.input.getY() - y);
 		return v.angle();
 	}
 }

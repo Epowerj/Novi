@@ -13,11 +13,7 @@ public abstract class Module {
 		this.novi = n;
 	}
 
-	public <T extends Module> T GetModule(Class<T> c) {
+	public <T extends Module> T getModule(Class<T> c) {
 		return novi.getModule(c);
-	}
-
-	public Module GetModule(String name) {
-		return novi.getModule(name);
 	}
 }

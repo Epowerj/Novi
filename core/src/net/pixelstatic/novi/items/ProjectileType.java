@@ -12,6 +12,10 @@ public enum ProjectileType{
 		public int getLifetime(){
 			return 60;
 		}
+		
+		public float getSpeed(){
+			return 7;
+		}
 	};
 	
 	public float getSpeed(){

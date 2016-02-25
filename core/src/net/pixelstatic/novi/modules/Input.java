@@ -17,7 +17,7 @@ public class Input extends Module implements InputProcessor{
 	}
 
 	public void Init(){
-		player = GetModule(ClientData.class).player;
+		player = getModule(ClientData.class).player;
 	}
 
 	@Override
@@ -60,7 +60,7 @@ public class Input extends Module implements InputProcessor{
 	void SendInput(InputType type){
 		InputPacket input = new InputPacket();
 		input.input = type;
-		GetModule(Network.class).client.sendTCP(input);
+		getModule(Network.class).client.sendTCP(input);
 	}
 
 	@Override
@@ -113,7 +113,7 @@ public class Input extends Module implements InputProcessor{
 
 	@Override
 	public boolean scrolled(int amount){
-		GetModule(Renderer.class).zoom(amount / 10f);
+		getModule(Renderer.class).zoom(amount / 10f);
 		return false;
 	}
 

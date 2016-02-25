@@ -9,7 +9,7 @@ import net.pixelstatic.novi.modules.Input;
 import com.badlogic.gdx.*;
 
 public class Novi extends ApplicationAdapter {
-	public HashMap<String, Module> modules = new HashMap<String, Module>();
+	public HashMap<Class<? extends Module>, Module> modules = new HashMap<Class<? extends Module>, Module>();
 	
 	@Override
 	public void create() {
@@ -45,16 +45,12 @@ public class Novi extends ApplicationAdapter {
 	}
 
 	public <T extends Module> T getModule(Class<T> c) {
-		return c.cast(modules.get(c.getSimpleName().toLowerCase()));
-	}
-
-	public Module getModule(String name) {
-		return modules.get(name);
+		return c.cast(modules.get(c));
 	}
 
 	public void createModule(Class<? extends Module> module) {
 		try {
-			modules.put(module.getSimpleName().toLowerCase(), module.getConstructor(this.getClass()).newInstance(this));
+			modules.put(module, module.getConstructor(this.getClass()).newInstance(this));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

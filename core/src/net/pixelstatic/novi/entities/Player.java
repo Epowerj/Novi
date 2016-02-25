@@ -32,8 +32,8 @@ public class Player extends DestructibleEntity implements Syncable{
 	public void Update(){
 		if(NoviServer.active) return; //don't want to do stuff like getting the mouse angle on the server, do we?
 		if(!client)data.update(this);
-		
 		UpdateVelocity();
+		updateBounds();
 		velocity.limit(ship.getMaxvelocity() * kiteChange());
 		if(reload > 0) reload -= delta();
 		if(rotation > 360f && !ship.getSpin()) rotation -= 360f;
@@ -79,17 +79,7 @@ public class Player extends DestructibleEntity implements Syncable{
 	public void move(float angle){
 		velocity.add(new Vector2(1f, 1f).setAngle(angle).setLength(ship.getSpeed()));
 	}
-	/*
-	public void shoot(){
-		Vector2 v = new Vector2(1f, 1f).setAngle(rotation);
-		Bullet b = new Bullet();
-		b.x = x;
-		b.y = y;
-		b.velocity.set(v.setLength(4f));
-		b.AddSelf();
-		reload = ship.getShootspeed();
-	}
-*/
+
 	public float getSpriteRotation(){
 		return ( !shooting && valigned) ? velocity.angle() - 90 : this.rotation - 90;
 	}

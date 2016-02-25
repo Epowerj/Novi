@@ -2,7 +2,7 @@ package net.pixelstatic.novi.entities;
 
 import java.util.concurrent.ConcurrentHashMap;
 
-import net.pixelstatic.novi.modules.Renderer;
+import net.pixelstatic.novi.modules.*;
 import net.pixelstatic.novi.server.NoviServer;
 
 import com.badlogic.gdx.Gdx;
@@ -17,6 +17,14 @@ public abstract class Entity{
     
     abstract public void Update();
     abstract public void Draw();
+    
+    //used to make entities not fly off the map
+	public void updateBounds(){
+		if(x < 0) x = 0;
+		if(y < 0) y = 0;
+		if(x > World.worldSize) x = World.worldSize;
+		if(y > World.worldSize) y = World.worldSize;
+	}
     
     public void onRecieve(){
     	
