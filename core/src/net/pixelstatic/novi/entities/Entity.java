@@ -2,12 +2,14 @@ package net.pixelstatic.novi.entities;
 
 import java.util.concurrent.ConcurrentHashMap;
 
+import net.pixelstatic.novi.Novi;
 import net.pixelstatic.novi.modules.*;
 import net.pixelstatic.novi.server.NoviServer;
 
 import com.badlogic.gdx.Gdx;
 
 public abstract class Entity{
+	static public Novi novi;
 	static public NoviServer server;
     static private long lastid;
     public static ConcurrentHashMap<Long, Entity> entities = new ConcurrentHashMap<Long, Entity>();

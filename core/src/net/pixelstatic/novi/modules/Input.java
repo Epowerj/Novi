@@ -18,6 +18,7 @@ public class Input extends Module implements InputProcessor{
 
 	public void Init(){
 		player = getModule(ClientData.class).player;
+		Gdx.input.setInputProcessor(this);
 	}
 
 	@Override

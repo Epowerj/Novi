@@ -4,21 +4,20 @@ import java.util.HashMap;
 
 import net.pixelstatic.novi.entities.Entity;
 import net.pixelstatic.novi.modules.*;
-import net.pixelstatic.novi.modules.Input;
 
-import com.badlogic.gdx.*;
+import com.badlogic.gdx.ApplicationAdapter;
 
 public class Novi extends ApplicationAdapter {
 	public HashMap<Class<? extends Module>, Module> modules = new HashMap<Class<? extends Module>, Module>();
 	
 	@Override
 	public void create() {
+		Entity.novi = this;
 		createModule(Renderer.class);
 		createModule(Input.class);
 		createModule(Network.class);
 		createModule(ClientData.class);
 		createModule(World.class);
-		Gdx.input.setInputProcessor(getModule(Input.class));
 		for(Module m : modules.values()) m.Init(); //initialize modules
 	}
 

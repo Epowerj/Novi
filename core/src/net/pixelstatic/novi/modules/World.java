@@ -6,7 +6,7 @@ import com.badlogic.gdx.maps.tiled.*;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 
 public class World extends Module{
-	public static final int worldSize = 200 * 8;
+	public static final int worldSize = 800 * 8;
 	public TiledMap map;
 
 	@Override
