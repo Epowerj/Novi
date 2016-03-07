@@ -16,6 +16,19 @@ public enum ProjectileType{
 		public float getSpeed(){
 			return 7;
 		}
+	},
+	redbullet{
+		public void draw(Bullet bullet, Renderer renderer){
+			renderer.layer("dronebullet", bullet.x, bullet.y).setLayer(0.5f).setRotation(bullet.velocity.angle() - 90);
+		}
+		
+		public int getLifetime(){
+			return 60;
+		}
+		
+		public float getSpeed(){
+			return 5;
+		}
 	};
 	
 	public float getSpeed(){

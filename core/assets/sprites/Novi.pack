@@ -69,6 +69,18 @@ Novi3.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
+enemies/drone
+  rotate: false
+  xy: 1, 1
+  size: 12, 12
+  orig: 12, 12
+  offset: 0, 0
+  index: -1
+
+Novi4.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
 error/error
   rotate: false
   xy: 1, 1
@@ -77,7 +89,7 @@ error/error
   offset: 0, 0
   index: -1
 
-Novi4.png
+Novi5.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
@@ -89,7 +101,7 @@ tiles/tile
   offset: 0, 0
   index: -1
 
-Novi5.png
+Novi6.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
@@ -108,13 +120,20 @@ ships/ship_test
   offset: 0, 0
   index: -1
 
-Novi6.png
+Novi7.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
 projectiles/bullet
   rotate: false
   xy: 1, 1
+  size: 5, 7
+  orig: 5, 7
+  offset: 0, 0
+  index: -1
+projectiles/dronebullet
+  rotate: false
+  xy: 8, 1
   size: 5, 7
   orig: 5, 7
   offset: 0, 0

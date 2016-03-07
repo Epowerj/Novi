@@ -89,7 +89,11 @@ public class Renderer extends Module {
 	
 	void updateCamera(){
 		camera.position.set(player.x, player.y, 0f);
-		
+		limitCamera();
+		camera.update();
+	}
+	
+	void limitCamera(){
 		//limit camera position, snap to sides
 		if(camera.position.x - camera.viewportWidth/2*camera.zoom < 0)
 			camera.position.x = camera.viewportWidth/2*camera.zoom;
@@ -99,7 +103,6 @@ public class Renderer extends Module {
 			camera.position.x = world.worldWidthPixels() - camera.viewportWidth/2*camera.zoom;
 		if(camera.position.y + camera.viewportHeight/2*camera.zoom > world.worldHeightPixels())
 			camera.position.y = world.worldHeightPixels() - camera.viewportHeight/2*camera.zoom;
-		camera.update();
 	}
 	
 	public void onResize(int width, int height) {

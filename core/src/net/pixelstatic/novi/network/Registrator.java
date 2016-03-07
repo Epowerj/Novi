@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.concurrent.ConcurrentHashMap;
 
 import net.pixelstatic.novi.entities.*;
+import net.pixelstatic.novi.entities.enemies.Drone;
 import net.pixelstatic.novi.items.*;
 import net.pixelstatic.novi.network.packets.*;
 import net.pixelstatic.novi.utils.InputType;
@@ -21,6 +22,7 @@ public class Registrator{
 		k.register(InputPacket.class);
 		k.register(SyncBuffer.class);
 		k.register(PlayerSyncBuffer.class);
+		k.register(EnemySyncBuffer.class);
 		k.register(Ship.class);
 		k.register(ArrowheadShip.class);
 		k.register(Item.class);
@@ -31,6 +33,7 @@ public class Registrator{
 		k.register(Bullet.class);
 		k.register(ExplosionEffect.class);
 		k.register(Target.class);
+		k.register(Drone.class);
 		k.register(Player.class);
 		k.register(Vector2.class);
 		k.register(HashMap.class);

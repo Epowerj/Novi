@@ -10,5 +10,6 @@ public abstract class FlyingEntity extends SolidEntity{
 		x += velocity.x*delta();
 		y += velocity.y*delta();
 		velocity.scl((float)Math.pow(1f - material.drag, delta()));
+		if(material.maxvelocity > 0) velocity.limit(material.maxvelocity);
 	}
 }

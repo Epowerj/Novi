@@ -9,7 +9,7 @@ import net.pixelstatic.novi.network.packets.WorldUpdatePacket;
 public class NoviUpdater{
 	NoviServer server;
 	private boolean isRunning = true;
-	final int maxfps = 30;
+	final int maxfps = 60;
 	int frameid;
 	float delta = 1f;
 	long lastFpsTime;

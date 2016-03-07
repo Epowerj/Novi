@@ -54,7 +54,7 @@ public class Bullet extends FlyingEntity{
 	
 	//don't want to hit players or other bullets
 	public boolean collides(SolidEntity other){
-		return super.collides(other) && !((other instanceof Player && shooter instanceof Player) || other instanceof Bullet || other.equals(shooter));
+		return super.collides(other) && !((other instanceof Player && shooter instanceof Player) || other instanceof Bullet || other.equals(shooter) || (shooter instanceof Enemy && other instanceof Enemy));
 	}
 	
 	@Override
