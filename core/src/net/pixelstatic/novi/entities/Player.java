@@ -33,7 +33,7 @@ public class Player extends DestructibleEntity implements Syncable{
 		if(NoviServer.active) return; //don't want to do stuff like getting the mouse angle on the server, do we?
 		if(!client)data.update(this);
 		UpdateVelocity();
-		updateBounds();
+		//updateBounds();
 		velocity.limit(ship.getMaxvelocity() * kiteChange());
 		if(reload > 0) reload -= delta();
 		if(rotation > 360f && !ship.getSpin()) rotation -= 360f;

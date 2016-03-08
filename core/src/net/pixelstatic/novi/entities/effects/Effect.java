@@ -1,4 +1,6 @@
-package net.pixelstatic.novi.entities;
+package net.pixelstatic.novi.entities.effects;
+
+import net.pixelstatic.novi.entities.Entity;
 
 
 

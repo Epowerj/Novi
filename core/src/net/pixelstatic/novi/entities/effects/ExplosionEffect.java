@@ -1,4 +1,4 @@
-package net.pixelstatic.novi.entities;
+package net.pixelstatic.novi.entities.effects;
 
 import com.badlogic.gdx.graphics.Color;
 

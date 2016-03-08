@@ -3,7 +3,7 @@ package net.pixelstatic.novi.server;
 import java.util.HashSet;
 
 import net.pixelstatic.novi.entities.*;
-import net.pixelstatic.novi.network.Syncable;
+import net.pixelstatic.novi.network.*;
 import net.pixelstatic.novi.network.packets.WorldUpdatePacket;
 
 public class NoviUpdater{
@@ -30,10 +30,10 @@ public class NoviUpdater{
 
 	void checkCollisions(SolidEntity entity){
 		for(Entity other : Entity.entities.values()){
-			if(!inRange(entity,other,10 + entity.material.getRectangle().width) || other.equals(entity) && !(other instanceof SolidEntity)) continue;
+			if(!inRange(entity,other,10 + entity.material.getRectangle().width) || other.equals(entity)  || !(other instanceof SolidEntity)) continue;
 			if(!collided.contains(other.GetID())){
 				SolidEntity othersolid = (SolidEntity)other;
-				if(othersolid.collides(entity)){
+				if(othersolid.collides(entity) && entity.collides(othersolid)){
 					collisionEvent(entity, othersolid);
 					collided.add(entity.GetID());
 				}
@@ -53,7 +53,7 @@ public class NoviUpdater{
 	void sendSync(Player player){
 		WorldUpdatePacket worldupdate = new WorldUpdatePacket();
 		for(Entity other : Entity.entities.values()){
-			if(other.equals(player) || !(other instanceof Syncable)) continue;
+			if(other.equals(player) || !(other instanceof Syncable) || (other instanceof TimedSyncable && !((TimedSyncable)other).sync())) continue;
 			Syncable sync = (Syncable)other;
 			worldupdate.updates.put(other.GetID(), sync.writeSync());
 		}

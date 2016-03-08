@@ -30,7 +30,8 @@ public class Drone extends Enemy{
 		if(target == null) return;
 		Vector2 add = new Vector2(target.x - x, target.y - y);
 		float len = add.len();
-		if(len < turnrange) add.setAngle((add.angle() + sign*(turnrange - len)*(90f/turnrange)));
+		float anglechange =  sign*(turnrange - len)*(90f/turnrange);
+		if(len < turnrange) add.setAngle((add.angle() + anglechange));
 		add.setAngle(add.angle() + offset);
 		velocity.add(add.setLength(speed * delta()));
 		if(MathUtils.randomBoolean(0.03f)){

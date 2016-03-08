@@ -1,5 +1,6 @@
 package net.pixelstatic.novi.entities;
 
+import net.pixelstatic.novi.entities.effects.ExplosionEffect;
 import net.pixelstatic.novi.items.ProjectileType;
 
 public class Bullet extends FlyingEntity{

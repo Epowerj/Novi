@@ -89,7 +89,7 @@ public class Renderer extends Module {
 	
 	void updateCamera(){
 		camera.position.set(player.x, player.y, 0f);
-		limitCamera();
+	//	limitCamera();
 		camera.update();
 	}
 	

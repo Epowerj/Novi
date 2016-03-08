@@ -4,12 +4,10 @@ import java.util.HashMap;
 
 import net.pixelstatic.novi.Novi;
 import net.pixelstatic.novi.entities.*;
-import net.pixelstatic.novi.entities.enemies.Drone;
 import net.pixelstatic.novi.modules.Network;
 import net.pixelstatic.novi.network.Registrator;
 import net.pixelstatic.novi.network.packets.*;
 
-import com.badlogic.gdx.math.MathUtils;
 import com.esotericsoftware.kryonet.*;
 
 public class NoviServer{
@@ -125,8 +123,8 @@ public class NoviServer{
 	
 	private void addEntities(){
 		for(int i = 0; i < 10; i ++){
-			new Drone().setPosition(100 + MathUtils.random(100), 100+ MathUtils.random(100)).AddSelf();
+		//	new Drone().setPosition(100 + MathUtils.random(100), 100+ MathUtils.random(100)).AddSelf();
 		}
-		
+		new Base().setPosition(100, 100).AddSelf();
 	}
 }
