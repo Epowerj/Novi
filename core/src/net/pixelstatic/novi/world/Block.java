@@ -1,9 +1,13 @@
 package net.pixelstatic.novi.world;
 
+import com.badlogic.gdx.math.MathUtils;
+
 public class Block{
 	private Material material = Material.air;
+	public transient float reload = MathUtils.random(60);
 	public final int x,y;
 	public int health;
+	public float rotation;
 	
 	public Block(int x, int y, Material material){
 		setMaterial(material);

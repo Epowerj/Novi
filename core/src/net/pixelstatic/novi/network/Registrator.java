@@ -42,6 +42,7 @@ public class Registrator{
 		k.register(Player.class);
 		k.register(Material.class);
 		k.register(BlockUpdate.class);
+		k.register(BlockFrameUpdate.class);
 		k.register(Block.class);
 		k.register(Block[].class);
 		k.register(Block[][].class);
@@ -50,5 +51,7 @@ public class Registrator{
 		k.register(ConcurrentHashMap.class);
 		k.register(ArrayList.class);
 		k.register(Long.class);
+		k.register(boolean[].class);
+		k.register(boolean[][].class);
 	}
 }

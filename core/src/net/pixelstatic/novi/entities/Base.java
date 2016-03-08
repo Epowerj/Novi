@@ -6,16 +6,18 @@ import net.pixelstatic.novi.entities.effects.ExplosionEmitter;
 import net.pixelstatic.novi.network.*;
 import net.pixelstatic.novi.world.*;
 
-public class Base extends DestructibleEntity implements TimedSyncable{
+public class Base extends Enemy implements Syncable{
 	public final int size = 10;
-	Block[][] blocks;
-	ArrayList<BlockUpdate> updates = new ArrayList<BlockUpdate>();
+	public Block[][] blocks;
+	public boolean[][] updated;
 
 	{
 		blocks = new Block[size][size];
+		updated = new boolean[size][size];
 		for(int x = 0;x < size;x ++){
 			for(int y = 0;y < size;y ++){
-				blocks[x][y] = new Block(x,y,Material.ironblock);
+				blocks[x][y] = new Block(x, y, Material.ironblock);
+				if(Math.random() < 0.1) blocks[x][y].setMaterial(Material.turret);
 				health += blocks[x][y].health;
 			}
 		}
@@ -23,31 +25,27 @@ public class Base extends DestructibleEntity implements TimedSyncable{
 	}
 
 	@Override
-	public void Update(){
-
-	}
-
-	@Override
 	public boolean collides(SolidEntity other){
-		if( !(other instanceof Bullet)) return false;
+		if( !(other instanceof Bullet) || !(((Bullet)other).shooter instanceof Player)) return false;
 
 		Block block = getBlockAt(other.x, other.y);
 		if(block == null) return false;
-		boolean collide = block != null && !block.empty();
+		boolean collide = block != null && !block.empty() && block.solid();
 		if(collide){
 			block.health --;
-		} 
+		}
 		if(block.health < 0){
 			block.setMaterial(Material.air);
+			block.getMaterial().destroyEvent(this, block.x, block.y);
 			new ExplosionEmitter(10f, 1f, 7f).setPosition(other.x, other.y).AddSelf();
 		}
-		if(collide)updateBlock(block.x, block.y);
+		if(collide) update(block.x, block.y);
 		return collide;
 	}
-	
-	public void updateBlock(int x, int y){
-		Block block = blocks[x][y];
-		updates.add(new BlockUpdate(block.getMaterial(), block.x, block.y, block.health));
+
+	//updates a block at x,y so it gets synced
+	public void update(int x, int y){
+		updated[x][y] = true;
 	}
 
 	public Block getBlockAt(float x, float y){
@@ -74,22 +72,34 @@ public class Base extends DestructibleEntity implements TimedSyncable{
 
 	@Override
 	public SyncBuffer writeSync(){
-		@SuppressWarnings("unchecked")
-		ArrayList<BlockUpdate> clone = (ArrayList<BlockUpdate>)updates.clone();
-		updates.clear();
-		return new BaseSyncBuffer(clone);
+		ArrayList<BlockUpdate> updates = new ArrayList<BlockUpdate>();
+		for(int x = 0;x < size;x ++){
+			for(int y = 0;y < size;y ++){
+				if(!updated[x][y]) continue;
+				Block block = blocks[x][y];
+				updates.add(new BlockUpdate(block));
+				updated[x][y] = false;
+			}
+		}
+		return new BaseSyncBuffer(updates);
 	}
 
 	@Override
 	public void readSync(SyncBuffer buffer){
-    	for(BlockUpdate update : ((BaseSyncBuffer)buffer).updates){
-    		update.apply(blocks);
-    	}
+		for(BlockUpdate update : ((BaseSyncBuffer)buffer).updates){
+			update.apply(blocks);
+		}
 	}
 
 	@Override
-	public boolean sync(){
-		return !updates.isEmpty();
+	public void behaviorUpdate(){
+		for(int x = 0;x < size;x ++){
+			for(int y = 0;y < size;y ++){
+				Block block = blocks[x][y];
+				if(block.empty()) continue;
+				block.getMaterial().update(block, this);
+			}
+		}
 	}
 
 }

@@ -1,23 +1,17 @@
 package net.pixelstatic.novi.world;
 
 public class BlockUpdate{
-	public int x, y, health;
-	public Material material;
+	public Block block;
 
 	public BlockUpdate(){
 
 	}
 
-	public BlockUpdate(Material material, int x, int y, int damage){
-		this.x = x;
-		this.y = y;
-		this.health = damage;
-		this.material = material;
+	public BlockUpdate(Block block){
+		this.block = block;
 	}
 	
 	public void apply(Block[][] blocks){
-		Block block = blocks[x][y];
-		block.setMaterial(material);
-		block.health = health;
+		blocks[block.x][block.y] = block;
 	}
 }

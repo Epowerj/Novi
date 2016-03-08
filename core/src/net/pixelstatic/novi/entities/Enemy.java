@@ -11,10 +11,9 @@ public abstract class Enemy extends DestructibleEntity implements Syncable{
 	private static final float targettime = 40;
 	private float targetcount = 0;
 	public Player target;
-	public int targetrange = 100;
+	public int targetrange = 500;
 	transient InterpolationData data = new InterpolationData();
-	
-	
+
 	public void targetPlayers(int range){
 		Player nearest = null;
 		float neardist = Float.MAX_VALUE;
@@ -27,9 +26,10 @@ public abstract class Enemy extends DestructibleEntity implements Syncable{
 				}
 			}
 		}
+		if(neardist > targetrange) nearest = null;
 		target = nearest;
 	}
-	
+
 	public void tryRetarget(){
 		if(targetcount > 0){
 			targetcount -= delta();
@@ -38,25 +38,32 @@ public abstract class Enemy extends DestructibleEntity implements Syncable{
 			targetcount = targettime;
 		}
 	}
-	
+
 	public boolean collides(SolidEntity other){
 		return !(other instanceof Enemy) && super.collides(other) && !((other instanceof Bullet && ((Bullet)other).shooter instanceof Enemy));
 	}
-	
+
 	public void deathEvent(){
 		int radius = 20;
 		for(int i = 0;i < 10;i ++){
 			new ExplosionEffect().setPosition(x + MathUtils.random( -radius, radius), y + MathUtils.random( -radius, radius)).SendSelf();
 		}
 	}
-	
+
 	public void shoot(ProjectileType type, float angle){
 		Bullet bullet = new Bullet(type, angle);
 		bullet.setPosition(x, y);
 		bullet.setShooter(this);
 		bullet.AddSelf().SendSelf();
 	}
-	
+
+	public Bullet getShoot(ProjectileType type, float angle){
+		Bullet bullet = new Bullet(type, angle);
+		bullet.setPosition(x, y);
+		bullet.setShooter(this);
+		return bullet;
+	}
+
 	public void Update(){
 		UpdateVelocity();
 	}
@@ -66,7 +73,7 @@ public abstract class Enemy extends DestructibleEntity implements Syncable{
 		tryRetarget();
 		behaviorUpdate();
 	}
-	
+
 	@Override
 	public SyncBuffer writeSync(){
 		return new EnemySyncBuffer(GetID(), x, y, velocity);
@@ -78,6 +85,6 @@ public abstract class Enemy extends DestructibleEntity implements Syncable{
 		velocity = sync.velocity;
 		data.push(this, sync.x, sync.y, 0);
 	}
-	
+
 	abstract public void behaviorUpdate();
 }

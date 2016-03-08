@@ -69,9 +69,16 @@ Novi3.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-enemies/drone
+enemies/turret
   rotate: false
   xy: 1, 1
+  size: 20, 20
+  orig: 20, 20
+  offset: 0, 0
+  index: -1
+enemies/drone
+  rotate: false
+  xy: 23, 9
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
@@ -100,6 +107,13 @@ tiles/tile
   orig: 16, 16
   offset: 0, 0
   index: -1
+tiles/ironblock
+  rotate: false
+  xy: 19, 3
+  size: 14, 14
+  orig: 14, 14
+  offset: 0, 0
+  index: -1
 
 Novi6.png
 format: RGBA8888
@@ -124,23 +138,16 @@ Novi7.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-projectiles/ironblock
-  rotate: false
-  xy: 1, 1
-  size: 14, 14
-  orig: 14, 14
-  offset: 0, 0
-  index: -1
 projectiles/bullet
   rotate: false
-  xy: 17, 8
+  xy: 1, 1
   size: 5, 7
   orig: 5, 7
   offset: 0, 0
   index: -1
 projectiles/dronebullet
   rotate: false
-  xy: 24, 8
+  xy: 8, 1
   size: 5, 7
   orig: 5, 7
   offset: 0, 0
