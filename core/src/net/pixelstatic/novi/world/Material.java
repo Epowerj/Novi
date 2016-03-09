@@ -5,7 +5,6 @@ import net.pixelstatic.novi.items.ProjectileType;
 import net.pixelstatic.novi.sprites.Layer;
 
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.math.Vector2;
 
 public enum Material{
 	air, ironblock{
@@ -14,7 +13,7 @@ public enum Material{
 		}
 	},
 	turret{
-		static final float reloadtime = 30;
+		static final float reloadtime = 40;
 
 		public boolean solid(){
 			return true;
@@ -22,12 +21,13 @@ public enum Material{
 
 		public void update(Block block, Base base){
 			if(base.target != null){
-				Vector2 v = new Vector2(world(base, block.x) - base.target.x, world(base, block.y) - base.target.y);
-				block.rotation = v.angle() + 90;
+				block.rotation = base.autoPredictTargetAngle(world(base, block.x), world(base, block.y), 5f) + 90;
 				base.update(block.x, block.y);
 				block.reload += Entity.delta();
 				if(block.reload >= reloadtime){
-					base.getShoot(ProjectileType.redbullet, block.rotation + 90).setPosition(world(base, block.x), world(base, block.y)).AddSelf().SendSelf();;
+					base.getShoot(ProjectileType.redbullet, block.rotation + 90).setPosition(world(base, block.x), world(base, block.y)).translate(3, 5).AddSelf().SendSelf();;					
+					base.getShoot(ProjectileType.redbullet, block.rotation + 90).setPosition(world(base, block.x), world(base, block.y)).translate(-3, 5).AddSelf().SendSelf();;					
+					
 					block.reload = 0;
 				}
 			}

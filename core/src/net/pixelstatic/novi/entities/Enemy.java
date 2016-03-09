@@ -63,6 +63,22 @@ public abstract class Enemy extends DestructibleEntity implements Syncable{
 		bullet.setShooter(this);
 		return bullet;
 	}
+	
+	public float targetAngle(float x, float y){
+		return predictTargetAngle(x,y,0f);
+	}
+	
+	public float predictTargetAngle(float x, float y, float amount){
+		if(target == null) return 0f;
+		vector.set(x - (target.x+target.velocity.x*amount), y - (target.y+target.velocity.y*amount));
+		return vector.angle();
+	}
+	
+	public float autoPredictTargetAngle(float x, float y, float speed){
+		if(target == null) return 0f;
+		float dist = Vector2.dst(target.x, target.y, x, y);
+		return predictTargetAngle(x,y,dist / speed);
+	}
 
 	public void Update(){
 		UpdateVelocity();

@@ -7,11 +7,13 @@ import net.pixelstatic.novi.modules.*;
 import net.pixelstatic.novi.server.NoviServer;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.math.Vector2;
 
 public abstract class Entity{
 	static public Novi novi;
 	static public NoviServer server;
     static private long lastid;
+    static public Vector2 vector = Vector2.Zero; // Vector2 object used for calculations; is reused
     public static ConcurrentHashMap<Long, Entity> entities = new ConcurrentHashMap<Long, Entity>();
     public static Renderer renderer; // renderer reference for drawing things
     private long id;
