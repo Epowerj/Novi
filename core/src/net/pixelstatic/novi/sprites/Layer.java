@@ -6,11 +6,11 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 
 public class Layer implements Comparable<Layer>{
-	Color color = Color.WHITE;
-	float layer, x, y, rotation, scale = 1f;
-	String region;
-	LayerType type = LayerType.SPRITE;
-	String text;
+	public Color color = Color.WHITE;
+	public float layer, x, y, rotation, scale = 1f;
+	public String region;
+	public LayerType type = LayerType.SPRITE;
+	public String text;
 
 	public void Draw(Renderer renderer){
 		renderer.batch.setColor(color);
@@ -48,6 +48,10 @@ public class Layer implements Comparable<Layer>{
 		this.x = x;
 		this.y = y;
 		return this;
+	}
+	
+	public Layer translate(float x, float y){
+		return setPosition(this.x+x,this.y+y);
 	}
 	
 	public Layer setText(String text){

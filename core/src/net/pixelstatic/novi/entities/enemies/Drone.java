@@ -1,6 +1,6 @@
 package net.pixelstatic.novi.entities.enemies;
 
-import net.pixelstatic.novi.entities.Enemy;
+import net.pixelstatic.novi.entities.*;
 import net.pixelstatic.novi.items.ProjectileType;
 
 import com.badlogic.gdx.math.*;
@@ -10,6 +10,7 @@ public class Drone extends Enemy{
 	float turnrange = 80;
 	float offset;
 	float sign = 0;
+	public Base base;
 	
 	{
 		material.maxvelocity = 2f;
@@ -24,6 +25,11 @@ public class Drone extends Enemy{
 	public void Draw(){
 		renderer.layer("drone", x, y).setRotation(velocity.angle() - 90);
 	}
+	
+	public void deathEvent(){
+		super.deathEvent();
+		if(base != null) base.spawned --;
+	}
 
 	@Override
 	public void behaviorUpdate(){
@@ -35,7 +41,7 @@ public class Drone extends Enemy{
 		add.setAngle(add.angle() + offset);
 		velocity.add(add.setLength(speed * delta()));
 		if(MathUtils.randomBoolean(0.03f)){
-			shoot(ProjectileType.redbullet, velocity.angle());
+			shoot(ProjectileType.redbullet, targetAngle()-180);
 		}
 	}
 

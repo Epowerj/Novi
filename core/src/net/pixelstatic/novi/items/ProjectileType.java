@@ -10,7 +10,7 @@ public enum ProjectileType{
 		}
 		
 		public int getLifetime(){
-			return 60;
+			return 30;
 		}
 		
 		public float getSpeed(){

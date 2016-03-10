@@ -6,21 +6,31 @@ import net.pixelstatic.novi.entities.effects.ExplosionEmitter;
 import net.pixelstatic.novi.network.*;
 import net.pixelstatic.novi.world.*;
 
+import com.badlogic.gdx.math.Vector2;
+
 public class Base extends Enemy implements Syncable{
 	public final int size = 10;
 	public Block[][] blocks;
 	public boolean[][] updated;
+	public int spawned;
 
 	{
 		blocks = new Block[size][size];
 		updated = new boolean[size][size];
 		for(int x = 0;x < size;x ++){
 			for(int y = 0;y < size;y ++){
-				blocks[x][y] = new Block(x, y, Material.ironblock);
-				if(Math.random() < 0.1) blocks[x][y].setMaterial(Material.turret);
+				blocks[x][y] = new Block(x, y, Material.air);
+				if(Vector2.dst(x, y, size/2f, size/2f) < 4.5f) blocks[x][y].setMaterial(Material.ironblock);
+				//if(Vector2.dst(x, y, size/2f, size/2f) <= 2) blocks[x][y].setMaterial(Material.turret);
 				health += blocks[x][y].health;
 			}
 		}
+		int o = 3;
+		blocks[o][o].setMaterial(Material.turret);
+		blocks[size - o][o].setMaterial(Material.turret);
+		blocks[o][size - o].setMaterial(Material.turret);
+		blocks[size - o][size - o].setMaterial(Material.turret);
+		blocks[size/2][1].setMaterial(Material.dronemaker);
 		material.getRectangle().setSize(size * Material.blocksize, size * Material.blocksize);
 	}
 
@@ -37,10 +47,27 @@ public class Base extends Enemy implements Syncable{
 		if(block.health < 0){
 			block.setMaterial(Material.air);
 			block.getMaterial().destroyEvent(this, block.x, block.y);
-			new ExplosionEmitter(10f, 1f, 7f).setPosition(other.x, other.y).AddSelf();
+			new ExplosionEmitter(10f, 1f, 14f).setPosition(other.x, other.y).AddSelf();
+			explosion(block.x,block.y);
 		}
 		if(collide) update(block.x, block.y);
 		return collide;
+	}
+	
+	public void explosion(int cx, int cy){
+		int rad = 4;
+		for(int x = -rad; x <= rad; x ++){
+			for(int y = -rad; y <= rad; y ++){
+				int relx = cx+x, rely = cy+y;
+				if(relx < 0 || rely < 0 || relx >= size || rely >= size) continue;
+				float dist = Vector2.dst(x, y, 0, 0); 
+				if(dist >= rad) continue;
+				Block block = blocks[relx][rely];
+				if(!block.solid())block.health -= (int)((1f-dist/rad+0.2f)*block.getMaterial().health());
+				if(block.health < 0 ) block.setMaterial(Material.air);
+				update(relx,rely);
+			}
+		}
 	}
 
 	//updates a block at x,y so it gets synced
