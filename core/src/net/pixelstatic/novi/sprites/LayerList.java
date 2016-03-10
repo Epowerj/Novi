@@ -8,7 +8,7 @@ import net.pixelstatic.novi.Novi;
 public class LayerList{
 	private Layer[] layerpool;
 	public Layer[] layers;
-	static int maxsize = 2600;
+	static int maxsize = 5600;
 	public int count, lastcount, poolcount;
 	boolean outofbounds;
 

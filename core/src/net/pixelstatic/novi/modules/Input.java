@@ -2,6 +2,7 @@ package net.pixelstatic.novi.modules;
 
 import net.pixelstatic.novi.Novi;
 import net.pixelstatic.novi.entities.Player;
+import net.pixelstatic.novi.entities.effects.BreakParticle;
 import net.pixelstatic.novi.network.packets.InputPacket;
 import net.pixelstatic.novi.utils.InputType;
 
@@ -36,6 +37,7 @@ public class Input extends Module implements InputProcessor{
 		if(down() && left()) angle = 225;
 		if(angle > -1)player.move(angle);
 		if(Gdx.input.isButtonPressed(Buttons.LEFT)){
+			new BreakParticle("ironblock").setPosition(player.x+30,player.y+30).AddSelf();
 			player.shooting = true;
 		}else{
 			player.shooting = false;

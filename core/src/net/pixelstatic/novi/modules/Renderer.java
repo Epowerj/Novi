@@ -20,7 +20,7 @@ public class Renderer extends Module {
 	public Matrix4 matrix; // matrix used for rendering gui and other things
 	GlyphLayout layout; // used for getting font bounds
 	public OrthographicCamera camera; //a camera, seems self explanatory
-	NoviAtlas atlas; //texture atlas
+	public NoviAtlas atlas; //texture atlas
 	LayerList layers;
 	int scale = 5; //camera zoom/scale
 	int pixelscale = 1; // pixelation scale

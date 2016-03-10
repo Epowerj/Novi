@@ -3,7 +3,7 @@ package net.pixelstatic.novi.entities;
 import net.pixelstatic.novi.items.*;
 import net.pixelstatic.novi.network.*;
 import net.pixelstatic.novi.server.*;
-import net.pixelstatic.novi.sprites.LayerType;
+import net.pixelstatic.novi.sprites.Layer.LayerType;
 import net.pixelstatic.novi.utils.*;
 
 import com.badlogic.gdx.graphics.Color;

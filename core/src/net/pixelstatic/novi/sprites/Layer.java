@@ -2,7 +2,7 @@ package net.pixelstatic.novi.sprites;
 
 import net.pixelstatic.novi.modules.Renderer;
 
-import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 
 public class Layer implements Comparable<Layer>{
@@ -11,6 +11,11 @@ public class Layer implements Comparable<Layer>{
 	public String region;
 	public LayerType type = LayerType.SPRITE;
 	public String text;
+	public Texture texture;
+	
+	public enum LayerType{
+		SPRITE, TEXT, TEXTURE
+	}
 
 	public void Draw(Renderer renderer){
 		renderer.batch.setColor(color);
@@ -26,9 +31,12 @@ public class Layer implements Comparable<Layer>{
 			renderer.font.setColor(color);
 			renderer.font.getData().setScale(scale);
 			renderer.font.draw(renderer.batch, text, x - glyphs.width /2, y - glyphs.height / 2);
+		}else if (type == LayerType.TEXTURE){
+			renderer.batch.setColor(color);
+			renderer.batch.draw(texture, x - texture.getWidth()/2, y - texture.getHeight()/2);
 		}
 	}
-
+		
 	public Layer(){
 
 	}
@@ -37,6 +45,11 @@ public class Layer implements Comparable<Layer>{
 		this.region = region;
 		this.x = x;
 		this.y = y;
+	}
+	
+	public Layer setTexture(Texture texture){
+		this.texture = texture;
+		return this;
 	}
 
 	public Layer setType(LayerType type){
@@ -95,6 +108,7 @@ public class Layer implements Comparable<Layer>{
 		color = Color.WHITE;
 		type = LayerType.SPRITE;
 		scale = 1f;
+		texture = null;
 	}
 
 	@Override

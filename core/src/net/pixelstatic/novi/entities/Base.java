@@ -22,7 +22,6 @@ public class Base extends Enemy implements Syncable{
 				blocks[x][y] = new Block(x, y, Material.air);
 				if(Vector2.dst(x, y, size/2f, size/2f) < 4.5f) blocks[x][y].setMaterial(Material.ironblock);
 				//if(Vector2.dst(x, y, size/2f, size/2f) <= 2) blocks[x][y].setMaterial(Material.turret);
-				health += blocks[x][y].health;
 			}
 		}
 		int o = 3;
@@ -32,6 +31,17 @@ public class Base extends Enemy implements Syncable{
 		blocks[size - o][size - o].setMaterial(Material.turret);
 		blocks[size/2][1].setMaterial(Material.dronemaker);
 		material.getRectangle().setSize(size * Material.blocksize, size * Material.blocksize);
+		updateHealth();
+	}
+	
+	void updateHealth(){
+		health = 0;
+		for(int x = 0;x < size;x ++){
+			for(int y = 0;y < size;y ++){
+				if(blocks[x][y].solid()) health += blocks[x][y].getMaterial().health();
+			}
+		}
+		health = 300;
 	}
 
 	@Override
@@ -48,7 +58,7 @@ public class Base extends Enemy implements Syncable{
 			block.setMaterial(Material.air);
 			block.getMaterial().destroyEvent(this, block.x, block.y);
 			new ExplosionEmitter(10f, 1f, 14f).setPosition(other.x, other.y).AddSelf();
-			explosion(block.x,block.y);
+		//	explosion(block.x,block.y);
 		}
 		if(collide) update(block.x, block.y);
 		return collide;

@@ -17,6 +17,10 @@ public enum Material{
 	dronemaker{
 		static final float buildtime = 200;
 		static final int maxspawn = 30;
+		
+		public boolean solid(){
+			return true;
+		}
 
 		public void draw(Block block, Base base, int x, int y){
 			defaultDraw("dronemaker", block, base, x, y, false);
@@ -95,7 +99,7 @@ public enum Material{
 	}
 
 	public boolean solid(){
-		return true;
+		return false;
 	}
 
 	public int health(){
