@@ -33,7 +33,8 @@ public class Layer implements Comparable<Layer>{
 			renderer.font.draw(renderer.batch, text, x - glyphs.width /2, y - glyphs.height / 2);
 		}else if (type == LayerType.TEXTURE){
 			renderer.batch.setColor(color);
-			renderer.batch.draw(texture, x - texture.getWidth()/2, y - texture.getHeight()/2);
+			renderer.batch.draw(texture, x - texture.getWidth()/2, y - texture.getHeight()/2,
+					texture.getWidth(),texture.getHeight());
 		}
 	}
 		

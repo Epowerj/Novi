@@ -1,6 +1,7 @@
 package net.pixelstatic.novi.entities.enemies;
 
 import net.pixelstatic.novi.entities.*;
+import net.pixelstatic.novi.entities.effects.BreakEffect;
 import net.pixelstatic.novi.items.ProjectileType;
 
 import com.badlogic.gdx.math.*;
@@ -29,6 +30,7 @@ public class Drone extends Enemy{
 	public void deathEvent(){
 		super.deathEvent();
 		if(base != null) base.spawned --;
+		new BreakEffect("drone", velocity, 1f).setPosition(x, y).SendSelf();
 	}
 
 	@Override

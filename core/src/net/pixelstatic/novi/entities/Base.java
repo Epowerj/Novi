@@ -2,7 +2,7 @@ package net.pixelstatic.novi.entities;
 
 import java.util.ArrayList;
 
-import net.pixelstatic.novi.entities.effects.ExplosionEmitter;
+import net.pixelstatic.novi.entities.effects.*;
 import net.pixelstatic.novi.network.*;
 import net.pixelstatic.novi.world.*;
 
@@ -41,13 +41,12 @@ public class Base extends Enemy implements Syncable{
 				if(blocks[x][y].solid()) health += blocks[x][y].getMaterial().health();
 			}
 		}
-		health = 300;
 	}
 
 	@Override
 	public boolean collides(SolidEntity other){
 		if( !(other instanceof Bullet) || !(((Bullet)other).shooter instanceof Player)) return false;
-
+		Bullet bullet = (Bullet)other;
 		Block block = getBlockAt(other.x, other.y);
 		if(block == null) return false;
 		boolean collide = block != null && !block.empty() && block.solid();
@@ -55,7 +54,6 @@ public class Base extends Enemy implements Syncable{
 			block.health --;
 		}
 		if(block.health < 0){
-			block.setMaterial(Material.air);
 			block.getMaterial().destroyEvent(this, block.x, block.y);
 			new ExplosionEmitter(10f, 1f, 14f).setPosition(other.x, other.y).AddSelf();
 		//	explosion(block.x,block.y);
@@ -93,7 +91,13 @@ public class Base extends Enemy implements Syncable{
 	}
 
 	public void deathEvent(){
+		for(int x = 0;x < size;x ++){
+			for(int y = 0;y < size;y ++){
+				if(!blocks[x][y].empty()) new BreakEffect("ironblock").setPosition(world(x), world(y)).SendSelf();
+			}
+		}
 		new ExplosionEmitter(60, 1f, size * Material.blocksize / 2f).setPosition(x, y).AddSelf();
+		
 	}
 
 	@Override
@@ -137,6 +141,10 @@ public class Base extends Enemy implements Syncable{
 				block.getMaterial().update(block, this);
 			}
 		}
+	}
+	
+	float world(int i){
+		return y + i * Material.blocksize - size / 2f * Material.blocksize + Material.blocksize / 2f;
 	}
 
 }

@@ -6,7 +6,7 @@ public abstract class DestructibleEntity extends FlyingEntity{
 	
 	public void collisionEvent(SolidEntity other){
 		if(!(other instanceof Bullet)) return;
-		health -= 2;
+		health -= ((Bullet)other).type.damage();
 		hitEvent((Bullet)other);
 		if(health < 0){
 			deathEvent();

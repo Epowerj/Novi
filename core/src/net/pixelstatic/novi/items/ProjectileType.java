@@ -39,6 +39,10 @@ public enum ProjectileType{
 		return 100;
 	}
 	
+	public int damage(){
+		return 1;
+	}
+	
 	public void draw(Bullet bullet, Renderer renderer){
 		
 	}

@@ -1,6 +1,7 @@
 package net.pixelstatic.novi.world;
 
 import net.pixelstatic.novi.entities.*;
+import net.pixelstatic.novi.entities.effects.BreakEffect;
 import net.pixelstatic.novi.entities.enemies.Drone;
 import net.pixelstatic.novi.items.ProjectileType;
 import net.pixelstatic.novi.sprites.Layer;
@@ -77,6 +78,7 @@ public enum Material{
 	static public final int blocksize = 14;
 
 	public void destroyEvent(Base base, int x, int y){
+		new BreakEffect(name(), 1.5f).setPosition(world(base,x), world(base,y)).SendSelf();
 		base.blocks[x][y].setMaterial(Material.ironblock);
 	}
 

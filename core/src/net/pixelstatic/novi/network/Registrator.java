@@ -37,6 +37,7 @@ public class Registrator{
 		k.register(Bullet.class);
 		k.register(ExplosionEffect.class);
 		k.register(ExplosionEmitter.class);
+		k.register(BreakEffect.class);
 		k.register(Target.class);
 		k.register(Drone.class);
 		k.register(Player.class);
