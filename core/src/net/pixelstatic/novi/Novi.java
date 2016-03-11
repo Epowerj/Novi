@@ -2,7 +2,7 @@ package net.pixelstatic.novi;
 
 import java.util.HashMap;
 
-import net.pixelstatic.novi.entities.Entity;
+import net.pixelstatic.novi.entities.*;
 import net.pixelstatic.novi.modules.*;
 
 import com.badlogic.gdx.ApplicationAdapter;
@@ -24,7 +24,9 @@ public class Novi extends ApplicationAdapter {
 	@Override
 	public void render() {
 		//update all entities
+		Player player = getModule(ClientData.class).player;
 		for(Entity e : Entity.entities.values()){
+			if(!e.loaded(player.x, player.y)) continue;
 			e.Update();
 			e.Draw();
 		}

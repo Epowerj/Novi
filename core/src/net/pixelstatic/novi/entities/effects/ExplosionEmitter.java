@@ -5,7 +5,7 @@ import net.pixelstatic.novi.entities.Entity;
 import com.badlogic.gdx.math.MathUtils;
 
 public class ExplosionEmitter extends Entity{
-	float radius, chance, lifetime, life;
+	float radius, chance, lifetime, life, drag = 0.01f;
 	
 	public ExplosionEmitter(){
 		
@@ -32,6 +32,7 @@ public class ExplosionEmitter extends Entity{
 		if(MathUtils.randomBoolean(chance)){
 			new ExplosionEffect().setPosition(x+MathUtils.random(-radius, radius),  y+MathUtils.random(-radius, radius)).SendSelf();
 		}
+		chance -= drag;
 	}
 
 }

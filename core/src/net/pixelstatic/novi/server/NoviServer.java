@@ -123,8 +123,7 @@ public class NoviServer{
 	
 	private void addEntities(){
 		for(int i = 0; i < 10; i ++){
-		//	new Drone().setPosition(100 + MathUtils.random(100), 100+ MathUtils.random(100)).AddSelf();
+			new Base().setPosition(100+i*150, 100).AddSelf();
 		}
-		new Base().setPosition(100, 100).AddSelf();
 	}
 }

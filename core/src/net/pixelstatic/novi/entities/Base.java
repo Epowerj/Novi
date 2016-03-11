@@ -93,11 +93,10 @@ public class Base extends Enemy implements Syncable{
 	public void deathEvent(){
 		for(int x = 0;x < size;x ++){
 			for(int y = 0;y < size;y ++){
-				if(!blocks[x][y].empty()) new BreakEffect("ironblock").setPosition(world(x), world(y)).SendSelf();
+				if(!blocks[x][y].empty()) new BreakEffect("ironblock").setPosition(worldx(x), worldy(y)).SendSelf();
 			}
 		}
-		new ExplosionEmitter(60, 1f, size * Material.blocksize / 2f).setPosition(x, y).AddSelf();
-		
+		new ExplosionEmitter(120, 1.1f, size * Material.blocksize / 2f).setPosition(x, y).AddSelf();
 	}
 
 	@Override
@@ -143,7 +142,11 @@ public class Base extends Enemy implements Syncable{
 		}
 	}
 	
-	float world(int i){
+	float worldx(int i){
+		return x + i * Material.blocksize - size / 2f * Material.blocksize + Material.blocksize / 2f;
+	}
+	
+	float worldy(int i){
 		return y + i * Material.blocksize - size / 2f * Material.blocksize + Material.blocksize / 2f;
 	}
 

@@ -1,7 +1,10 @@
 package net.pixelstatic.novi.modules;
 
+import java.util.Random;
+
 import net.pixelstatic.novi.Novi;
 import net.pixelstatic.novi.entities.*;
+import net.pixelstatic.novi.entities.effects.BreakEffect;
 import net.pixelstatic.novi.sprites.*;
 
 import com.badlogic.gdx.Gdx;
@@ -13,7 +16,7 @@ import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Matrix4;
 
-public class Renderer extends Module {
+public class Renderer extends Module{
 	public SpriteBatch batch; //novi's batch
 	public BitmapFont font; //a font for displaying text
 	public OrthogonalTiledMapRenderer maprenderer; //used for rendering the map
@@ -27,8 +30,8 @@ public class Renderer extends Module {
 	public Player player; //player object from ClientData module
 	World world; // world module
 	FrameBuffer buffer;
-	
-	public Renderer(Novi novi) {
+
+	public Renderer(Novi novi){
 		super(novi);
 		matrix = new Matrix4();
 		batch = new SpriteBatch();
@@ -39,16 +42,17 @@ public class Renderer extends Module {
 		buffer = new FrameBuffer(Format.RGBA8888, Gdx.graphics.getWidth() / pixelscale, Gdx.graphics.getHeight() / pixelscale, false);
 		buffer.getColorBufferTexture().setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
 		Entity.renderer = this;
+		BreakEffect.createChunks();
 	}
-	
+
 	public void Init(){
-		camera = new OrthographicCamera(Gdx.graphics.getWidth() / scale, Gdx.graphics.getHeight()/ scale);
+		camera = new OrthographicCamera(Gdx.graphics.getWidth() / scale, Gdx.graphics.getHeight() / scale);
 		player = getModule(ClientData.class).player;
 		world = getModule(World.class);
 	}
-	
+
 	@Override
-	public void Update() {
+	public void Update(){
 		updateCamera();
 		batch.setProjectionMatrix(camera.combined); //make the batch use the camera projection
 		drawWorld();
@@ -56,93 +60,101 @@ public class Renderer extends Module {
 		doRender();
 		updateCamera();
 	}
-	
+
 	void doRender(){
 		clearScreen();
 		maprenderer.setView(camera);
-		maprenderer.render();
+		//	maprenderer.render();
 		batch.begin();
+		drawSky();
 		drawLayers();
 		batch.end();
 		batch.setColor(Color.WHITE);
 	}
-	
+
+	void drawSky(){
+
+	}
+
 	void clearScreen(){
 		Color clear = Color.SKY.cpy().sub(0.1f, 0.1f, 0.1f, 0f);
 		Gdx.gl.glClearColor(clear.r, clear.g, clear.b, 0);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 	}
-	
-	void drawWorld(){
 
+	void drawWorld(){
+		Random rand = new Random();
+		rand.setSeed(1);
+		float scl = 1000f;
+		float time = (float)Gdx.graphics.getFrameId()/10f + 1000f;
+		for(int i = 1;i <= 100;i ++){
+			float randx = (rand.nextFloat()-0.5f)*scl;
+			float randy = (rand.nextFloat()-0.5f)*scl;
+			int iscl = (i%5+1);
+			float airadd = (iscl*time)%2000f-1000f;
+			float loop = Gdx.graphics.getHeight()*1.6f;
+			float loopx = Gdx.graphics.getWidth()*1.6f;
+			float camx = - ((player.x*iscl)%loopx-loopx/2f), camy =  - ((player.y*iscl)%loop-loop/2f);
+			
+			layer("cloud" + (i%7+1),camera.position.x +airadd+randx, camera.position.y +randy).setLayer(-2f);
+		}
 	}
-	
+
 	//sorts layer list, draws all layers and clears it
 	void drawLayers(){
 		layers.sort();
-		for(int i = 0; i < layers.count; i ++){
+		for(int i = 0;i < layers.count;i ++){
 			Layer layer = layers.layers[i];
 			layer.Draw(this);
 		}
 		layers.clear();
 	}
-	
+
 	void updateCamera(){
 		camera.position.set(player.x, player.y, 0f);
-	//	limitCamera();
+		//	limitCamera();
 		camera.update();
 	}
-	
+
 	void limitCamera(){
 		//limit camera position, snap to sides
-		if(camera.position.x - camera.viewportWidth/2*camera.zoom < 0)
-			camera.position.x = camera.viewportWidth/2*camera.zoom;
-		if(camera.position.y - camera.viewportHeight/2*camera.zoom < 0)
-			camera.position.y = camera.viewportHeight/2*camera.zoom;
-		if(camera.position.x + camera.viewportWidth/2*camera.zoom > world.worldWidthPixels())
-			camera.position.x = world.worldWidthPixels() - camera.viewportWidth/2*camera.zoom;
-		if(camera.position.y + camera.viewportHeight/2*camera.zoom > world.worldHeightPixels())
-			camera.position.y = world.worldHeightPixels() - camera.viewportHeight/2*camera.zoom;
+		if(camera.position.x - camera.viewportWidth / 2 * camera.zoom < 0) camera.position.x = camera.viewportWidth / 2 * camera.zoom;
+		if(camera.position.y - camera.viewportHeight / 2 * camera.zoom < 0) camera.position.y = camera.viewportHeight / 2 * camera.zoom;
+		if(camera.position.x + camera.viewportWidth / 2 * camera.zoom > world.worldWidthPixels()) camera.position.x = world.worldWidthPixels() - camera.viewportWidth / 2 * camera.zoom;
+		if(camera.position.y + camera.viewportHeight / 2 * camera.zoom > world.worldHeightPixels()) camera.position.y = world.worldHeightPixels() - camera.viewportHeight / 2 * camera.zoom;
 	}
-	
-	public void onResize(int width, int height) {
+
+	public void onResize(int width, int height){
 		matrix.setToOrtho2D(0, 0, width, height);
-		camera.setToOrtho(false, width / scale, height/ scale); //resize camera
+		camera.setToOrtho(false, width / scale, height / scale); //resize camera
 	}
-	
-	
+
 	public Layer layer(String region, float x, float y){
 		return layers.addLayer().set(region, x, y);
 	}
-	
+
 	public Layer layer(float x, float y){
 		return layers.addLayer().setPosition(x, y);
 	}
-	
+
 	public void zoom(float amount){
-		if(camera.zoom + amount < 0 || (camera.zoom   + amount) * camera.viewportWidth > world.worldWidthPixels() ) return;
-		
+		if(camera.zoom + amount < 0 || (camera.zoom + amount) * camera.viewportWidth > world.worldWidthPixels()) return;
+		if(camera.zoom < 3 || amount < 0)
 		camera.zoom += amount;
 	}
-	
+
 	public GlyphLayout getBounds(String text){
 		layout.setText(font, text);
 		return layout;
 	}
-	
+
 	//utility/shortcut draw method
 	public void draw(String region, float x, float y){
 		batch.draw(atlas.findRegion(region), x - atlas.RegionWidth(region) / 2, y - atlas.RegionHeight(region) / 2);
 	}
-	
+
 	public void draw(String region, float x, float y, float rotation){
-		batch.draw(atlas.findRegion(region), 
-				x - atlas.RegionWidth(region) / 2, 
-				y - atlas.RegionHeight(region) / 2, 
-				atlas.RegionWidth(region) / 2, 
-				atlas.RegionHeight(region) / 2, 
-				atlas.RegionWidth(region), 
-				atlas.RegionHeight(region), 1f, 1f, rotation);
+		batch.draw(atlas.findRegion(region), x - atlas.RegionWidth(region) / 2, y - atlas.RegionHeight(region) / 2, atlas.RegionWidth(region) / 2, atlas.RegionHeight(region) / 2, atlas.RegionWidth(region), atlas.RegionHeight(region), 1f, 1f, rotation);
 	}
 
 }

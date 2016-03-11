@@ -7,7 +7,7 @@ import net.pixelstatic.novi.modules.*;
 import net.pixelstatic.novi.server.NoviServer;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.*;
 
 public abstract class Entity{
 	static public Novi novi;
@@ -28,6 +28,10 @@ public abstract class Entity{
 		if(y < 0) y = 0;
 		if(x > World.worldSize) x = World.worldSize;
 		if(y > World.worldSize) y = World.worldSize;
+	}
+	
+	public boolean loaded(float playerx, float playery){
+		return MathUtils.isEqual(playerx, x, 1000f) && MathUtils.isEqual(playery, y, 1000f);
 	}
     
     public void onRecieve(){
