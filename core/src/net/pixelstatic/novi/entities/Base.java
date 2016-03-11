@@ -97,6 +97,11 @@ public class Base extends Enemy implements Syncable{
 			}
 		}
 		new ExplosionEmitter(120, 1.1f, size * Material.blocksize / 2f).setPosition(x, y).AddSelf();
+		new Shockwave().setPosition(x, y).SendSelf();
+	}
+	
+	public void removeEvent(){
+		renderer.shakeCamera(60f, 20f);
 	}
 
 	@Override

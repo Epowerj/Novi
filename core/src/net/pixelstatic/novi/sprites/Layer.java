@@ -12,7 +12,7 @@ public class Layer implements Comparable<Layer>{
 	public LayerType type = LayerType.SPRITE;
 	public String text;
 	public TextureRegion texture;
-	
+
 	public enum LayerType{
 		SPRITE, TEXT, TEXTURE
 	}
@@ -20,25 +20,25 @@ public class Layer implements Comparable<Layer>{
 	public void Draw(Renderer renderer){
 		renderer.batch.setColor(color);
 		if(type == LayerType.SPRITE){
-			if(rotation == 0){
+			if(scale != 1f){
+				renderer.drawscl(region, x, y, scale);
+			}else if(rotation == 0){
 				renderer.draw(region, x, y);
 			}else{
 				renderer.draw(region, x, y, rotation);
 			}
-		}else if (type == LayerType.TEXT){
+		}else if(type == LayerType.TEXT){
 			GlyphLayout glyphs = renderer.getBounds(text);
 			renderer.font.setUseIntegerPositions(false);
 			renderer.font.setColor(color);
 			renderer.font.getData().setScale(scale);
-			renderer.font.draw(renderer.batch, text, x - glyphs.width /2, y - glyphs.height / 2);
-		}else if (type == LayerType.TEXTURE){
+			renderer.font.draw(renderer.batch, text, x - glyphs.width / 2, y - glyphs.height / 2);
+		}else if(type == LayerType.TEXTURE){
 			renderer.batch.setColor(color);
-			renderer.batch.draw(texture, x - texture.getRegionWidth()/2, y - texture.getRegionHeight()/2, 
-					texture.getRegionHeight()/2, texture.getRegionWidth()/2,
-					texture.getRegionWidth(),texture.getRegionHeight(), 1f, 1f, rotation);
+			renderer.batch.draw(texture, x - texture.getRegionWidth() / 2, y - texture.getRegionHeight() / 2, texture.getRegionHeight() / 2, texture.getRegionWidth() / 2, texture.getRegionWidth(), texture.getRegionHeight(), 1f, 1f, rotation);
 		}
 	}
-		
+
 	public Layer(){
 
 	}
@@ -48,7 +48,7 @@ public class Layer implements Comparable<Layer>{
 		this.x = x;
 		this.y = y;
 	}
-	
+
 	public Layer setTexture(TextureRegion texture){
 		this.texture = texture;
 		return this;
@@ -58,22 +58,22 @@ public class Layer implements Comparable<Layer>{
 		this.type = type;
 		return this;
 	}
-	
+
 	public Layer setPosition(float x, float y){
 		this.x = x;
 		this.y = y;
 		return this;
 	}
-	
+
 	public Layer translate(float x, float y){
-		return setPosition(this.x+x,this.y+y);
+		return setPosition(this.x + x, this.y + y);
 	}
-	
+
 	public Layer setText(String text){
 		this.text = text;
 		return this;
 	}
-	
+
 	public Layer setScale(float scale){
 		this.scale = scale;
 		return this;

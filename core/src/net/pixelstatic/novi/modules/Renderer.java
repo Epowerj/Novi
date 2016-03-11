@@ -14,9 +14,10 @@ import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.math.Matrix4;
+import com.badlogic.gdx.math.*;
 
 public class Renderer extends Module{
+	private float cameraShakeDuration, cameraShakeIntensity, cameraDrag;
 	public SpriteBatch batch; //novi's batch
 	public BitmapFont font; //a font for displaying text
 	public OrthogonalTiledMapRenderer maprenderer; //used for rendering the map
@@ -92,10 +93,6 @@ public class Renderer extends Module{
 			float randy = (rand.nextFloat()-0.5f)*scl;
 			int iscl = (i%5+1);
 			float airadd = (iscl*time)%2000f-1000f;
-			float loop = Gdx.graphics.getHeight()*1.6f;
-			float loopx = Gdx.graphics.getWidth()*1.6f;
-			float camx = - ((player.x*iscl)%loopx-loopx/2f), camy =  - ((player.y*iscl)%loop-loop/2f);
-			
 			layer("cloud" + (i%7+1),camera.position.x +airadd+randx, camera.position.y +randy).setLayer(-2f);
 		}
 	}
@@ -112,8 +109,19 @@ public class Renderer extends Module{
 
 	void updateCamera(){
 		camera.position.set(player.x, player.y, 0f);
+		shakeCamera();
 		//	limitCamera();
 		camera.update();
+	}
+	
+	void shakeCamera(){
+		if(cameraShakeDuration > 0){
+			cameraShakeDuration -= Entity.delta();
+			camera.position.x += MathUtils.random(-cameraShakeIntensity, cameraShakeIntensity);
+			camera.position.y += MathUtils.random(-cameraShakeIntensity, cameraShakeIntensity);
+			Novi.log(cameraShakeIntensity);
+			cameraShakeIntensity -= cameraDrag * Entity.delta();
+		}
 	}
 
 	void limitCamera(){
@@ -127,6 +135,12 @@ public class Renderer extends Module{
 	public void onResize(int width, int height){
 		matrix.setToOrtho2D(0, 0, width, height);
 		camera.setToOrtho(false, width / scale, height / scale); //resize camera
+	}
+	
+	public void shakeCamera(float duration, float intensity){
+		cameraShakeIntensity = intensity;
+		cameraShakeDuration = duration;
+		cameraDrag = cameraShakeIntensity / cameraShakeDuration;
 	}
 
 	public Layer layer(String region, float x, float y){
@@ -151,6 +165,10 @@ public class Renderer extends Module{
 	//utility/shortcut draw method
 	public void draw(String region, float x, float y){
 		batch.draw(atlas.findRegion(region), x - atlas.RegionWidth(region) / 2, y - atlas.RegionHeight(region) / 2);
+	}
+	
+	public void drawscl(String region, float x, float y, float scl){
+		batch.draw(atlas.findRegion(region), x - atlas.RegionWidth(region) / 2*scl, y - atlas.RegionHeight(region) / 2*scl, atlas.RegionHeight(region)*scl, atlas.RegionHeight(region)*scl);
 	}
 
 	public void draw(String region, float x, float y, float rotation){

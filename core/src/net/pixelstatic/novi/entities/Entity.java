@@ -30,14 +30,22 @@ public abstract class Entity{
 		if(y > World.worldSize) y = World.worldSize;
 	}
 	
+	//whether or not this entity is loaded (is drawn/updated on screen)
 	public boolean loaded(float playerx, float playery){
 		return MathUtils.isEqual(playerx, x, 1000f) && MathUtils.isEqual(playery, y, 1000f);
 	}
     
+	//called when this entity object is recieved
     public void onRecieve(){
     	
     }
     
+    //called when this entity is removed
+    public void removeEvent(){
+    	
+    }
+    
+    //guess what this does
     public Entity setPosition(float x, float y){
     	this.x = x;
     	this.y = y;

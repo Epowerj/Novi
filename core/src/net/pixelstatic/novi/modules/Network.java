@@ -60,6 +60,8 @@ public class Network extends Module{
 					//Novi.log("recieved entity of type " + entity.getClass().getSimpleName());
 				}else if(object instanceof EntityRemovePacket){
 					EntityRemovePacket remove = (EntityRemovePacket)object;
+					if(Entity.entities.containsKey(remove.id))
+					Entity.entities.get(remove.id).removeEvent();
 					Entity.entities.remove(remove.id);
 				}else if(object instanceof WorldUpdatePacket){
 					WorldUpdatePacket packet = (WorldUpdatePacket)object;
