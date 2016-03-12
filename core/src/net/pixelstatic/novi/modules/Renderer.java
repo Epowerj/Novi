@@ -87,7 +87,7 @@ public class Renderer extends Module{
 		Random rand = new Random();
 		rand.setSeed(1);
 		float scl = 1000f;
-		float time = (float)Gdx.graphics.getFrameId()/10f + 1000f;
+		float time = (float)Gdx.graphics.getFrameId()/10f + 1000f-player.x/100f;
 		for(int i = 1;i <= 100;i ++){
 			float randx = (rand.nextFloat()-0.5f)*scl;
 			float randy = (rand.nextFloat()-0.5f)*scl;

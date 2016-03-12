@@ -8,6 +8,7 @@ import net.pixelstatic.novi.sprites.Layer;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.math.MathUtils;
 
 public enum Material{
 	air, ironblock{
@@ -16,7 +17,7 @@ public enum Material{
 		}
 	},
 	dronemaker{
-		static final float buildtime = 200;
+		static final float buildtime = 600;
 		static final int maxspawn = 10;
 		
 		public boolean solid(){
@@ -43,6 +44,10 @@ public enum Material{
 				base.spawned ++;
 			}
 		}
+		
+		public int health(){
+			return 60;
+		}
 	},
 	turret{
 		static final float reloadtime = 40;
@@ -68,6 +73,40 @@ public enum Material{
 		public void draw(Block block, Base base, int x, int y){
 			defaultDraw("ironblock", block, base, x, y, false);
 			defaultDraw("turret", block, base, x, y, false).setRotation(block.rotation).setLayer( -0.5f);
+		}
+		
+		public int health(){
+			return 40;
+		}
+	},
+	bigturret{
+		static final float reloadtime = 120;
+
+		public boolean solid(){
+			return true;
+		}
+
+		public void update(Block block, Base base){
+			if(base.target != null){
+				block.rotation = MathUtils.lerpAngle(block.rotation, base.autoPredictTargetAngle(worldx(base, block.x), worldy(base, block.y), 5f) + 90, 0.1f);
+				base.update(block.x, block.y);
+				block.reload += Entity.delta();
+				if(block.reload >= reloadtime){
+					base.getShoot(ProjectileType.redbullet, block.rotation + 90).setPosition(worldx(base, block.x), worldy(base, block.y)).translate(3, 5).AddSelf().SendSelf();;					
+					base.getShoot(ProjectileType.redbullet, block.rotation + 90).setPosition(worldx(base, block.x), worldy(base, block.y)).translate(-3, 5).AddSelf().SendSelf();;					
+					
+					block.reload = 0;
+				}
+			}
+		}
+
+		public void draw(Block block, Base base, int x, int y){
+			defaultDraw("ironblock", block, base, x, y, false);
+			defaultDraw("bigturret", block, base, x, y, false).setRotation(block.rotation).setLayer( -0.5f);
+		}
+		
+		public int health(){
+			return 100;
 		}
 	};
 

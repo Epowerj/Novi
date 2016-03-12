@@ -14,12 +14,12 @@ import com.badlogic.gdx.math.*;
 public class BreakEffect extends Effect{
 	public static final int cachedchunks = 10;
 	private static HashMap<String, Chunk[][]> loadedchunks = new HashMap<String, Chunk[][]>();
-	public static final float jaggedness = 3f;
+	public static final float jaggedness = 2f;
 	public int chunkamount = 7;
 	private String regionName;
 	private transient boolean init;
 	private transient ChunkParticle[] chunks;
-	private float velocityscl = 3f;
+	private float velocityscl = 4f;
 	private Vector2 offset = new Vector2(0, 0);
 
 	{
@@ -34,7 +34,7 @@ public class BreakEffect extends Effect{
 	private static void loadChunkType(String name){
 		Chunk[][] chunklist = new Chunk[cachedchunks][0];
 		for(int chunkarraynum = 0;chunkarraynum < cachedchunks;chunkarraynum ++){
-			int chunkamount = 2 + MathUtils.random(5);
+			int chunkamount = 3 + MathUtils.random(4);
 			Chunk[] chunks = new Chunk[chunkamount];
 			TextureRegion region = renderer.atlas.findRegion(name);
 			Pixmap regionpixmap = renderer.atlas.getPixmapOf(region);
@@ -48,8 +48,8 @@ public class BreakEffect extends Effect{
 			for(int i = 0;i < chunkamount;i ++){
 				Pixmap pixmap = new Pixmap(region.getRegionWidth(), region.getRegionHeight(), Format.RGBA8888);
 
-				float angle = angles[i];
-				float lastangle = i == 0 ? angles[chunkamount - 1] : angles[i - 1];
+				float angle = i == chunkamount - 1 ? 360f : angles[i];
+				float lastangle = i == 0 ? 0 : angles[i - 1];
 				for(int x = region.getRegionX();x < region.getRegionX() + region.getRegionWidth();x ++){
 					for(int y = region.getRegionY();y < region.getRegionY() + region.getRegionHeight();y ++){
 						angle += MathUtils.random( -jaggedness, jaggedness);
@@ -59,7 +59,7 @@ public class BreakEffect extends Effect{
 						float rawangle = MathUtils.radDeg * MathUtils.atan2(rely - region.getRegionHeight() / 2f, relx - region.getRegionWidth() / 2f);
 						float pixangle = rawangle < 0 ? rawangle + 360f : rawangle;
 
-						if( !((pixangle > lastangle && pixangle < angle) || (i == 0 && pixangle > lastangle + 100))) continue;
+						if( !((pixangle >= lastangle && pixangle <= angle))) continue;
 
 						Color color = new Color(regionpixmap.getPixel(x, y));
 						if(Math.random() < 0.1) color.mul(1f, 0.9f, 0.9f, 1f);
@@ -77,7 +77,7 @@ public class BreakEffect extends Effect{
 	static class ChunkParticle{
 		private Chunk chunk;
 		public Vector2 velocity = new Vector2();
-		float x, y, drag = 0.02f, rotation;
+		float x, y, drag = 0.03f, rotation;
 		float rotatevelocity = MathUtils.random( -5f, 5f), rotatedrag = 0.99f;
 		
 		public void draw(BreakEffect effect){

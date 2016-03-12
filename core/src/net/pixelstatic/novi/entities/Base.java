@@ -30,6 +30,8 @@ public class Base extends Enemy implements Syncable{
 		blocks[o][size - o].setMaterial(Material.turret);
 		blocks[size - o][size - o].setMaterial(Material.turret);
 		blocks[size/2][1].setMaterial(Material.dronemaker);
+		blocks[size/2][size/2].setMaterial(Material.bigturret);
+		
 		material.getRectangle().setSize(size * Material.blocksize, size * Material.blocksize);
 		updateHealth();
 	}
@@ -101,7 +103,7 @@ public class Base extends Enemy implements Syncable{
 	}
 	
 	public void removeEvent(){
-		renderer.shakeCamera(60f, 20f);
+		renderer.shakeCamera(80f, 60f);
 	}
 
 	@Override

@@ -84,7 +84,7 @@ public class Input extends Module implements InputProcessor{
 
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button){
-		//new BreakEffect("ironblock").setPosition(player.x+30,player.y+30).AddSelf();
+	//	new BreakEffect("ironblock").setPosition(player.x+30,player.y+30).AddSelf();
 		player.rotation = player.velocity.angle();
 		player.valigned = false;
 		SendInput(InputType.CLICK_DOWN);
