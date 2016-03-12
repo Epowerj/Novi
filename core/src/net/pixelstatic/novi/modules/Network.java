@@ -53,6 +53,9 @@ public class Network extends Module{
 					Entity.entities = data.entities;
 					getModule(ClientData.class).player.AddSelf();
 					Novi.log("Recieved data packet.");
+				}else if(object instanceof EffectPacket){
+					EffectPacket effect = (EffectPacket)object;
+					effect.apply(novi);
 				}else if(object instanceof Entity){
 					Entity entity = (Entity)object;
 					entity.onRecieve();

@@ -8,6 +8,7 @@ import net.pixelstatic.novi.entities.effects.*;
 import net.pixelstatic.novi.entities.enemies.Drone;
 import net.pixelstatic.novi.items.*;
 import net.pixelstatic.novi.network.packets.*;
+import net.pixelstatic.novi.network.packets.EffectPacket.EffectType;
 import net.pixelstatic.novi.utils.InputType;
 import net.pixelstatic.novi.world.*;
 
@@ -21,6 +22,7 @@ public class Registrator{
 		k.register(PositionPacket.class);
 		k.register(WorldUpdatePacket.class);
 		k.register(EntityRemovePacket.class);
+		k.register(EffectPacket.class);
 		k.register(InputPacket.class);
 		k.register(SyncBuffer.class);
 		k.register(BaseSyncBuffer.class);
@@ -43,6 +45,7 @@ public class Registrator{
 		k.register(Drone.class);
 		k.register(Player.class);
 		k.register(Material.class);
+		k.register(EffectType.class);
 		k.register(BlockUpdate.class);
 		k.register(BlockFrameUpdate.class);
 		k.register(Block.class);
@@ -53,6 +56,7 @@ public class Registrator{
 		k.register(ConcurrentHashMap.class);
 		k.register(ArrayList.class);
 		k.register(Long.class);
+		k.register(float[].class);
 		k.register(boolean[].class);
 		k.register(boolean[][].class);
 	}

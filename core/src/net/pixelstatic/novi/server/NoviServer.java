@@ -122,7 +122,7 @@ public class NoviServer{
 	}
 	
 	private void addEntities(){
-		for(int i = 0; i < 10; i ++){
+		for(int i = 0; i < 1; i ++){
 			new Base().setPosition(100+i*150, 100).AddSelf();
 		}
 	}

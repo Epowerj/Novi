@@ -166,16 +166,23 @@ Novi7.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-projectiles/dronebullet
+projectiles/explosivebullet
   rotate: false
   xy: 1, 1
   size: 7, 9
   orig: 7, 9
   offset: 0, 0
   index: -1
+projectiles/dronebullet
+  rotate: false
+  xy: 10, 1
+  size: 7, 9
+  orig: 7, 9
+  offset: 0, 0
+  index: -1
 projectiles/bullet
   rotate: false
-  xy: 10, 3
+  xy: 19, 3
   size: 5, 7
   orig: 5, 7
   offset: 0, 0

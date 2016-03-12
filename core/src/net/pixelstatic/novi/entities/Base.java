@@ -47,13 +47,12 @@ public class Base extends Enemy implements Syncable{
 
 	@Override
 	public boolean collides(SolidEntity other){
-		if( !(other instanceof Bullet) || !(((Bullet)other).shooter instanceof Player)) return false;
-		Bullet bullet = (Bullet)other;
+		if( !(other instanceof Damager) || (other instanceof Bullet && !(((Bullet)other).shooter instanceof Player))) return false;
 		Block block = getBlockAt(other.x, other.y);
 		if(block == null) return false;
 		boolean collide = block != null && !block.empty() && block.solid();
 		if(collide){
-			block.health --;
+			block.health -= ((Damager)other).damage();
 		}
 		if(block.health < 0){
 			block.getMaterial().destroyEvent(this, block.x, block.y);
@@ -100,10 +99,7 @@ public class Base extends Enemy implements Syncable{
 		}
 		new ExplosionEmitter(120, 1.1f, size * Material.blocksize / 2f).setPosition(x, y).AddSelf();
 		new Shockwave().setPosition(x, y).SendSelf();
-	}
-	
-	public void removeEvent(){
-		renderer.shakeCamera(80f, 60f);
+		Effects.shake(80f, 60f, x, y);
 	}
 
 	@Override

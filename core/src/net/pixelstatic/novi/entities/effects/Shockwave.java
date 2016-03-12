@@ -5,10 +5,16 @@ import net.pixelstatic.novi.sprites.Layer;
 import com.badlogic.gdx.graphics.Color;
 
 public class Shockwave extends Effect{
-	transient float scale = 0.001f, grow = 0.09f;
+	float scale = 0.001f, grow = 0.09f;
 	
-	{
+	public Shockwave(){
 		lifetime = 16;
+	}
+	
+	public Shockwave(float lifetime, float scale, float grow){
+		this.scale = scale;
+		this.grow = grow;
+		this.lifetime = lifetime;
 	}
 	
 	@Override

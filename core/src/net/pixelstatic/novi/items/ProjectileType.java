@@ -1,6 +1,7 @@
 package net.pixelstatic.novi.items;
 
-import net.pixelstatic.novi.entities.Bullet;
+import net.pixelstatic.novi.entities.*;
+import net.pixelstatic.novi.entities.effects.*;
 import net.pixelstatic.novi.modules.Renderer;
 
 public enum ProjectileType{
@@ -29,7 +30,35 @@ public enum ProjectileType{
 		public float getSpeed(){
 			return 5;
 		}
+	},
+	explosivebullet{
+		public void draw(Bullet bullet, Renderer renderer){
+			renderer.layer("explosivebullet", bullet.x, bullet.y).setLayer(0.5f).setRotation(bullet.velocity.angle() - 90);
+		}
+		
+		public int getLifetime(){
+			return 100;
+		}
+		
+		public float getSpeed(){
+			return 3;
+		}
+		
+		public void destroyEvent(Bullet bullet){
+			new Shockwave(8f, 0.001f, 0.02f).setPosition(bullet.x, bullet.y).SendSelf();
+			new ExplosionEffect().setPosition(bullet.x, bullet.y).SendSelf();
+			new DamageArea(30f, 10f).setPosition(bullet.x, bullet.y).AddSelf();
+			Effects.shake(20f, 10f, bullet.x, bullet.y);
+		}
+		
+		public void setup(Bullet bullet){
+			bullet.material.getRectangle().setSize(4f);
+		}
 	};
+	
+	public void setup(Bullet bullet){
+		
+	}
 	
 	public float getSpeed(){
 		return 4;
@@ -41,6 +70,10 @@ public enum ProjectileType{
 	
 	public int damage(){
 		return 1;
+	}
+	
+	public void destroyEvent(Bullet bullet){
+		
 	}
 	
 	public void draw(Bullet bullet, Renderer renderer){
