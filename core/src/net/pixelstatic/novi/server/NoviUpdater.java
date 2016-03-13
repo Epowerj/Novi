@@ -52,6 +52,7 @@ public class NoviUpdater{
 
 	void sendSync(Player player){
 		WorldUpdatePacket worldupdate = new WorldUpdatePacket();
+		worldupdate.health = player.health;
 		for(Entity other : Entity.entities.values()){
 			if(other.equals(player) || !(other instanceof Syncable) || (other instanceof TimedSyncable && !((TimedSyncable)other).sync()) || !other.loaded(player.x, player.y)) continue;
 			Syncable sync = (Syncable)other;

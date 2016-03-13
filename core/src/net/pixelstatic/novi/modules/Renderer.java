@@ -119,7 +119,6 @@ public class Renderer extends Module{
 			cameraShakeDuration -= Entity.delta();
 			camera.position.x += MathUtils.random(-cameraShakeIntensity, cameraShakeIntensity);
 			camera.position.y += MathUtils.random(-cameraShakeIntensity, cameraShakeIntensity);
-			Novi.log(cameraShakeIntensity);
 			cameraShakeIntensity -= cameraDrag * Entity.delta();
 		}
 	}

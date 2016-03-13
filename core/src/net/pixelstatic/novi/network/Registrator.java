@@ -24,6 +24,7 @@ public class Registrator{
 		k.register(EntityRemovePacket.class);
 		k.register(EffectPacket.class);
 		k.register(InputPacket.class);
+		k.register(DeathPacket.class);
 		k.register(SyncBuffer.class);
 		k.register(BaseSyncBuffer.class);
 		k.register(PlayerSyncBuffer.class);

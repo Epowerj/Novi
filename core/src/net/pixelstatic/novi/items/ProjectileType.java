@@ -47,12 +47,12 @@ public enum ProjectileType{
 		public void destroyEvent(Bullet bullet){
 			new Shockwave(8f, 0.001f, 0.02f).setPosition(bullet.x, bullet.y).SendSelf();
 			new ExplosionEffect().setPosition(bullet.x, bullet.y).SendSelf();
-			new DamageArea(30f, 10f).setPosition(bullet.x, bullet.y).AddSelf();
+			new DamageArea(30f, 16f).setPosition(bullet.x, bullet.y).AddSelf();
 			Effects.shake(20f, 10f, bullet.x, bullet.y);
 		}
 		
 		public void setup(Bullet bullet){
-			bullet.material.getRectangle().setSize(4f);
+			bullet.material.getRectangle().setSize(5f);
 		}
 	};
 	

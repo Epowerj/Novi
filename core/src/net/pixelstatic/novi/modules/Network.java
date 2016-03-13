@@ -66,10 +66,12 @@ public class Network extends Module{
 					if(Entity.entities.containsKey(remove.id))
 					Entity.entities.get(remove.id).removeEvent();
 					Entity.entities.remove(remove.id);
+				}else if(object instanceof DeathPacket){
+					getModule(ClientData.class).player.deathEvent();
 				}else if(object instanceof WorldUpdatePacket){
 					WorldUpdatePacket packet = (WorldUpdatePacket)object;
+					getModule(ClientData.class).player.health = packet.health;
 					for(long key : packet.updates.keySet()){
-						
 						((Syncable)Entity.getEntity(key)).readSync(packet.updates.get(key));;
 					}
 				}

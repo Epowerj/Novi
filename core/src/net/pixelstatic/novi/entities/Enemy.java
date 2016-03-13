@@ -18,7 +18,7 @@ public abstract class Enemy extends DestructibleEntity implements Syncable{
 		Player nearest = null;
 		float neardist = Float.MAX_VALUE;
 		for(Entity entity : entities.values()){
-			if(entity instanceof Player){
+			if(entity instanceof Player && ((Player)entity).respawntime <= 0){
 				float dist = Vector2.dst(entity.x, entity.y, x, y);
 				if(dist < neardist){
 					neardist = dist;
