@@ -1,8 +1,11 @@
 package net.pixelstatic.novi.entities;
 
+import java.util.HashSet;
+
 public class DamageArea extends SolidEntity implements Damager{
+	HashSet<Long> collided = new HashSet<Long>();
 	float lifetime =  100f, life;
-	int damage = 2;
+	int damage = 20;
 	
 	public DamageArea(){
 		
@@ -39,7 +42,12 @@ public class DamageArea extends SolidEntity implements Damager{
 	}
 	
 	public boolean collides(SolidEntity other){
-		return !(other instanceof Damager) && super.collides(other);
+		return !(other instanceof Damager) && !collided.contains(other.GetID()) && super.collides(other);
+	}
+	
+	@Override
+	public void collisionEvent(SolidEntity entity){
+		collided.add(entity.GetID());
 	}
 
 	@Override

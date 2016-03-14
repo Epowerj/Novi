@@ -1,5 +1,6 @@
 package net.pixelstatic.novi.utils;
 
 public enum InputType{
-	CLICK_UP, CLICK_DOWN;
+	LEFT_CLICK_UP, LEFT_CLICK_DOWN,
+	RIGHT_CLICK_UP, RIGHT_CLICK_DOWN;
 }

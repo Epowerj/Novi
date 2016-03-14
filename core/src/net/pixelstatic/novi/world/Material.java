@@ -59,7 +59,7 @@ public enum Material{
 
 		public void update(Block block, Base base){
 			if(base.target != null){
-				block.rotation = base.autoPredictTargetAngle(worldx(base, block.x), worldy(base, block.y), 5f) + 90;
+				block.rotation = base.autoPredictTargetAngle(worldx(base, block.x), worldy(base, block.y), 4f) + 90;
 				base.update(block.x, block.y);
 				block.reload += Entity.delta();
 				if(block.reload >= reloadtime){

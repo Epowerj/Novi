@@ -137,6 +137,8 @@ public class Renderer extends Module{
 	}
 	
 	public void shakeCamera(float duration, float intensity){
+		if(cameraShakeDuration > 0 && cameraShakeIntensity > intensity) return;
+		
 		cameraShakeIntensity = intensity;
 		cameraShakeDuration = duration;
 		cameraDrag = cameraShakeIntensity / cameraShakeDuration;

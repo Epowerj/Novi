@@ -16,7 +16,7 @@ public class Bullet extends FlyingEntity implements Damager{
 
 	@SuppressWarnings("unused")
 	private Bullet(){
-
+		
 	}
 
 	public Bullet(float rotation){
@@ -58,7 +58,7 @@ public class Bullet extends FlyingEntity implements Damager{
 
 	//don't want to hit players or other bullets
 	public boolean collides(SolidEntity other){
-		return super.collides(other) && !((other instanceof Player && shooter instanceof Player) || other instanceof Bullet || other.equals(shooter) || (shooter instanceof Enemy && other instanceof Enemy));
+		return type.collide() && super.collides(other) && !((other instanceof Base && !type.collideWithBases()) ||(other instanceof Player && shooter instanceof Player) || (other instanceof Bullet && (!type.collideWithOtherProjectiles() && !((Bullet)other).type.collideWithOtherProjectiles())) || other.equals(shooter) || (shooter instanceof Enemy && other instanceof Enemy));
 	}
 
 	@Override
@@ -67,6 +67,10 @@ public class Bullet extends FlyingEntity implements Damager{
 		new ExplosionEffect().setPosition(x, y).SendSelf();
 		server.removeEntity(this);
 		if(server != null) type.destroyEvent(this);
+	}
+	
+	public float life(){
+		return life;
 	}
 
 	@Override

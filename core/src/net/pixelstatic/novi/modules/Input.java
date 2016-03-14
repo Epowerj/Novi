@@ -25,7 +25,7 @@ public class Input extends Module implements InputProcessor{
 	public void Update(){
 		if(Gdx.input.isKeyPressed(Keys.ESCAPE)) Gdx.app.exit();
 		float angle = -9;
-		
+		if(player.isDead()) return;
 		if(up()) angle = 90;
 		if(left()) angle = 180;
 		if(down()) angle = 270;
@@ -87,13 +87,13 @@ public class Input extends Module implements InputProcessor{
 	//	new BreakEffect("ironblock").setPosition(player.x+30,player.y+30).AddSelf();
 		player.rotation = player.velocity.angle();
 		player.valigned = false;
-		SendInput(InputType.CLICK_DOWN);
+		SendInput(button == Buttons.LEFT ? InputType.LEFT_CLICK_DOWN : InputType.RIGHT_CLICK_DOWN);
 		return true;
 	}
 
 	@Override
 	public boolean touchUp(int screenX, int screenY, int pointer, int button){
-		SendInput(InputType.CLICK_UP);
+		SendInput(button == Buttons.LEFT ? InputType.LEFT_CLICK_UP : InputType.RIGHT_CLICK_UP);
 		if(player.velocity.isZero(0.01f)){
 			player.velocity.x = 0.01f;
 			player.velocity.setAngle(player.rotation);

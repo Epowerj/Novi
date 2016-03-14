@@ -9,7 +9,7 @@ public abstract class DestructibleEntity extends FlyingEntity{
 		Damager damager = (Damager)other;
 		health -= damager.damage();
 		hitEvent(other);
-		if(health < 0){
+		if(health <= 0){
 			deathEvent();
 			if(this.removeOnDeath())server.removeEntity(this);
 		}

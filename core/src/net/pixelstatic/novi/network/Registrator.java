@@ -40,6 +40,7 @@ public class Registrator{
 		k.register(Bullet.class);
 		k.register(ExplosionEffect.class);
 		k.register(ExplosionEmitter.class);
+		k.register(DamageArea.class);
 		k.register(Shockwave.class);
 		k.register(BreakEffect.class);
 		k.register(Target.class);

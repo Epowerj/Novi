@@ -6,10 +6,12 @@ import net.pixelstatic.novi.entities.effects.*;
 import net.pixelstatic.novi.network.*;
 import net.pixelstatic.novi.world.*;
 
-import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.*;
 
 public class Base extends Enemy implements Syncable{
 	public final int size = 10;
+	private transient ArrayList<Block> blocklist = new ArrayList<Block>();
+	private transient Rectangle rectangle = new Rectangle(0,0,Material.blocksize,Material.blocksize);
 	public Block[][] blocks;
 	public boolean[][] updated;
 	public int spawned;
@@ -32,7 +34,7 @@ public class Base extends Enemy implements Syncable{
 		blocks[size/2][1].setMaterial(Material.dronemaker);
 		blocks[size/2][size/2].setMaterial(Material.bigturret);
 		
-		material.getRectangle().setSize(size * Material.blocksize, size * Material.blocksize);
+		material.getRectangle().setSize(size * (Material.blocksize+1), size * (Material.blocksize+1));
 		updateHealth();
 	}
 	
@@ -48,19 +50,27 @@ public class Base extends Enemy implements Syncable{
 	@Override
 	public boolean collides(SolidEntity other){
 		if( !(other instanceof Damager) || (other instanceof Bullet && !(((Bullet)other).shooter instanceof Player))) return false;
-		Block block = getBlockAt(other.x, other.y);
-		if(block == null) return false;
-		boolean collide = block != null && !block.empty() && block.solid();
-		if(collide){
-			block.health -= ((Damager)other).damage();
+		radiusBlocks(blockX(other.x), blockY(other.y));
+		boolean collide = false;
+		for(Block block : blocklist){
+			rectangle.setPosition(worldex(block.x), worldey(block.y));
+			if(other.collides(rectangle)){
+				block.health -= ((Damager)other).damage();
+				checkHealth(block);
+				update(block.x, block.y);
+				Effects.explosion(worldx(block.x), worldy(block.y));
+				collide = true;
+			}
 		}
+		return collide;
+	}
+	
+	public void checkHealth(Block block){
 		if(block.health < 0){
 			block.getMaterial().destroyEvent(this, block.x, block.y);
-			new ExplosionEmitter(10f, 1f, 14f).setPosition(other.x, other.y).AddSelf();
+			new ExplosionEmitter(10f, 1f, 14f).setPosition(worldx(block.x), worldy(block.y)).AddSelf();
 		//	explosion(block.x,block.y);
 		}
-		if(collide) update(block.x, block.y);
-		return collide;
 	}
 	
 	public void explosion(int cx, int cy){
@@ -78,6 +88,21 @@ public class Base extends Enemy implements Syncable{
 			}
 		}
 	}
+	
+	//returns a list of solid blocks around the specified location
+	public ArrayList<Block> radiusBlocks(int cx, int cy){
+		int rad = 1;
+		blocklist.clear();
+		for(int x = -rad; x <= rad; x ++){
+			for(int y = -rad; y <= rad; y ++){
+				int relx = cx+x, rely = cy+y;
+				if(relx < 0 || rely < 0 || relx >= size || rely >= size) continue;
+				if(blocks[relx][rely].solid())
+				blocklist.add(blocks[relx][rely]);
+			}
+		}
+		return blocklist;
+	}
 
 	//updates a block at x,y so it gets synced
 	public void update(int x, int y){
@@ -89,6 +114,14 @@ public class Base extends Enemy implements Syncable{
 		int blockx = (int)(relativex / Material.blocksize), blocky = (int)(relativey / Material.blocksize);
 		if(blockx < 0 || blocky < 0 || blockx >= size || blocky >= size) return null;
 		return blocks[blockx][blocky];
+	}
+	
+	public int blockX(float x){
+		return (int)(( x - this.x + size / 2f * Material.blocksize) / Material.blocksize);
+	}
+	
+	public int blockY(float y){
+		return (int)(( y - this.y + size / 2f * Material.blocksize) / Material.blocksize);
 	}
 
 	public void deathEvent(){
@@ -151,6 +184,14 @@ public class Base extends Enemy implements Syncable{
 	
 	float worldy(int i){
 		return y + i * Material.blocksize - size / 2f * Material.blocksize + Material.blocksize / 2f;
+	}
+	
+	float worldex(int i){
+		return x + i * Material.blocksize - size / 2f * Material.blocksize;
+	}
+	
+	float worldey(int i){
+		return y + i * Material.blocksize - size / 2f * Material.blocksize;
 	}
 
 }

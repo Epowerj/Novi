@@ -15,11 +15,11 @@ public class Player extends DestructibleEntity implements Syncable{
 	public transient int connectionid;
 	public transient boolean client = false;
 	public String name;
-	public float respawntime;
+	private float respawntime;
 
 	public boolean shooting, valigned = true; //used for aligning the rotation after you shoot and let go of the mouse
 	public float rotation = 0;
-	public float reload;
+	public transient float reload, altreload = 0;
 	transient InterpolationData data = new InterpolationData();
 	public transient InputHandler input;
 
@@ -41,12 +41,13 @@ public class Player extends DestructibleEntity implements Syncable{
 				if(server != null) new Shockwave(20, 0.1f, 0.01f).setPosition(x, y).SendSelf();
 			}
 		}
+		if(reload > 0) reload -= delta();
+		if(altreload > 0) altreload -= delta();
 		if(NoviServer.active) return; //don't want to do stuff like getting the mouse angle on the server, do we?
 		if( !client) data.update(this);
 		UpdateVelocity();
 		//updateBounds();
 		velocity.limit(ship.getMaxvelocity() * kiteChange());
-		if(reload > 0) reload -= delta();
 		if(rotation > 360f && !ship.getSpin()) rotation -= 360f;
 		if(rotation < 0f && !ship.getSpin()) rotation += 360f;
 
@@ -94,7 +95,8 @@ public class Player extends DestructibleEntity implements Syncable{
 
 	@Override
 	public void Draw(){
-		if(respawntime <= 0) renderer.layer("ship", x, y).setLayer(1).setRotation(client ? getSpriteRotation() : rotation);
+		if(respawntime > 0) return;
+		renderer.layer("ship", x, y).setLayer(1).setRotation(client ? getSpriteRotation() : rotation);
 		if( !client) renderer.layer(x, y + 14).setScale(0.2f).setColor(Color.GOLD).setLayer(2f).setType(LayerType.TEXT).setText(name); //draw player name
 	}
 
@@ -109,7 +111,17 @@ public class Player extends DestructibleEntity implements Syncable{
 			health = ship.getMaxhealth();
 			server.server.sendToTCP(connectionid, new DeathPacket());
 		}
+		velocity.set(0,0);
 		respawntime = 150;
+	}
+	
+	//returns whether or not enemies should target this player
+	public boolean isVisible(){
+		return respawntime <= 0;
+	}
+	
+	public boolean isDead(){
+		return respawntime > 0;
 	}
 
 	//don't want the player entity getting removed
@@ -120,13 +132,14 @@ public class Player extends DestructibleEntity implements Syncable{
 
 	@Override
 	public SyncBuffer writeSync(){
-		return new PlayerSyncBuffer(GetID(), x, y, rotation, velocity);
+		return new PlayerSyncBuffer(GetID(), x, y, rotation, respawntime, velocity);
 	}
 
 	@Override
 	public void readSync(SyncBuffer buffer){
 		PlayerSyncBuffer sync = (PlayerSyncBuffer)buffer;
 		velocity = sync.velocity;
+		this.respawntime = sync.respawntime;
 		data.push(this, sync.x, sync.y, sync.rotation);
 	}
 
