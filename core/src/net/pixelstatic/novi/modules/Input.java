@@ -24,7 +24,7 @@ public class Input extends Module implements InputProcessor{
 	@Override
 	public void Update(){
 		if(Gdx.input.isKeyPressed(Keys.ESCAPE)) Gdx.app.exit();
-		if(Gdx.input.isKeyJustPressed(Keys.G)) getModule(Logger.class).writeFile();
+		if(Gdx.input.isKeyJustPressed(Keys.G)) getModule(LogModule.class).writeFile();
 		if(player.isDead()) return;
 		float angle = -9;
 		if(up()) angle = 90;

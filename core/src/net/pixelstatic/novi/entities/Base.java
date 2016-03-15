@@ -62,6 +62,7 @@ public class Base extends Enemy implements Syncable{
 				collide = true;
 			}
 		}
+		if(collide) updateHealth();
 		return collide;
 	}
 	

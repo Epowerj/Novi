@@ -21,7 +21,8 @@ public class Network extends Module{
 			Registrator.register(client.getKryo());
 			client.addListener(new Listen());
 			client.start();
-			client.connect(100000, ip, port, port);
+			client.setTimeout(1000000);
+			client.connect(1000000, ip, port, port);
 			ConnectPacket packet = new ConnectPacket();
 			packet.name = System.getProperty("user.name");
 			client.sendTCP(packet);
