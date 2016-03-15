@@ -8,6 +8,7 @@ import net.pixelstatic.novi.modules.Network;
 import net.pixelstatic.novi.network.Registrator;
 import net.pixelstatic.novi.network.packets.*;
 
+import com.badlogic.gdx.math.MathUtils;
 import com.esotericsoftware.kryonet.*;
 
 public class NoviServer{
@@ -122,8 +123,8 @@ public class NoviServer{
 	}
 	
 	private void addEntities(){
-		for(int i = 1; i < 10; i ++){
-			new Base().setPosition(100+i*150, 100).AddSelf();
+		for(int i = 1; i < 100; i ++){
+			new Base().setPosition(100+MathUtils.random(-2000, 2000), 100+MathUtils.random(-2000, 2000)).AddSelf();
 		}
 	}
 }

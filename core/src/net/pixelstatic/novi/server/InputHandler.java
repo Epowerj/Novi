@@ -39,7 +39,7 @@ public class InputHandler{
 		return rightmousedown;
 	}
 	
-	float reload2 = 80f;
+	float reload2 = 120f;
 	
 	public void update(){
 		if(player.isDead()) return;

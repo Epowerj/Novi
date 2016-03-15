@@ -9,6 +9,7 @@ import com.badlogic.gdx.ApplicationAdapter;
 
 public class Novi extends ApplicationAdapter{
 	static final boolean logtrace = false;
+	private static Logger logger;
 	public HashMap<Class<? extends Module>, Module> modules = new HashMap<Class<? extends Module>, Module>();
 
 	@Override
@@ -19,6 +20,8 @@ public class Novi extends ApplicationAdapter{
 		createModule(Network.class);
 		createModule(ClientData.class);
 		createModule(World.class);
+		createModule(Logger.class);
+		logger = getModule(Logger.class);
 		for(Module m : modules.values())
 			m.Init(); //initialize modules
 	}
@@ -44,11 +47,17 @@ public class Novi extends ApplicationAdapter{
 	}
 
 	public static void log(Object o){
-		if(!logtrace){
+		if(logger != null) logger.logged(o);
+		if(o instanceof Exception){
+			((Exception)o).printStackTrace();
+			return;
+		}
+		if( !logtrace){
 			System.out.println(o);
 		}else{
 			logtrace(o);
 		}
+
 	}
 
 	public static void logtrace(Object o){

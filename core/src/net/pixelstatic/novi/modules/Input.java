@@ -24,8 +24,9 @@ public class Input extends Module implements InputProcessor{
 	@Override
 	public void Update(){
 		if(Gdx.input.isKeyPressed(Keys.ESCAPE)) Gdx.app.exit();
-		float angle = -9;
+		if(Gdx.input.isKeyJustPressed(Keys.G)) getModule(Logger.class).writeFile();
 		if(player.isDead()) return;
+		float angle = -9;
 		if(up()) angle = 90;
 		if(left()) angle = 180;
 		if(down()) angle = 270;
@@ -34,8 +35,8 @@ public class Input extends Module implements InputProcessor{
 		if(up() && left()) angle = 135;
 		if(down() && right()) angle = 315;
 		if(down() && left()) angle = 225;
-		if(angle > -1)player.move(angle);
-		if(Gdx.input.isButtonPressed(Buttons.LEFT)){
+		if(angle > -1) player.move(angle);
+		if(Gdx.input.isButtonPressed(Buttons.LEFT) && !Gdx.input.isKeyPressed(Keys.SHIFT_LEFT)){
 			player.shooting = true;
 		}else{
 			player.shooting = false;
@@ -57,7 +58,7 @@ public class Input extends Module implements InputProcessor{
 	boolean down(){
 		return Gdx.input.isKeyPressed(Keys.S) || Gdx.input.isKeyPressed(Keys.O);
 	}
-	
+
 	void SendInput(InputType type){
 		InputPacket input = new InputPacket();
 		input.input = type;
@@ -84,7 +85,7 @@ public class Input extends Module implements InputProcessor{
 
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button){
-	//	new BreakEffect("ironblock").setPosition(player.x+30,player.y+30).AddSelf();
+		//	new BreakEffect("ironblock").setPosition(player.x+30,player.y+30).AddSelf();
 		player.rotation = player.velocity.angle();
 		player.valigned = false;
 		SendInput(button == Buttons.LEFT ? InputType.LEFT_CLICK_DOWN : InputType.RIGHT_CLICK_DOWN);

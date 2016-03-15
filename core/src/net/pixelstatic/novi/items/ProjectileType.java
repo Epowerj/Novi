@@ -20,6 +20,10 @@ public enum ProjectileType{
 		public float getSpeed(){
 			return 7;
 		}
+		
+		public int damage(){
+			return 2;
+		}
 	},
 	redbullet{
 		public void draw(Bullet bullet, Renderer renderer){
@@ -35,7 +39,7 @@ public enum ProjectileType{
 		}
 		
 		public int damage(){
-			return 3;
+			return 4;
 		}
 	},
 	explosivebullet{

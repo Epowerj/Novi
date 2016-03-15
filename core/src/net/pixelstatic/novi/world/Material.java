@@ -73,7 +73,7 @@ public enum Material{
 
 		public void draw(Block block, Base base, int x, int y){
 			defaultDraw("ironblock", block, base, x, y, false);
-			defaultDraw("turret", block, base, x , y).setRotation(block.rotation).setLayer( -0.5f);
+			defaultDraw("turret", block, base, x , y, false).setRotation(block.rotation).setLayer( -0.5f);
 		}
 		
 		public int health(){

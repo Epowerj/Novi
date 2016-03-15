@@ -5,17 +5,16 @@ import net.pixelstatic.novi.entities.Entity;
 import net.pixelstatic.novi.network.*;
 import net.pixelstatic.novi.network.packets.*;
 
-import com.badlogic.gdx.Gdx;
 import com.esotericsoftware.kryonet.*;
 
 public class Network extends Module{
-	public static final String ip = "localhost";
+	public static final String ip = "2605:a000:110d:4020:ddc8:a41:a0ef:9ac8";
 	public static final int port = 7576;
-	public boolean connect = true;
+	private boolean connected = true;
+	private boolean initialconnect = false;
 	Client client;
 
 	public void Init(){
-		if( !connect) return;
 		try{
 			int buffer = (int)Math.pow(2, 5);
 			client = new Client(8192*buffer, 8192*buffer);
@@ -26,11 +25,11 @@ public class Network extends Module{
 			ConnectPacket packet = new ConnectPacket();
 			packet.name = System.getProperty("user.name");
 			client.sendTCP(packet);
+			initialconnect = true;
 			Novi.log("Connecting to server..");
 		}catch(Exception e){
-			e.printStackTrace();
+			Novi.log(e);
 			Novi.log("Connection failed!");
-			Gdx.app.exit();
 		}
 	}
 
@@ -85,10 +84,19 @@ public class Network extends Module{
 	public Network(Novi n){
 		super(n);
 	}
+	
+	public boolean connected(){
+		return connected;
+	}
+	
+	public boolean initialconnect(){
+		return initialconnect;
+	}
 
 	@Override
 	public void Update(){
 		sendUpdate();
+		connected = client.isConnected();
 	}
 
 }

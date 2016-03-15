@@ -76,6 +76,32 @@ Novi3.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
+gui/healthbarcontainer
+  rotate: false
+  xy: 1, 7
+  size: 22, 6
+  orig: 22, 6
+  offset: 0, 0
+  index: -1
+gui/healthbar
+  rotate: false
+  xy: 1, 1
+  size: 20, 4
+  orig: 20, 4
+  offset: 0, 0
+  index: -1
+gui/blank
+  rotate: false
+  xy: 25, 12
+  size: 1, 1
+  orig: 1, 1
+  offset: 0, 0
+  index: -1
+
+Novi4.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
 enemies/bigturret
   rotate: false
   xy: 1, 1
@@ -98,7 +124,7 @@ enemies/drone
   offset: 0, 0
   index: -1
 
-Novi4.png
+Novi5.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
@@ -110,7 +136,7 @@ error/error
   offset: 0, 0
   index: -1
 
-Novi5.png
+Novi6.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
@@ -143,7 +169,7 @@ tiles/ironblock
   offset: 0, 0
   index: -1
 
-Novi6.png
+Novi7.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
@@ -162,7 +188,7 @@ ships/ship_test
   offset: 0, 0
   index: -1
 
-Novi7.png
+Novi8.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
