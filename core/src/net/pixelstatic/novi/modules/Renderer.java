@@ -34,6 +34,7 @@ public class Renderer extends Module{
 	public Player player; //player object from ClientData module
 	World world; // world module
 	FrameBuffer buffer;
+	boolean debug = true;
 
 	public Renderer(Novi novi){
 		super(novi);
@@ -88,6 +89,12 @@ public class Renderer extends Module{
 		AtlasRegion region = atlas.findRegion("healthbar");
 		region.setRegionWidth((int)(region.getRotatedPackedWidth() * player.health / player.getShip().getMaxhealth()));
 		batch.draw(region, 1, 1);
+		
+		if(debug){
+			font.setColor(Color.ORANGE);
+			font.draw(batch, "FPS: " + Gdx.graphics.getFramesPerSecond(), 0, gheight());
+			font.draw(batch, "Ping: " + network.client.getReturnTripTime(), 0, gheight()-5);
+		}
 		
 		if( !network.connected() || !network.initialconnect()){
 			color(0,0,0,0.5f);

@@ -59,8 +59,8 @@ public class InputHandler{
 	
 	public void bullet(ProjectileType type){
 		Bullet b = new Bullet(type, player.rotation + 90);
-		b.x = player.x;
-		b.y = player.y;
+		b.x = player.predictedX();
+		b.y = player.predictedY();
 		b.setShooter(player);
 		b.AddSelf().SendSelf();
 	}

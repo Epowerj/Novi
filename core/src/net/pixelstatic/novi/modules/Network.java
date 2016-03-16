@@ -5,11 +5,13 @@ import net.pixelstatic.novi.entities.Entity;
 import net.pixelstatic.novi.network.*;
 import net.pixelstatic.novi.network.packets.*;
 
+import com.badlogic.gdx.Gdx;
 import com.esotericsoftware.kryonet.*;
 
 public class Network extends Module{
-	public static final String ip = "2605:a000:110d:4020:ddc8:a41:a0ef:9ac8";
+	public static final String ip = System.getProperty("user.name").equals("cobalt") ? "localhost" : "75.179.181.100";
 	public static final int port = 7576;
+	public static final int ping = 100;
 	private boolean connected = true;
 	private boolean initialconnect = false;
 	Client client;
@@ -19,10 +21,9 @@ public class Network extends Module{
 			int buffer = (int)Math.pow(2, 5);
 			client = new Client(8192*buffer, 8192*buffer);
 			Registrator.register(client.getKryo());
-			client.addListener(new Listen());
+			client.addListener(new Listener.LagListener(ping,ping,new Listen()));
 			client.start();
-			client.setTimeout(1000000);
-			client.connect(1000000, ip, port, port);
+			client.connect(12000, ip, port, port);
 			ConnectPacket packet = new ConnectPacket();
 			packet.name = System.getProperty("user.name");
 			client.sendTCP(packet);
@@ -93,11 +94,16 @@ public class Network extends Module{
 	public boolean initialconnect(){
 		return initialconnect;
 	}
+	
+	public float pingInFrames(){
+		return ((ping*2f + client.getReturnTripTime()) / 1000f) * Entity.delta() * 60f+1f;
+	}
 
 	@Override
 	public void Update(){
-		sendUpdate();
+		if(initialconnect)sendUpdate();
 		connected = client.isConnected();
+		if(Gdx.graphics.getFrameId() % 120 == 0) client.updateReturnTripTime();
 	}
 
 }

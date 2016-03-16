@@ -2,6 +2,7 @@ package net.pixelstatic.novi.entities;
 
 import net.pixelstatic.novi.entities.effects.*;
 import net.pixelstatic.novi.items.*;
+import net.pixelstatic.novi.modules.Network;
 import net.pixelstatic.novi.network.*;
 import net.pixelstatic.novi.network.packets.DeathPacket;
 import net.pixelstatic.novi.server.*;
@@ -10,16 +11,17 @@ import net.pixelstatic.novi.utils.*;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
+import com.esotericsoftware.kryonet.Connection;
 
 public class Player extends DestructibleEntity implements Syncable{
-	public transient int connectionid;
+	public transient Connection connection;
 	public transient boolean client = false;
 	public String name;
 	private float respawntime;
 
 	public boolean shooting, valigned = true; //used for aligning the rotation after you shoot and let go of the mouse
 	public float rotation = 0;
-	public transient float reload, altreload = 0;
+	public transient float reload, altreload = 0, ping;
 	transient InterpolationData data = new InterpolationData();
 	public transient InputHandler input;
 
@@ -45,7 +47,7 @@ public class Player extends DestructibleEntity implements Syncable{
 		if(altreload > 0) altreload -= delta();
 		if(NoviServer.active) return; //don't want to do stuff like getting the mouse angle on the server, do we?
 		if( !client) data.update(this);
-		UpdateVelocity();
+		if(client || NoviServer.active)UpdateVelocity();
 		//updateBounds();
 		velocity.limit(ship.getMaxvelocity() * kiteChange());
 		if(rotation > 360f && !ship.getSpin()) rotation -= 360f;
@@ -96,8 +98,12 @@ public class Player extends DestructibleEntity implements Syncable{
 	@Override
 	public void Draw(){
 		if(respawntime > 0) return;
-		renderer.layer("ship", x, y).setLayer(1).setRotation(client ? getSpriteRotation() : rotation);
-		if( !client) renderer.layer(x, y + 14).setScale(0.2f).setColor(Color.GOLD).setLayer(2f).setType(LayerType.TEXT).setText(name); //draw player name
+		if(!client){
+			renderer.layer("ship", x, y).setLayer(1).setRotation(client ? getSpriteRotation() : rotation);
+			renderer.layer(x, y + 14).setScale(0.2f).setColor(Color.GOLD).setLayer(2f).setType(LayerType.TEXT).setText(name); //draw player name
+		}else{
+			renderer.layer("ship", x, y).setLayer(1).setRotation(client ? getSpriteRotation() : rotation);
+		}
 	}
 
 	//dying is currently disabled
@@ -109,7 +115,7 @@ public class Player extends DestructibleEntity implements Syncable{
 			Effects.explosionCluster(x, y, 6, 16);
 			Effects.shake(50f, 50f, x, y);
 			health = ship.getMaxhealth();
-			server.server.sendToTCP(connectionid, new DeathPacket());
+			connection.sendTCP(new DeathPacket());
 		}
 		velocity.set(0,0);
 		respawntime = 150;
@@ -129,10 +135,27 @@ public class Player extends DestructibleEntity implements Syncable{
 	public boolean removeOnDeath(){
 		return false;
 	}
+	
+	public float pingInFrames(){
+		if(!NoviServer.active) return 0;
+		return ((Network.ping*2f + connection.getReturnTripTime()) / 1000f) * delta() * 60f+1f;
+	}
+	
+	public float predictedX(){
+		return velocity.x * pingInFrames() + x;
+	}
+	
+	public float predictedY(){
+		return velocity.y * pingInFrames() + y;
+	}
+	
+	public int connectionID(){
+		return connection.getID();
+	}
 
 	@Override
 	public SyncBuffer writeSync(){
-		return new PlayerSyncBuffer(GetID(), x, y, rotation, respawntime, velocity);
+		return new PlayerSyncBuffer(GetID(), x, y, rotation, respawntime, pingInFrames(), velocity);
 	}
 
 	@Override
@@ -140,7 +163,7 @@ public class Player extends DestructibleEntity implements Syncable{
 		PlayerSyncBuffer sync = (PlayerSyncBuffer)buffer;
 		velocity = sync.velocity;
 		this.respawntime = sync.respawntime;
+		this.ping = sync.ping;
 		data.push(this, sync.x, sync.y, sync.rotation);
 	}
-
 }

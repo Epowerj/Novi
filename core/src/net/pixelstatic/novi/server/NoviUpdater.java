@@ -24,6 +24,7 @@ public class NoviUpdater{
 			}
 			if(entity instanceof Player){
 				sendSync((Player)entity);
+				if(frameid % 120 == 0) pingPlayer((Player)entity);
 			}
 		}
 	}
@@ -58,7 +59,11 @@ public class NoviUpdater{
 			Syncable sync = (Syncable)other;
 			worldupdate.updates.put(other.GetID(), sync.writeSync());
 		}
-		server.server.sendToTCP(player.connectionid, worldupdate);
+		server.server.sendToTCP(player.connectionID(), worldupdate);
+	}
+	
+	public void pingPlayer(Player player){
+		player.connection.updateReturnTripTime();
 	}
 
 	public float delta(){
