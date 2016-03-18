@@ -3,7 +3,7 @@ package net.pixelstatic.novi.entities;
 import java.util.HashSet;
 
 public class DamageArea extends SolidEntity implements Damager{
-	HashSet<Long> collided = new HashSet<Long>();
+	transient HashSet<Long> collided = new HashSet<Long>();
 	float lifetime =  100f, life;
 	int damage = 20;
 	
