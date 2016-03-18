@@ -3,9 +3,16 @@ Novi.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-effects/explosion
+effects/shockwave
   rotate: false
   xy: 1, 1
+  size: 500, 500
+  orig: 500, 500
+  offset: 0, 0
+  index: -1
+effects/explosion
+  rotate: false
+  xy: 503, 487
   size: 14, 14
   orig: 14, 14
   offset: 0, 0
@@ -69,6 +76,58 @@ Novi3.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
+gui/healthbarcontainer
+  rotate: false
+  xy: 1, 7
+  size: 22, 6
+  orig: 22, 6
+  offset: 0, 0
+  index: -1
+gui/healthbar
+  rotate: false
+  xy: 1, 1
+  size: 20, 4
+  orig: 20, 4
+  offset: 0, 0
+  index: -1
+gui/blank
+  rotate: false
+  xy: 25, 12
+  size: 1, 1
+  orig: 1, 1
+  offset: 0, 0
+  index: -1
+
+Novi4.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+enemies/bigturret
+  rotate: false
+  xy: 1, 1
+  size: 30, 30
+  orig: 30, 30
+  offset: 0, 0
+  index: -1
+enemies/turret
+  rotate: false
+  xy: 33, 11
+  size: 20, 20
+  orig: 20, 20
+  offset: 0, 0
+  index: -1
+enemies/drone
+  rotate: false
+  xy: 55, 19
+  size: 12, 12
+  orig: 12, 12
+  offset: 0, 0
+  index: -1
+
+Novi5.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
 error/error
   rotate: false
   xy: 1, 1
@@ -77,19 +136,40 @@ error/error
   offset: 0, 0
   index: -1
 
-Novi4.png
+Novi6.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
 tiles/tile
   rotate: false
-  xy: 1, 1
+  xy: 1, 15
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
+tiles/dronemakerbar
+  rotate: false
+  xy: 19, 17
+  size: 14, 14
+  orig: 14, 14
+  offset: 0, 0
+  index: -1
+tiles/dronemaker
+  rotate: false
+  xy: 19, 1
+  size: 14, 14
+  orig: 14, 14
+  offset: 0, 0
+  index: -1
+tiles/ironblock
+  rotate: false
+  xy: 35, 17
+  size: 14, 14
+  orig: 14, 14
+  offset: 0, 0
+  index: -1
 
-Novi5.png
+Novi7.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
@@ -108,13 +188,41 @@ ships/ship_test
   offset: 0, 0
   index: -1
 
-Novi6.png
+Novi8.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-projectiles/bullet
+projectiles/minecenter
   rotate: false
   xy: 1, 1
+  size: 11, 11
+  orig: 11, 11
+  offset: 0, 0
+  index: -1
+projectiles/mine
+  rotate: false
+  xy: 14, 1
+  size: 11, 11
+  orig: 11, 11
+  offset: 0, 0
+  index: -1
+projectiles/explosivebullet
+  rotate: false
+  xy: 27, 3
+  size: 7, 9
+  orig: 7, 9
+  offset: 0, 0
+  index: -1
+projectiles/dronebullet
+  rotate: false
+  xy: 36, 3
+  size: 7, 9
+  orig: 7, 9
+  offset: 0, 0
+  index: -1
+projectiles/bullet
+  rotate: false
+  xy: 45, 5
   size: 5, 7
   orig: 5, 7
   offset: 0, 0

@@ -7,11 +7,13 @@ import net.pixelstatic.novi.modules.*;
 import net.pixelstatic.novi.server.NoviServer;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.math.*;
 
 public abstract class Entity{
 	static public Novi novi;
 	static public NoviServer server;
     static private long lastid;
+    static public Vector2 vector = Vector2.Zero; // Vector2 object used for calculations; is reused
     public static ConcurrentHashMap<Long, Entity> entities = new ConcurrentHashMap<Long, Entity>();
     public static Renderer renderer; // renderer reference for drawing things
     private long id;
@@ -27,11 +29,23 @@ public abstract class Entity{
 		if(x > World.worldSize) x = World.worldSize;
 		if(y > World.worldSize) y = World.worldSize;
 	}
+	
+	//whether or not this entity is loaded (is drawn/updated on screen)
+	public boolean loaded(float playerx, float playery){
+		return MathUtils.isEqual(playerx, x, 1000f) && MathUtils.isEqual(playery, y, 1000f);
+	}
     
+	//called when this entity object is recieved
     public void onRecieve(){
     	
     }
     
+    //called when this entity is removed
+    public void removeEvent(){
+    	
+    }
+    
+    //guess what this does
     public Entity setPosition(float x, float y){
     	this.x = x;
     	this.y = y;
@@ -74,7 +88,7 @@ public abstract class Entity{
     	//do nothing
     }
     
-    public float delta(){
+    public static float delta(){
     	return server == null ? (Gdx.graphics.getDeltaTime() * 60f) : server.delta();
     }
     

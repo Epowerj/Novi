@@ -5,10 +5,11 @@ public abstract class DestructibleEntity extends FlyingEntity{
 	public int health = 100;
 	
 	public void collisionEvent(SolidEntity other){
-		if(!(other instanceof Bullet)) return;
-		health -= 2;
-		hitEvent((Bullet)other);
-		if(health < 0){
+		if(!(other instanceof Damager)) return;
+		Damager damager = (Damager)other;
+		health -= damager.damage();
+		hitEvent(other);
+		if(health <= 0){
 			deathEvent();
 			if(this.removeOnDeath())server.removeEntity(this);
 		}
@@ -20,7 +21,7 @@ public abstract class DestructibleEntity extends FlyingEntity{
 	}
 	
 	//when the entity is hit
-	public void hitEvent(Bullet bullet){
+	public void hitEvent(SolidEntity entity){
 		
 	}
 	

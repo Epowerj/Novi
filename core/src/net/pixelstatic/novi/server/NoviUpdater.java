@@ -3,13 +3,13 @@ package net.pixelstatic.novi.server;
 import java.util.HashSet;
 
 import net.pixelstatic.novi.entities.*;
-import net.pixelstatic.novi.network.Syncable;
+import net.pixelstatic.novi.network.*;
 import net.pixelstatic.novi.network.packets.WorldUpdatePacket;
 
 public class NoviUpdater{
 	NoviServer server;
 	private boolean isRunning = true;
-	final int maxfps = 30;
+	final int maxfps = 60;
 	int frameid;
 	float delta = 1f;
 	long lastFpsTime;
@@ -24,16 +24,17 @@ public class NoviUpdater{
 			}
 			if(entity instanceof Player){
 				sendSync((Player)entity);
+				if(frameid % 120 == 0) pingPlayer((Player)entity);
 			}
 		}
 	}
 
 	void checkCollisions(SolidEntity entity){
 		for(Entity other : Entity.entities.values()){
-			if(!inRange(entity,other,10 + entity.material.getRectangle().width) || other.equals(entity) && !(other instanceof SolidEntity)) continue;
+			if(!inRange(entity,other,10 + entity.material.getRectangle().width) || other.equals(entity)  || !(other instanceof SolidEntity)) continue;
 			if(!collided.contains(other.GetID())){
 				SolidEntity othersolid = (SolidEntity)other;
-				if(othersolid.collides(entity)){
+				if(othersolid.collides(entity) && entity.collides(othersolid)){
 					collisionEvent(entity, othersolid);
 					collided.add(entity.GetID());
 				}
@@ -52,12 +53,17 @@ public class NoviUpdater{
 
 	void sendSync(Player player){
 		WorldUpdatePacket worldupdate = new WorldUpdatePacket();
+		worldupdate.health = player.health;
 		for(Entity other : Entity.entities.values()){
-			if(other.equals(player) || !(other instanceof Syncable)) continue;
+			if(other.equals(player) || !(other instanceof Syncable) || (other instanceof TimedSyncable && !((TimedSyncable)other).sync()) || !other.loaded(player.x, player.y)) continue;
 			Syncable sync = (Syncable)other;
 			worldupdate.updates.put(other.GetID(), sync.writeSync());
 		}
-		server.server.sendToTCP(player.connectionid, worldupdate);
+		server.server.sendToTCP(player.connectionID(), worldupdate);
+	}
+	
+	public void pingPlayer(Player player){
+		player.connection.updateReturnTripTime();
 	}
 
 	public float delta(){

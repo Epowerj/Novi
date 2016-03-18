@@ -1,4 +1,6 @@
-package net.pixelstatic.novi.entities;
+package net.pixelstatic.novi.entities.effects;
+
+import net.pixelstatic.novi.entities.Entity;
 
 
 
@@ -9,7 +11,14 @@ public abstract class Effect extends Entity{
 	@Override
 	public final void Update(){
 		life += delta();
-		if(life > lifetime) RemoveSelf();
+		if(life > lifetime){
+			removeEvent();
+			RemoveSelf();
+		}
+	}
+	
+	public void removeEvent(){
+		
 	}
 	
 	public final Entity AddSelf(){

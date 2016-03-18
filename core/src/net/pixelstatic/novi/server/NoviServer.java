@@ -7,8 +7,11 @@ import net.pixelstatic.novi.entities.*;
 import net.pixelstatic.novi.modules.Network;
 import net.pixelstatic.novi.network.Registrator;
 import net.pixelstatic.novi.network.packets.*;
+import net.pixelstatic.novi.utils.Loggy;
 
+import com.badlogic.gdx.math.MathUtils;
 import com.esotericsoftware.kryonet.*;
+import com.esotericsoftware.minlog.Log;
 
 public class NoviServer{
 	public static boolean active;
@@ -21,9 +24,9 @@ public class NoviServer{
 		Entity.server = this;
 		addEntities();
 		try{
-			server = new Server(16384*16, 16384*16);
+			server = new Server(16384 * 256, 16384 * 256);
 			Registrator.register(server.getKryo());
-			server.addListener(new Listen(this));
+			server.addListener(new Listener.LagListener(Network.ping,Network.ping,new Listen(this)));
 			server.start();
 			server.bind(Network.port, Network.port);
 			Novi.log("Server up.");
@@ -55,6 +58,10 @@ public class NoviServer{
 
 		@Override
 		public void disconnected(Connection connection){
+			if( !players.containsKey(connection.getID())){
+				Novi.log("An unknown player has disconnected.");
+				return;
+			}
 			Novi.log(getPlayer(connection.getID()).name + " has disconnected.");
 			removeEntity(getPlayer(connection.getID()));
 			players.remove(connection.getID());
@@ -65,9 +72,9 @@ public class NoviServer{
 			try{
 				if(object instanceof ConnectPacket){
 					try{
-						ConnectPacket connect= (ConnectPacket)object;
+						ConnectPacket connect = (ConnectPacket)object;
 						Player player = new Player();
-						player.connectionid = connection.getID();
+						player.connection = connection;
 						player.name = connect.name;
 						DataPacket data = new DataPacket();
 						data.playerid = player.GetID();
@@ -87,9 +94,10 @@ public class NoviServer{
 					getPlayer(connection.getID()).input.inputEvent(packet.input);
 				}else if(object instanceof PositionPacket){
 					PositionPacket position = (PositionPacket)object;
-					getPlayer(connection.getID()).setPosition(position.x, position.y);
-					getPlayer(connection.getID()).rotation = position.rotation;
-					getPlayer(connection.getID()).velocity = position.velocity;
+					Player player = getPlayer(connection.getID());
+					player.setPosition(position.x, position.y);
+					player.rotation = position.rotation;
+					player.velocity = position.velocity;
 				}
 			}catch(Exception e){
 				e.printStackTrace();
@@ -120,8 +128,15 @@ public class NoviServer{
 		active = true;
 		new NoviServer().createServer();
 	}
-	
+
+	void doLogging(){
+		Log.DEBUG();
+		Log.setLogger(new Loggy());
+	}
+
 	private void addEntities(){
-		new Target().AddSelf();
+		for(int i = 1;i < 0;i ++){
+			new Base().setPosition(100 + MathUtils.random( -2000, 2000), 100 + MathUtils.random( -2000, 2000)).AddSelf();
+		}
 	}
 }
