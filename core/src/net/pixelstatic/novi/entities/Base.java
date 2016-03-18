@@ -4,10 +4,12 @@ import java.util.ArrayList;
 
 import net.pixelstatic.novi.entities.effects.*;
 import net.pixelstatic.novi.network.*;
+import net.pixelstatic.novi.network.Syncable.GlobalSyncable;
 import net.pixelstatic.novi.world.*;
 
 import com.badlogic.gdx.math.*;
 
+@GlobalSyncable
 public class Base extends Enemy implements Syncable{
 	public final int size = 10;
 	private transient ArrayList<Block> blocklist = new ArrayList<Block>();
@@ -155,7 +157,6 @@ public class Base extends Enemy implements Syncable{
 				if(!updated[x][y]) continue;
 				Block block = blocks[x][y];
 				updates.add(new BlockUpdate(block));
-				updated[x][y] = false;
 			}
 		}
 		return new BaseSyncBuffer(updates);
@@ -174,6 +175,7 @@ public class Base extends Enemy implements Syncable{
 			for(int y = 0;y < size;y ++){
 				Block block = blocks[x][y];
 				if(block.empty()) continue;
+				updated[x][y] = false;
 				block.getMaterial().update(block, this);
 			}
 		}

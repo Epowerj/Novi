@@ -93,7 +93,7 @@ public class Renderer extends Module{
 		if(debug){
 			font.setColor(Color.ORANGE);
 			font.draw(batch, "FPS: " + Gdx.graphics.getFramesPerSecond(), 0, gheight());
-			font.draw(batch, "Ping: " + network.client.getReturnTripTime(), 0, gheight()-5);
+			font.draw(batch, "Ping: " + (network.client.getReturnTripTime() + Network.ping*2), 0, gheight()-5);
 		}
 		
 		if( !network.connected() || !network.initialconnect()){

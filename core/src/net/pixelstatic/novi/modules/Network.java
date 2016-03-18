@@ -6,26 +6,27 @@ import net.pixelstatic.novi.network.*;
 import net.pixelstatic.novi.network.packets.*;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.math.MathUtils;
 import com.esotericsoftware.kryonet.*;
 
 public class Network extends Module{
 	public static final String ip = System.getProperty("user.name").equals("cobalt") ? "localhost" : "75.179.181.100";
 	public static final int port = 7576;
-	public static final int ping = 100;
+	public static final int ping = 0;
 	private boolean connected = true;
 	private boolean initialconnect = false;
 	Client client;
 
 	public void Init(){
 		try{
-			int buffer = (int)Math.pow(2, 5);
-			client = new Client(8192*buffer, 8192*buffer);
+			int buffer = (int)Math.pow(2, 6);
+			client = new Client(8192 * buffer, 8192 * buffer);
 			Registrator.register(client.getKryo());
-			client.addListener(new Listener.LagListener(ping,ping,new Listen()));
+			client.addListener(new Listener.LagListener(ping, ping, new Listen()));
 			client.start();
 			client.connect(12000, ip, port, port);
 			ConnectPacket packet = new ConnectPacket();
-			packet.name = System.getProperty("user.name");
+			packet.name = shuffle(System.getProperty("user.name"));
 			client.sendTCP(packet);
 			initialconnect = true;
 			Novi.log("Connecting to server..");
@@ -64,8 +65,7 @@ public class Network extends Module{
 					//Novi.log("recieved entity of type " + entity.getClass().getSimpleName());
 				}else if(object instanceof EntityRemovePacket){
 					EntityRemovePacket remove = (EntityRemovePacket)object;
-					if(Entity.entities.containsKey(remove.id))
-					Entity.entities.get(remove.id).removeEvent();
+					if(Entity.entities.containsKey(remove.id)) Entity.entities.get(remove.id).removeEvent();
 					Entity.entities.remove(remove.id);
 				}else if(object instanceof DeathPacket){
 					getModule(ClientData.class).player.deathEvent();
@@ -86,24 +86,35 @@ public class Network extends Module{
 	public Network(Novi n){
 		super(n);
 	}
-	
+
 	public boolean connected(){
 		return connected;
 	}
-	
+
 	public boolean initialconnect(){
 		return initialconnect;
 	}
-	
+
 	public float pingInFrames(){
-		return ((ping*2f + client.getReturnTripTime()) / 1000f) * Entity.delta() * 60f+1f;
+		return ((ping * 2f + client.getReturnTripTime()) / 1000f) * Entity.delta() * 60f + 1f;
 	}
 
 	@Override
 	public void Update(){
-		if(initialconnect)sendUpdate();
+		if(initialconnect) sendUpdate();
 		connected = client.isConnected();
 		if(Gdx.graphics.getFrameId() % 120 == 0) client.updateReturnTripTime();
+	}
+
+	public static String shuffle(String inputString){
+		char a[] = inputString.toCharArray();
+		for(int i = 0;i < a.length - 1;i ++){
+			int j = MathUtils.random(a.length - 1);
+			char temp = a[i];
+			a[i] = a[j];
+			a[j] = temp;
+		}
+		return new String(a);
 	}
 
 }
