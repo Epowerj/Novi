@@ -12,27 +12,17 @@ public class NoviUpdater{
 	NoviServer server;
 	private boolean isRunning = true;
 	final int maxfps = 60;
-	int frameid;
+	long frameid;
 	float delta = 1f;
 	long lastFpsTime;
 	HashSet<Long> collided = new HashSet<Long>(); //used for storing collisions each frame so entities don't collide twice
 
 	void Loop(){
 		try{
-			for(Entity entity : Entity.entities.values()){
-				entity.Update();
-				entity.serverUpdate();
-				if(entity instanceof SolidEntity){
-					checkCollisions((SolidEntity)entity);
-				}
-				if(entity instanceof Player){
-					sendSync((Player)entity);
-					if(frameid % 120 == 0) pingPlayer((Player)entity);
-				}
-			}
+			Entity.updateAll();
 		}catch(Exception e){
 			e.printStackTrace();
-			Novi.log("Update loop error!");
+			Novi.log("Entity update loop error!");
 		}
 	}
 
@@ -71,6 +61,10 @@ public class NoviUpdater{
 
 	public void pingPlayer(Player player){
 		player.connection.updateReturnTripTime();
+	}
+	
+	public long frameID(){
+		return frameid;
 	}
 
 	public float delta(){

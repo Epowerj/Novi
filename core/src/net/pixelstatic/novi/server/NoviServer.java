@@ -7,6 +7,7 @@ import net.pixelstatic.novi.entities.*;
 import net.pixelstatic.novi.modules.Network;
 import net.pixelstatic.novi.network.Registrator;
 import net.pixelstatic.novi.network.packets.*;
+import net.pixelstatic.novi.systems.*;
 import net.pixelstatic.novi.utils.Loggy;
 
 import com.badlogic.gdx.math.MathUtils;
@@ -19,8 +20,14 @@ public class NoviServer{
 	public Server server;
 	public HashMap<Integer, Long> players = new HashMap<Integer, Long>(); //used for getting entities from connections
 	public NoviUpdater updater; //this runs and updates the game objects
-
+	
+	void createSystems(){
+		Entity.addSystem(new CollisionSystem());
+		Entity.addSystem(new SyncSystem());
+	}
+	
 	void createServer(){
+		createSystems();
 		Entity.server = this;
 		addEntities();
 		try{

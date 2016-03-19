@@ -73,6 +73,7 @@ public class Player extends DestructibleEntity implements Syncable{
 	@Override
 	public void serverUpdate(){
 		input.update();
+		if(frame() % 120 == 0) connection.updateReturnTripTime();
 	}
 
 	public Player(){

@@ -19,7 +19,7 @@ public class InterpolationData{
 		lasty = y - e.y;
 		lastrotation = rotation;
 		if(Math.abs(e.x - x) > correctrange || Math.abs(e.y - y) > correctrange){
-		//	e.setPosition(x, y);
+			e.setPosition(x, y);
 		}
 	}
 	
