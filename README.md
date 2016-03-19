@@ -14,4 +14,8 @@ A top-down flying shooter with simple mechanics and colorful graphics.
 - grid-based collisions
 - tiled map with land
 - land units
+- clientside collision detection
+- player hit detection prediction 
+- better interpolation
+- ghost blocks
 
