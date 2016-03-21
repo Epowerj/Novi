@@ -48,6 +48,7 @@ public class Angles{
 	}
 	
 	static public Vector2 rotate(float x, float y, float angle){
+		if(MathUtils.isEqual(angle, 0, 0.001f)) return vector.set(x,y);
 		return vector.set(x,y).rotate(angle);
 	}
 	

@@ -30,7 +30,6 @@ public class Bullet extends FlyingEntity implements Damager{
 
 	@Override
 	public void Update(){
-	//	if(type.equals(ProjectileType.explosivebullet)) Novi.log(GetID() + ": " + life + "  " + type.getLifetime());
 		life += delta();
 		if(life >= type.getLifetime()){
 			RemoveSelf();
@@ -41,7 +40,6 @@ public class Bullet extends FlyingEntity implements Damager{
 
 	@Override
 	public void Draw(){
-		if(shooter instanceof Player)
 		type.draw(this, renderer);
 	}
 

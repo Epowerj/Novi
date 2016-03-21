@@ -20,6 +20,7 @@ public class Base extends Enemy implements Syncable{
 	public Block[][] blocks;
 	public boolean[][] updated;
 	public int spawned;
+	private String texture;
 
 	{
 		blocks = new Block[size][size];
@@ -155,6 +156,8 @@ public class Base extends Enemy implements Syncable{
 				block.getMaterial().draw(block, this, x, y);
 			}
 		}
+		
+		if(texture != null) renderer.layer(texture, x, y).setRotation(rotation);
 	}
 
 	@Override
@@ -180,7 +183,6 @@ public class Base extends Enemy implements Syncable{
 
 	@Override
 	public void behaviorUpdate(){
-		rotation ++;
 		for(int x = 0;x < size;x ++){
 			for(int y = 0;y < size;y ++){
 				Block block = blocks[x][y];
@@ -189,6 +191,10 @@ public class Base extends Enemy implements Syncable{
 				block.getMaterial().update(block, this);
 			}
 		}
+	}
+
+	public void setTexture(String texture){
+		this.texture = texture;
 	}
 
 	public float unitSize(){
