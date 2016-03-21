@@ -93,6 +93,11 @@ public class Layer implements Comparable<Layer>{
 		this.rotation = rotation;
 		return this;
 	}
+	
+	public Layer rotate(float rotation){
+		this.rotation += rotation;
+		return this;
+	}
 
 	public Layer set(String region, float x, float y){
 		this.region = region;

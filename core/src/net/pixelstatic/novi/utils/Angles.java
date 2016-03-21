@@ -47,7 +47,12 @@ public class Angles{
 		return angle;
 	}
 	
+	static public Vector2 rotate(float x, float y, float angle){
+		return vector.set(x,y).rotate(angle);
+	}
+	
 	static public Vector2 translation(float angle, float amount){
+		if(amount < 0) angle += 180f;
 		return vector.setAngle(angle).setLength(amount);
 	}
 

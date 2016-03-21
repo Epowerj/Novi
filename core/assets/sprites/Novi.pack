@@ -79,20 +79,20 @@ repeat: none
 gui/healthbarcontainer
   rotate: false
   xy: 1, 7
-  size: 22, 6
-  orig: 22, 6
+  size: 122, 6
+  orig: 122, 6
   offset: 0, 0
   index: -1
 gui/healthbar
   rotate: false
   xy: 1, 1
-  size: 20, 4
-  orig: 20, 4
+  size: 120, 4
+  orig: 120, 4
   offset: 0, 0
   index: -1
 gui/blank
   rotate: false
-  xy: 25, 12
+  xy: 125, 12
   size: 1, 1
   orig: 1, 1
   offset: 0, 0

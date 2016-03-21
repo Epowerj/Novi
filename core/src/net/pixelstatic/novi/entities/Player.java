@@ -25,7 +25,7 @@ public class Player extends DestructibleEntity implements Syncable{
 	transient InterpolationData data = new InterpolationData();
 	public transient InputHandler input;
 
-	private transient Ship ship = new ArrowheadShip();
+	private Ship ship = Ship.arrowhead;
 
 	{
 		material.drag = 0.01f;
@@ -135,6 +135,14 @@ public class Player extends DestructibleEntity implements Syncable{
 	@Override
 	public boolean removeOnDeath(){
 		return false;
+	}
+	
+	public void bullet(ProjectileType type){
+		Bullet b = new Bullet(type, rotation + 90);
+		b.x = predictedX();
+		b.y = predictedY();
+		b.setShooter(this);
+		b.AddSelf().SendSelf();
 	}
 	
 	public float pingInFrames(){

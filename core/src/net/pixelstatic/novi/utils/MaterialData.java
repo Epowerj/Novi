@@ -26,6 +26,6 @@ public class MaterialData{
 	}
 	
 	public void updateHitbox(){
-		rectangle.setCenter(entity.x, entity.y);
+		rectangle.setCenter(entity.predictedX(), entity.predictedY());
 	}
 }

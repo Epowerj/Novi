@@ -22,8 +22,22 @@ public abstract class SolidEntity extends Entity{
 		return material.getRectangle().overlaps(rekt);
 	}
 	
+	//returns the predicted X position. it's the normal X by default, because prediction is disabled
+	public float predictedX(){
+		return x;
+	}
+	
+	//^^^^
+	public float predictedY(){
+		return y;
+	}
+	
 	//called when this entity hits another one - overriding is optional
 	public void collisionEvent(SolidEntity other){
 		
+	}
+	
+	public boolean inRange(SolidEntity entity, float rad){
+		return Math.abs(predictedX() - entity.predictedX()) < rad && Math.abs(predictedY() - entity.predictedY()) < rad;
 	}
 }

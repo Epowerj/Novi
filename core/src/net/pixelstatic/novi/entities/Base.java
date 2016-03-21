@@ -1,10 +1,12 @@
 package net.pixelstatic.novi.entities;
 
+import java.awt.Point;
 import java.util.ArrayList;
 
 import net.pixelstatic.novi.entities.effects.*;
 import net.pixelstatic.novi.network.*;
 import net.pixelstatic.novi.network.Syncable.GlobalSyncable;
+import net.pixelstatic.novi.utils.Angles;
 import net.pixelstatic.novi.world.*;
 
 import com.badlogic.gdx.math.*;
@@ -13,7 +15,8 @@ import com.badlogic.gdx.math.*;
 public class Base extends Enemy implements Syncable{
 	public final int size = 10;
 	private transient ArrayList<Block> blocklist = new ArrayList<Block>();
-	private transient Rectangle rectangle = new Rectangle(0,0,Material.blocksize,Material.blocksize);
+	private transient Rectangle rectangle = new Rectangle(0, 0, Material.blocksize, Material.blocksize);
+	public float rotation;
 	public Block[][] blocks;
 	public boolean[][] updated;
 	public int spawned;
@@ -24,7 +27,7 @@ public class Base extends Enemy implements Syncable{
 		for(int x = 0;x < size;x ++){
 			for(int y = 0;y < size;y ++){
 				blocks[x][y] = new Block(x, y, Material.air);
-				if(Vector2.dst(x, y, size/2f, size/2f) < 4.5f) blocks[x][y].setMaterial(Material.ironblock);
+				if(Vector2.dst(x, y, size / 2f, size / 2f) < 4.5f) blocks[x][y].setMaterial(Material.ironblock);
 				//if(Vector2.dst(x, y, size/2f, size/2f) <= 2) blocks[x][y].setMaterial(Material.turret);
 			}
 		}
@@ -33,13 +36,13 @@ public class Base extends Enemy implements Syncable{
 		blocks[size - o][o].setMaterial(Material.turret);
 		blocks[o][size - o].setMaterial(Material.turret);
 		blocks[size - o][size - o].setMaterial(Material.turret);
-		blocks[size/2][1].setMaterial(Material.dronemaker);
-		blocks[size/2][size/2].setMaterial(Material.bigturret);
-		
-		material.getRectangle().setSize(size * (Material.blocksize+1), size * (Material.blocksize+1));
+		blocks[size / 2][1].setMaterial(Material.dronemaker);
+		blocks[size / 2][size / 2].setMaterial(Material.bigturret);
+
+		material.getRectangle().setSize(size * (Material.blocksize + 1), size * (Material.blocksize + 1));
 		updateHealth();
 	}
-	
+
 	void updateHealth(){
 		health = 0;
 		for(int x = 0;x < size;x ++){
@@ -52,56 +55,57 @@ public class Base extends Enemy implements Syncable{
 	@Override
 	public boolean collides(SolidEntity other){
 		if( !(other instanceof Damager) || (other instanceof Bullet && !(((Bullet)other).shooter instanceof Player))) return false;
-		radiusBlocks(blockX(other.x), blockY(other.y));
+		Point point = blockPosition(other.x, other.y);
+		radiusBlocks(point.x, point.y);
 		boolean collide = false;
 		for(Block block : blocklist){
-			rectangle.setPosition(worldex(block.x), worldey(block.y));
+			Vector2 vector = world(block.x, block.y);
+			rectangle.setCenter(vector.x, vector.y);
 			if(other.collides(rectangle)){
 				block.health -= ((Damager)other).damage();
-				checkHealth(block);
+				checkHealth(block, vector);
 				update(block.x, block.y);
-				Effects.explosion(worldx(block.x), worldy(block.y));
+				Effects.explosion(vector.x, vector.y);
 				collide = true;
 			}
 		}
 		if(collide) updateHealth();
 		return collide;
 	}
-	
-	public void checkHealth(Block block){
+
+	public void checkHealth(Block block, Vector2 pos){
 		if(block.health < 0){
 			block.getMaterial().destroyEvent(this, block.x, block.y);
-			new ExplosionEmitter(10f, 1f, 14f).setPosition(worldx(block.x), worldy(block.y)).AddSelf();
-		//	explosion(block.x,block.y);
+			new ExplosionEmitter(10f, 1f, 14f).setPosition(pos.x, pos.y).AddSelf();
+			//	explosion(block.x,block.y);
 		}
 	}
-	
+
 	public void explosion(int cx, int cy){
 		int rad = 4;
-		for(int x = -rad; x <= rad; x ++){
-			for(int y = -rad; y <= rad; y ++){
-				int relx = cx+x, rely = cy+y;
+		for(int x = -rad;x <= rad;x ++){
+			for(int y = -rad;y <= rad;y ++){
+				int relx = cx + x, rely = cy + y;
 				if(relx < 0 || rely < 0 || relx >= size || rely >= size) continue;
-				float dist = Vector2.dst(x, y, 0, 0); 
+				float dist = Vector2.dst(x, y, 0, 0);
 				if(dist >= rad) continue;
 				Block block = blocks[relx][rely];
-				if(!block.solid())block.health -= (int)((1f-dist/rad+0.2f)*block.getMaterial().health());
-				if(block.health < 0 ) block.setMaterial(Material.air);
-				update(relx,rely);
+				if( !block.solid()) block.health -= (int)((1f - dist / rad + 0.2f) * block.getMaterial().health());
+				if(block.health < 0) block.setMaterial(Material.air);
+				update(relx, rely);
 			}
 		}
 	}
-	
+
 	//returns a list of solid blocks around the specified location
 	public ArrayList<Block> radiusBlocks(int cx, int cy){
 		int rad = 1;
 		blocklist.clear();
-		for(int x = -rad; x <= rad; x ++){
-			for(int y = -rad; y <= rad; y ++){
-				int relx = cx+x, rely = cy+y;
+		for(int x = -rad;x <= rad;x ++){
+			for(int y = -rad;y <= rad;y ++){
+				int relx = cx + x, rely = cy + y;
 				if(relx < 0 || rely < 0 || relx >= size || rely >= size) continue;
-				if(blocks[relx][rely].solid())
-				blocklist.add(blocks[relx][rely]);
+				if(blocks[relx][rely].solid()) blocklist.add(blocks[relx][rely]);
 			}
 		}
 		return blocklist;
@@ -118,19 +122,23 @@ public class Base extends Enemy implements Syncable{
 		if(blockx < 0 || blocky < 0 || blockx >= size || blocky >= size) return null;
 		return blocks[blockx][blocky];
 	}
-	
-	public int blockX(float x){
-		return (int)(( x - this.x + size / 2f * Material.blocksize) / Material.blocksize);
-	}
-	
-	public int blockY(float y){
-		return (int)(( y - this.y + size / 2f * Material.blocksize) / Material.blocksize);
+
+	public Point blockPosition(float x, float y){
+		x -= this.x;
+		y -= this.y;
+		Vector2 v = Angles.rotate(x, y, -rotation);
+		float relx = (v.x - Material.blocksize / 2f + unitSize() / 2f) / Material.blocksize;
+		float rely = (v.y - Material.blocksize / 2f + unitSize() / 2f) / Material.blocksize;
+		return new Point((int)relx, (int)rely);
 	}
 
 	public void deathEvent(){
 		for(int x = 0;x < size;x ++){
 			for(int y = 0;y < size;y ++){
-				if(!blocks[x][y].empty()) new BreakEffect("ironblock").setPosition(worldx(x), worldy(y)).SendSelf();
+				if( !blocks[x][y].empty()){
+					Vector2 v = world(x, y);
+					new BreakEffect("ironblock").setPosition(v.x, v.y).SendSelf();
+				}
 			}
 		}
 		new ExplosionEmitter(120, 1.1f, size * Material.blocksize / 2f).setPosition(x, y).AddSelf();
@@ -154,16 +162,17 @@ public class Base extends Enemy implements Syncable{
 		ArrayList<BlockUpdate> updates = new ArrayList<BlockUpdate>();
 		for(int x = 0;x < size;x ++){
 			for(int y = 0;y < size;y ++){
-				if(!updated[x][y]) continue;
+				if( !updated[x][y]) continue;
 				Block block = blocks[x][y];
 				updates.add(new BlockUpdate(block));
 			}
 		}
-		return new BaseSyncBuffer(updates);
+		return new BaseSyncBuffer(updates, rotation);
 	}
 
 	@Override
 	public void readSync(SyncBuffer buffer){
+		this.rotation = ((BaseSyncBuffer)buffer).rotation;
 		for(BlockUpdate update : ((BaseSyncBuffer)buffer).updates){
 			update.apply(blocks);
 		}
@@ -171,6 +180,7 @@ public class Base extends Enemy implements Syncable{
 
 	@Override
 	public void behaviorUpdate(){
+		rotation ++;
 		for(int x = 0;x < size;x ++){
 			for(int y = 0;y < size;y ++){
 				Block block = blocks[x][y];
@@ -180,21 +190,17 @@ public class Base extends Enemy implements Syncable{
 			}
 		}
 	}
-	
-	float worldx(int i){
-		return x + i * Material.blocksize - size / 2f * Material.blocksize + Material.blocksize / 2f;
+
+	public float unitSize(){
+		return Material.blocksize * size;
 	}
-	
-	float worldy(int i){
-		return y + i * Material.blocksize - size / 2f * Material.blocksize + Material.blocksize / 2f;
-	}
-	
-	float worldex(int i){
-		return x + i * Material.blocksize - size / 2f * Material.blocksize;
-	}
-	
-	float worldey(int i){
-		return y + i * Material.blocksize - size / 2f * Material.blocksize;
+
+	public Vector2 world(int x, int y){
+		float relx = (x * Material.blocksize - size / 2f * Material.blocksize + Material.blocksize / 2f);
+		float rely = (y * Material.blocksize - size / 2f * Material.blocksize + Material.blocksize / 2f);
+		Vector2 v = Angles.rotate(relx, rely, rotation);
+		v.add(this.x, this.y);
+		return v;
 	}
 
 }

@@ -41,6 +41,7 @@ public class Bullet extends FlyingEntity implements Damager{
 
 	@Override
 	public void Draw(){
+		if(shooter instanceof Player)
 		type.draw(this, renderer);
 	}
 
