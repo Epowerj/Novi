@@ -12,7 +12,12 @@ public abstract class SolidEntity extends Entity{
 	//returns whether this entity collides with the other solid entity
 	public boolean collides(SolidEntity other){
 		if(other instanceof Bullet && this.equals(((Bullet)other).shooter)) return false;
-		return material.collides(other.material);
+		boolean collide = false;
+		material.updateHitbox();
+		if(material.doubleCheckCollision(other.material)) return true;
+		material.updateHitboxWrap();
+		if(material.doubleCheckCollision(other.material)) return true;
+		return false;
 	}
 	
 	public boolean collides(Rectangle rekt){
