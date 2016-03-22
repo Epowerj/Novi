@@ -19,6 +19,8 @@ public class Layer implements Comparable<Layer>{
 
 	public void Draw(Renderer renderer){
 		renderer.batch.setColor(color);
+		x = renderer.overlapx(x);
+		y = renderer.overlapy(y);
 		if(type == LayerType.SPRITE){
 			if(scale != 1f){
 				renderer.drawscl(region, x, y, scale);

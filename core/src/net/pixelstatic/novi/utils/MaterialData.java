@@ -13,7 +13,7 @@ public class MaterialData{
 	private Rectangle rectangle;
 	
 	public boolean collides(MaterialData other){
-		return rectangle.overlaps(other.rectangle);
+		return updateHitbox().overlaps(other.rectangle) || updateHitboxWrap().overlaps(other.rectangle);
 	}
 	
 	public Rectangle getRectangle(){
@@ -25,7 +25,11 @@ public class MaterialData{
 		rectangle = new Rectangle(0, 0, hitwidth, hitheight);
 	}
 	
-	public void updateHitbox(){
-		rectangle.setCenter(entity.predictedX(), entity.predictedY());
+	public Rectangle updateHitbox(){
+		return rectangle.setCenter(entity.predictedX(), entity.predictedY());
+	}
+	
+	public Rectangle updateHitboxWrap(){
+		return rectangle.setCenter(WorldUtils.wrap(entity.predictedX()), WorldUtils.wrap(entity.predictedY()));
 	}
 }

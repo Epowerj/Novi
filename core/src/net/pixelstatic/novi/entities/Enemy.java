@@ -1,11 +1,15 @@
 package net.pixelstatic.novi.entities;
 
+
+import static net.pixelstatic.novi.utils.WorldUtils.bound;
+import static net.pixelstatic.novi.utils.WorldUtils.relative;
+import static net.pixelstatic.novi.utils.WorldUtils.wrap;
 import net.pixelstatic.novi.entities.effects.ExplosionEffect;
 import net.pixelstatic.novi.items.ProjectileType;
 import net.pixelstatic.novi.network.*;
-import net.pixelstatic.novi.utils.InterpolationData;
+import net.pixelstatic.novi.utils.*;
 
-import com.badlogic.gdx.math.*;
+import com.badlogic.gdx.math.MathUtils;
 
 public abstract class Enemy extends DestructibleEntity implements Syncable{
 	private static final float targettime = 40;
@@ -19,7 +23,7 @@ public abstract class Enemy extends DestructibleEntity implements Syncable{
 		float neardist = Float.MAX_VALUE;
 		for(Entity entity : entities.values()){
 			if(entity instanceof Player && ((Player)entity).isVisible()){
-				float dist = Vector2.dst(entity.x, entity.y, x, y);
+				float dist = WorldUtils.wrappedDist(x, y, entity.x, entity.y);
 				if(dist < neardist){
 					neardist = dist;
 					nearest = (Player)entity;
@@ -63,25 +67,27 @@ public abstract class Enemy extends DestructibleEntity implements Syncable{
 		bullet.setShooter(this);
 		return bullet;
 	}
-	
+
 	public float targetAngle(float x, float y){
-		return predictTargetAngle(x,y,0f);
+		return predictTargetAngle(x, y, 0f);
 	}
-	
+
 	public float targetAngle(){
-		return predictTargetAngle(x,y,0f);
+		return predictTargetAngle(x, y, 0f);
 	}
-	
+
 	public float predictTargetAngle(float x, float y, float amount){
 		if(target == null) return 0f;
-		vector.set(x - (target.x+target.velocity.x*amount), y - (target.y+target.velocity.y*amount));
+		bound(1f);
+		wrap(1f);
+		vector.set(relative((x), (bound(target.x + target.velocity.x * amount))),relative((y), (bound(target.y + target.velocity.y * amount))));
 		return vector.angle();
 	}
-	
+
 	public float autoPredictTargetAngle(float x, float y, float speed){
 		if(target == null) return 0f;
-		float dist = Vector2.dst(target.x, target.y, x, y);
-		return predictTargetAngle(x,y,dist / speed);
+		float dist = WorldUtils.wrappedDist(target.x, target.y, x, y);
+		return predictTargetAngle(x, y, dist / speed);
 	}
 
 	public void Update(){

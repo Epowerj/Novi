@@ -13,7 +13,7 @@ public enum Ship{
 			maxvelocity = 4f;
 			shootspeed = 5;
 			kiteDebuffMultiplier = 0.7f;
-			maxHealth = 300000;
+			maxHealth = 3000;
 		}
 		
 		public void handleInput(Player player, InputHandler input){

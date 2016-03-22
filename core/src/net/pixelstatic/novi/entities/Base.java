@@ -1,5 +1,8 @@
 package net.pixelstatic.novi.entities;
 
+import static net.pixelstatic.novi.utils.WorldUtils.bound;
+import static net.pixelstatic.novi.utils.WorldUtils.relative2;
+
 import java.awt.Point;
 import java.util.ArrayList;
 
@@ -25,11 +28,16 @@ public class Base extends Enemy implements Syncable{
 	{
 		blocks = new Block[size][size];
 		updated = new boolean[size][size];
+		generateBlocks();
+		material.getRectangle().setSize(size * (Material.blocksize + 1), size * (Material.blocksize + 1));
+		updateHealth();
+	}
+
+	void generateBlocks(){
 		for(int x = 0;x < size;x ++){
 			for(int y = 0;y < size;y ++){
 				blocks[x][y] = new Block(x, y, Material.air);
 				if(Vector2.dst(x, y, size / 2f, size / 2f) < 4.5f) blocks[x][y].setMaterial(Material.ironblock);
-				//if(Vector2.dst(x, y, size/2f, size/2f) <= 2) blocks[x][y].setMaterial(Material.turret);
 			}
 		}
 		int o = 3;
@@ -39,9 +47,6 @@ public class Base extends Enemy implements Syncable{
 		blocks[size - o][size - o].setMaterial(Material.turret);
 		blocks[size / 2][1].setMaterial(Material.dronemaker);
 		blocks[size / 2][size / 2].setMaterial(Material.bigturret);
-
-		material.getRectangle().setSize(size * (Material.blocksize + 1), size * (Material.blocksize + 1));
-		updateHealth();
 	}
 
 	void updateHealth(){
@@ -52,7 +57,7 @@ public class Base extends Enemy implements Syncable{
 			}
 		}
 	}
-
+	//HNNNGGGGG
 	@Override
 	public boolean collides(SolidEntity other){
 		if( !(other instanceof Damager) || (other instanceof Bullet && !(((Bullet)other).shooter instanceof Player))) return false;
@@ -61,7 +66,7 @@ public class Base extends Enemy implements Syncable{
 		boolean collide = false;
 		for(Block block : blocklist){
 			Vector2 vector = world(block.x, block.y);
-			rectangle.setCenter(vector.x, vector.y);
+			rectangle.setCenter(bound(vector.x), bound(vector.y));
 			if(other.collides(rectangle)){
 				block.health -= ((Damager)other).damage();
 				checkHealth(block, vector);
@@ -125,8 +130,8 @@ public class Base extends Enemy implements Syncable{
 	}
 
 	public Point blockPosition(float x, float y){
-		x -= this.x;
-		y -= this.y;
+		x = relative2(x, this.x);
+		y = relative2(y, this.y);
 		Vector2 v = Angles.rotate(x, y, -rotation);
 		float relx = (v.x - Material.blocksize / 2f + unitSize() / 2f) / Material.blocksize;
 		float rely = (v.y - Material.blocksize / 2f + unitSize() / 2f) / Material.blocksize;
@@ -156,8 +161,7 @@ public class Base extends Enemy implements Syncable{
 				block.getMaterial().draw(block, this, x, y);
 			}
 		}
-		
-		if(texture != null) renderer.layer(texture, x, y).setRotation(rotation);
+		if(texture != null) renderer.layer(texture, x, y).setLayer( -2).setRotation(rotation);
 	}
 
 	@Override

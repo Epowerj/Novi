@@ -10,7 +10,6 @@ import net.pixelstatic.novi.network.packets.*;
 import net.pixelstatic.novi.systems.*;
 import net.pixelstatic.novi.utils.Loggy;
 
-import com.badlogic.gdx.math.MathUtils;
 import com.esotericsoftware.kryonet.*;
 import com.esotericsoftware.minlog.Log;
 
@@ -142,8 +141,9 @@ public class NoviServer{
 	}
 
 	private void addEntities(){
+		new Base().setPosition(10, 100).AddSelf();
 		for(int i = 1;i < 40;i ++){
-			new Base().setPosition(100 + MathUtils.random( -2000, 2000), 100 + MathUtils.random( -2000, 2000)).AddSelf();
+			//new Base().setPosition(100 + MathUtils.random( -2000, 2000), 100 + MathUtils.random( -2000, 2000)).AddSelf();
 		}
 	}
 }

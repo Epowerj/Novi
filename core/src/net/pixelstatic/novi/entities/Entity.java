@@ -4,12 +4,13 @@ import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
 
 import net.pixelstatic.novi.Novi;
-import net.pixelstatic.novi.modules.*;
+import net.pixelstatic.novi.modules.Renderer;
 import net.pixelstatic.novi.server.NoviServer;
 import net.pixelstatic.novi.systems.*;
+import net.pixelstatic.novi.utils.WorldUtils;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.math.*;
+import com.badlogic.gdx.math.Vector2;
 
 public abstract class Entity{
 	static public Novi novi;
@@ -26,18 +27,22 @@ public abstract class Entity{
 	abstract public void Update();
 
 	abstract public void Draw();
+	
+	public void baseUpdate(){
+		updateBounds();
+		Update();
+	}
 
 	//used to make entities not fly off the map
 	public void updateBounds(){
-		if(x < 0) x = 0;
-		if(y < 0) y = 0;
-		if(x > World.worldSize) x = World.worldSize;
-		if(y > World.worldSize) y = World.worldSize;
+		x = WorldUtils.bound(x);
+		y = WorldUtils.bound(y);
 	}
 
 	//whether or not this entity is loaded (is drawn/updated on screen)
+	//AAAAAAAggggg
 	public boolean loaded(float playerx, float playery){
-		return MathUtils.isEqual(playerx, x, 1000f) && MathUtils.isEqual(playery, y, 1000f);
+		return WorldUtils.loopDist(x, playerx, y, playery, 1000f);
 	}
 
 	//called when this entity object is recieved
@@ -82,7 +87,7 @@ public abstract class Entity{
 	}
 
 	public boolean inRange(Entity entity, float rad){
-		return Math.abs(x - entity.x) < rad && Math.abs(y - entity.y) < rad;
+		return WorldUtils.loopDist(entity.x, entity.y, x, y, rad);
 	}
 
 	public static Entity getEntity(long id){
@@ -124,7 +129,7 @@ public abstract class Entity{
 	public static void updateAll(){
 		for(Entity entity : Entity.entities.values()){
 			if(!basesystem.accept(entity)) continue;
-			entity.Update();
+			entity.baseUpdate();
 			if(NoviServer.active){
 				entity.serverUpdate();
 			}else{

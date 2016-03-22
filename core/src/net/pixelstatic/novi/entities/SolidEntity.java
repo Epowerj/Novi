@@ -1,6 +1,6 @@
 package net.pixelstatic.novi.entities;
 
-import net.pixelstatic.novi.utils.MaterialData;
+import net.pixelstatic.novi.utils.*;
 
 import com.badlogic.gdx.math.Rectangle;
 
@@ -38,6 +38,6 @@ public abstract class SolidEntity extends Entity{
 	}
 	
 	public boolean inRange(SolidEntity entity, float rad){
-		return Math.abs(predictedX() - entity.predictedX()) < rad && Math.abs(predictedY() - entity.predictedY()) < rad;
+		return WorldUtils.loopDist(entity.predictedX(), entity.predictedY(), predictedX(), predictedY(), rad);
 	}
 }

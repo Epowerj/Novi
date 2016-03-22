@@ -6,6 +6,7 @@ import net.pixelstatic.novi.Novi;
 import net.pixelstatic.novi.entities.*;
 import net.pixelstatic.novi.entities.effects.BreakEffect;
 import net.pixelstatic.novi.sprites.*;
+import net.pixelstatic.novi.world.NoviMapRenderer;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.*;
@@ -14,7 +15,6 @@ import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
-import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.*;
 
 public class Renderer extends Module{
@@ -23,7 +23,7 @@ public class Renderer extends Module{
 	public Network network;
 	public SpriteBatch batch; //novi's batch
 	public BitmapFont font; //a font for displaying text
-	public OrthogonalTiledMapRenderer maprenderer; //used for rendering the map
+	public NoviMapRenderer maprenderer; //used for rendering the map
 	public Matrix4 matrix; // matrix used for rendering gui and other things
 	GlyphLayout layout; // used for getting font bounds
 	public OrthographicCamera camera; //a camera, seems self explanatory
@@ -62,7 +62,6 @@ public class Renderer extends Module{
 	public void Update(){
 		updateCamera();
 		batch.setProjectionMatrix(camera.combined); //make the batch use the camera projection
-		drawWorld();
 		clearScreen();
 		doRender();
 		updateCamera();
@@ -71,7 +70,7 @@ public class Renderer extends Module{
 	void doRender(){
 		clearScreen();
 		maprenderer.setView(camera);
-		//	maprenderer.render();
+		renderMap();
 		batch.begin();
 		drawLayers();
 		batch.end();
@@ -82,6 +81,15 @@ public class Renderer extends Module{
 		batch.setColor(Color.WHITE);
 	}
 
+	public void renderMap(){
+		for(int x = -1;x <= 1;x ++){
+			for(int y = -1;y <= 1;y ++){
+				maprenderer.setPosition(x * World.worldSize, y * World.worldSize);
+				maprenderer.render();
+			}
+		}
+	}
+
 	public void drawGUI(){
 		color(Color.WHITE);
 		font.getData().setScale(1f / GUIscale);
@@ -89,16 +97,16 @@ public class Renderer extends Module{
 		AtlasRegion region = atlas.findRegion("healthbar");
 		region.setRegionWidth((int)(region.getRotatedPackedWidth() * player.health / player.getShip().getMaxhealth()));
 		batch.draw(region, 1, 1);
-		
+
 		if(debug){
 			font.setColor(Color.ORANGE);
 			font.draw(batch, "FPS: " + Gdx.graphics.getFramesPerSecond(), 0, gheight());
-			font.draw(batch, "Ping: " + (network.client.getReturnTripTime() + Network.ping*2), 0, gheight()-5);
+			font.draw(batch, "Ping: " + (network.client.getReturnTripTime() + Network.ping * 2), 0, gheight() - 5);
 		}
-		
+
 		if( !network.connected() || !network.initialconnect()){
-			color(0,0,0,0.5f);
-			batch.draw(atlas.findRegion("blank"),0,0,gwidth(),gheight());
+			color(0, 0, 0, 0.5f);
+			batch.draw(atlas.findRegion("blank"), 0, 0, gwidth(), gheight());
 			color(Color.WHITE);
 			drawFont(network.initialconnect() ? "Connecting..." : "Failed to connect to server.", gwidth() / 2, gheight() / 2);
 		}
@@ -190,7 +198,7 @@ public class Renderer extends Module{
 
 	public void drawFont(String text, float x, float y){
 		layout.setText(font, text);
-		font.draw(batch, text, x - layout.width/2, y + layout.height/2);
+		font.draw(batch, text, x - layout.width / 2, y + layout.height / 2);
 	}
 
 	//returns screen width / scale
@@ -202,17 +210,34 @@ public class Renderer extends Module{
 	public float gheight(){
 		return Gdx.graphics.getHeight() / GUIscale;
 	}
-	
+
 	public void color(Color color){
 		batch.setColor(color);
 	}
+
+	public void color(float r, float g, float b, float a){
+		batch.setColor(new Color(r, g, b, a));
+	}
 	
-	public void color(float r, float g, float b, float a ){
-		batch.setColor(new Color(r,g,b,a));
+	public float overlapx(float i){
+		if(MathUtils.isEqual(i, camera.position.x, (camera.viewportWidth * camera.zoom) / 2f + 10f)){
+			return i;
+		}else{
+			return i < World.worldSize/2f ? i + World.worldSize : i - World.worldSize;
+		}
+	}
+	
+	public float overlapy(float i){
+		if(MathUtils.isEqual(i, camera.position.y, (camera.viewportHeight * camera.zoom) / 2f + 10f)){
+			return i;
+		}else{
+			return i < World.worldSize/2f ? i + World.worldSize : i - World.worldSize;
+		}
 	}
 
 	//utility/shortcut draw method
 	public void draw(String region, float x, float y){
+
 		batch.draw(atlas.findRegion(region), x - atlas.RegionWidth(region) / 2, y - atlas.RegionHeight(region) / 2);
 	}
 
