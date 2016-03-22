@@ -11,7 +11,7 @@ public class CollisionSystem extends EntitySystem{
 	public void update(Entity aentity){
 		SolidEntity entity = (SolidEntity)aentity;
 		for(Entity other : Entity.entities.values()){
-			if(other.equals(entity) || !(other instanceof SolidEntity) /*|| !entity.inRange((SolidEntity)other, 10 + entity.material.getRectangle().width)*/) continue;
+			if(other.equals(entity) || !(other instanceof SolidEntity) || !entity.inRange((SolidEntity)other, 10 + entity.material.getRectangle().width)) continue;
 			if( !collided.contains(other.GetID())){
 				SolidEntity othersolid = (SolidEntity)other;
 				if(othersolid.collides(entity) && entity.collides(othersolid)){

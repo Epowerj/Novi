@@ -5,10 +5,12 @@ import net.pixelstatic.novi.modules.World;
 import com.badlogic.gdx.math.Vector2;
 
 //class full of arcane magic BS
+//goddammit
 public class WorldUtils{
 	private static int hsize = World.worldSize/2;
 	
-	//wrapped square dist, may not work properly
+	/*
+	//wrapped square dist, will not work properly so stop trying
 	public static boolean loopDist(float x1, float x2, float y1, float y2, float rad){
 		x1 = wrap(x1);
 		y1 = wrap(y1);
@@ -16,6 +18,12 @@ public class WorldUtils{
 		y2 = wrap(y2);
 		return (Math.abs(x1 - x2) < rad && Math.abs(y1 - y2) < rad);
 	}
+	*/
+	
+	public static boolean loopDist(float x1, float x2, float y1, float y2, float rad){
+		return ((wdist(x1,x2)) < rad && (wdist(y1,y2)) < rad);
+	}
+	
 	
 	public static float wrappedDist(float x1, float y1, float x2, float y2){
 		x1 = wrap(x1);
@@ -45,6 +53,16 @@ public class WorldUtils{
 		}else{ //a < hsize && b > hsize
 			return -(a-World.worldSize-b);
 		}
+	}
+	//90|10
+	
+	//abracadabra
+	public static float wdist(float a, float b){
+		return Math.min(wrap(a)+wrap(b), Math.abs(a-b));
+	}
+	
+	public static float dwrap(float i) {
+	    return wrap(i);
 	}
 	
 	//wraps crap

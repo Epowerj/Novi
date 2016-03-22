@@ -3,6 +3,7 @@ package net.pixelstatic.novi.entities.enemies;
 import net.pixelstatic.novi.entities.*;
 import net.pixelstatic.novi.entities.effects.BreakEffect;
 import net.pixelstatic.novi.items.ProjectileType;
+import net.pixelstatic.novi.utils.WorldUtils;
 
 import com.badlogic.gdx.math.*;
 
@@ -36,7 +37,7 @@ public class Drone extends Enemy{
 	@Override
 	public void behaviorUpdate(){
 		if(target == null) return;
-		Vector2 add = new Vector2(target.x - x, target.y - y);
+		Vector2 add = new Vector2(WorldUtils.relative(target.x, x), WorldUtils.relative(target.y, y));
 		float len = add.len();
 		float anglechange =  sign*(turnrange - len)*(90f/turnrange);
 		if(len < turnrange) add.setAngle((add.angle() + anglechange));
