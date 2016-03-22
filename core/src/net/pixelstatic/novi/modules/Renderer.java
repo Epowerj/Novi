@@ -6,6 +6,7 @@ import net.pixelstatic.novi.Novi;
 import net.pixelstatic.novi.entities.*;
 import net.pixelstatic.novi.entities.effects.BreakEffect;
 import net.pixelstatic.novi.sprites.*;
+import net.pixelstatic.novi.utils.WorldUtils;
 import net.pixelstatic.novi.world.NoviMapRenderer;
 
 import com.badlogic.gdx.Gdx;
@@ -99,9 +100,11 @@ public class Renderer extends Module{
 		batch.draw(region, 1, 1);
 
 		if(debug){
+			float f = ((WorldUtils.bound(camera.unproject(new Vector3(Gdx.input.getX(),Gdx.graphics.getHeight()/2,0)).x)));
 			font.setColor(Color.ORANGE);
 			font.draw(batch, "FPS: " + Gdx.graphics.getFramesPerSecond(), 0, gheight());
 			font.draw(batch, "Ping: " + (network.client.getReturnTripTime() + Network.ping * 2), 0, gheight() - 5);
+			font.draw(batch, "crep: " + WorldUtils.relative3(player.x, f), 0, gheight() - 10);
 		}
 
 		if( !network.connected() || !network.initialconnect()){

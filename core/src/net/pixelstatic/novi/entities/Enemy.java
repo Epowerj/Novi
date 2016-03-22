@@ -2,7 +2,7 @@ package net.pixelstatic.novi.entities;
 
 
 import static net.pixelstatic.novi.utils.WorldUtils.bound;
-import static net.pixelstatic.novi.utils.WorldUtils.relative;
+import static net.pixelstatic.novi.utils.WorldUtils.relative3;
 import static net.pixelstatic.novi.utils.WorldUtils.wrap;
 import net.pixelstatic.novi.entities.effects.ExplosionEffect;
 import net.pixelstatic.novi.items.ProjectileType;
@@ -80,7 +80,7 @@ public abstract class Enemy extends DestructibleEntity implements Syncable{
 		if(target == null) return 0f;
 		bound(1f);
 		wrap(1f);
-		vector.set(relative((x), (bound(target.x + target.velocity.x * amount))),relative((y), (bound(target.y + target.velocity.y * amount))));
+		vector.set(relative3((x), (bound(target.x + target.velocity.x * amount))),relative3((y), (bound(target.y + target.velocity.y * amount))));
 		return vector.angle();
 	}
 

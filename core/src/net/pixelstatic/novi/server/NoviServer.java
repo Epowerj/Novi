@@ -141,9 +141,10 @@ public class NoviServer{
 	}
 
 	private void addEntities(){
-		new Base().setPosition(10, 100).AddSelf();
-		for(int i = 1;i < 40;i ++){
-			//new Base().setPosition(100 + MathUtils.random( -2000, 2000), 100 + MathUtils.random( -2000, 2000)).AddSelf();
+		//new Base().setPosition(10, 100).AddSelf();
+		new Base().setPosition(100, 1380).AddSelf();
+		for(int i = 1;i < 20;i ++){
+		//	new Base().setPosition(100+ MathUtils.random(World.worldSize-100), 100 + MathUtils.random(World.worldSize-100)).AddSelf();
 		}
 	}
 }

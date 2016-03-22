@@ -12,8 +12,6 @@ public abstract class SolidEntity extends Entity{
 	//returns whether this entity collides with the other solid entity
 	public boolean collides(SolidEntity other){
 		if(other instanceof Bullet && this.equals(((Bullet)other).shooter)) return false;
-		material.updateHitbox();
-		other.material.updateHitbox();
 		return material.collides(other.material);
 	}
 	
@@ -38,6 +36,6 @@ public abstract class SolidEntity extends Entity{
 	}
 	
 	public boolean inRange(SolidEntity entity, float rad){
-		return WorldUtils.loopDist(entity.predictedX(), entity.predictedY(), predictedX(), predictedY(), rad);
+		return WorldUtils.loopDist(entity.predictedX(), predictedX(), entity.predictedY(), predictedY(), rad);
 	}
 }

@@ -37,7 +37,7 @@ public class Drone extends Enemy{
 	@Override
 	public void behaviorUpdate(){
 		if(target == null) return;
-		Vector2 add = new Vector2(WorldUtils.relative(target.x, x), WorldUtils.relative(target.y, y));
+		Vector2 add = new Vector2(WorldUtils.relative3(target.x, x), WorldUtils.relative3(target.y, y));
 		float len = add.len();
 		float anglechange =  sign*(turnrange - len)*(90f/turnrange);
 		if(len < turnrange) add.setAngle((add.angle() + anglechange));

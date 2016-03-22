@@ -1,6 +1,5 @@
 package net.pixelstatic.novi.entities;
 
-import net.pixelstatic.novi.Novi;
 import net.pixelstatic.novi.entities.effects.*;
 import net.pixelstatic.novi.items.*;
 import net.pixelstatic.novi.modules.Network;
@@ -98,7 +97,6 @@ public class Player extends DestructibleEntity implements Syncable{
 	}
 	
 	public boolean loaded(float playerx, float playery){
-		Novi.log((int)WorldUtils.wdist(x, 10) + "(x: " + x + ") " + " pls " + (int)WorldUtils.wdist(y, 100) + "(y: " + y + ")");
 		return true;
 	}
 

@@ -1,7 +1,7 @@
 package net.pixelstatic.novi.entities;
 
 import static net.pixelstatic.novi.utils.WorldUtils.bound;
-import static net.pixelstatic.novi.utils.WorldUtils.relative2;
+import static net.pixelstatic.novi.utils.WorldUtils.relative3;
 
 import java.awt.Point;
 import java.util.ArrayList;
@@ -130,8 +130,8 @@ public class Base extends Enemy implements Syncable{
 	}
 
 	public Point blockPosition(float x, float y){
-		x = relative2(x, this.x);
-		y = relative2(y, this.y);
+		x = relative3(x, this.x);
+		y = relative3(y, this.y);
 		Vector2 v = Angles.rotate(x, y, -rotation);
 		float relx = (v.x - Material.blocksize / 2f + unitSize() / 2f) / Material.blocksize;
 		float rely = (v.y - Material.blocksize / 2f + unitSize() / 2f) / Material.blocksize;

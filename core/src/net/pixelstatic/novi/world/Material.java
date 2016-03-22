@@ -19,7 +19,7 @@ public enum Material{
 	},
 	dronemaker{
 		static final float buildtime = 600;
-		static final int maxspawn = 10;
+		static final int maxspawn = 1;
 
 		public boolean solid(){
 			return true;

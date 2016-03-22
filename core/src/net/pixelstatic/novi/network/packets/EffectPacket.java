@@ -2,8 +2,7 @@ package net.pixelstatic.novi.network.packets;
 
 import net.pixelstatic.novi.Novi;
 import net.pixelstatic.novi.modules.*;
-
-import com.badlogic.gdx.math.Vector2;
+import net.pixelstatic.novi.utils.WorldUtils;
 
 public class EffectPacket{
 	public static final float shakerange = 600f;
@@ -23,7 +22,7 @@ public class EffectPacket{
 	public void apply(Novi novi){
 		if(type == EffectType.shake){
 			float range = 230f * (params[1]/20f+0.5f);
-			float dist = Vector2.dst(novi.getModule(ClientData.class).player.x, novi.getModule(ClientData.class).player.y, params[2], params[3]);
+			float dist = WorldUtils.wrappedDist(novi.getModule(ClientData.class).player.x, novi.getModule(ClientData.class).player.y, params[2], params[3]);
 			float scl = 1f - dist / range;
 			novi.getModule(Renderer.class).shakeCamera(params[0]*scl, params[1]*scl);
 		}
