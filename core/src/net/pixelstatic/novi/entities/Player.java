@@ -104,10 +104,10 @@ public class Player extends DestructibleEntity implements Syncable{
 	public void Draw(){
 		if(respawntime > 0) return;
 		if(!client){
-			renderer.layer("ship", x, y).setLayer(1).setRotation(client ? getSpriteRotation() : rotation);
+			renderer.layer("ship", x, y).setLayer(1).setRotation(client ? getSpriteRotation() : rotation).addShadow();
 			renderer.layer(x, y + 14).setScale(0.2f).setColor(Color.GOLD).setLayer(2f).setType(LayerType.TEXT).setText(name); //draw player name
 		}else{
-			renderer.layer("ship", x, y).setLayer(1).setRotation(client ? getSpriteRotation() : rotation);
+			renderer.layer("ship", x, y).setLayer(1).setRotation(client ? getSpriteRotation() : rotation).addShadow();
 		}
 	}
 

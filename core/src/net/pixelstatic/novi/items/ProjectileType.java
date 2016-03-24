@@ -3,16 +3,13 @@ package net.pixelstatic.novi.items;
 import net.pixelstatic.novi.entities.*;
 import net.pixelstatic.novi.entities.effects.*;
 import net.pixelstatic.novi.modules.Renderer;
+import net.pixelstatic.novi.sprites.Layer;
 import net.pixelstatic.novi.utils.Colors;
 
 import com.badlogic.gdx.graphics.Color;
 
 public enum ProjectileType{
 	bullet{
-		public void draw(Bullet bullet, Renderer renderer){
-			renderer.layer("bullet", bullet.x, bullet.y).setLayer(0.5f).setRotation(bullet.velocity.angle() - 90);
-		}
-		
 		public int getLifetime(){
 			return 30;
 		}
@@ -26,8 +23,9 @@ public enum ProjectileType{
 		}
 	},
 	redbullet{
-		public void draw(Bullet bullet, Renderer renderer){
-			renderer.layer("dronebullet", bullet.x, bullet.y).setLayer(0.5f).setRotation(bullet.velocity.angle() - 90);
+		
+		public String drawName(){
+			return "dronebullet";
 		}
 		
 		public int getLifetime(){
@@ -43,9 +41,6 @@ public enum ProjectileType{
 		}
 	},
 	explosivebullet{
-		public void draw(Bullet bullet, Renderer renderer){
-			renderer.layer("explosivebullet", bullet.x, bullet.y).setLayer(0.5f).setRotation(bullet.velocity.angle() - 90);
-		}
 		
 		public int getLifetime(){
 			return 100;
@@ -72,7 +67,7 @@ public enum ProjectileType{
 	},
 	mine{
 		public void draw(Bullet bullet, Renderer renderer){
-			renderer.layer("mine", bullet.x, bullet.y).setLayer(0.5f).setRotation(bullet.velocity.angle() - 90);
+			defaultDraw(bullet, renderer);
 			renderer.layer("minecenter",bullet.x,bullet.y).setLayer(0.51f).setRotation(bullet.velocity.angle() - 90)
 			.setColor(Colors.mix(Color.GOLD, Color.RED, bullet.life()/getLifetime()));
 		}
@@ -134,11 +129,19 @@ public enum ProjectileType{
 		return true;
 	}
 	
+	public String drawName(){
+		return name();
+	}
+	
 	public void destroyEvent(Bullet bullet){
 		
 	}
 	
+	public Layer defaultDraw(Bullet bullet, Renderer renderer){
+		return renderer.layer(drawName(), bullet.x, bullet.y).setLayer(0.5f).setRotation(bullet.velocity.angle() - 90).addShadow();
+	}
+	
 	public void draw(Bullet bullet, Renderer renderer){
-		renderer.layer(name(), bullet.x, bullet.y).setLayer(0.5f).setRotation(bullet.velocity.angle() - 90);
+		renderer.layer(drawName(), bullet.x, bullet.y).setLayer(0.5f).setRotation(bullet.velocity.angle() - 90).addShadow();
 	}
 }

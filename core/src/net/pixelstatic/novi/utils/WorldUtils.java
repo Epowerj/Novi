@@ -3,7 +3,7 @@ package net.pixelstatic.novi.utils;
 import net.pixelstatic.novi.modules.World;
 
 //class full of arcane magic BS
-//goddammit
+//don't change anything or collisions will break for no reason
 public class WorldUtils{
 	
 	//square distance with wrapping
@@ -24,7 +24,7 @@ public class WorldUtils{
 		float wdst = owrapdst(a, b);
 		return Math.abs(ndst) < Math.abs(wdst) ? ndst : wdst;
 	}
-
+	
 	//returns the wrapped distance from a to b
 	public static float owrapdst(float a, float b){
 		if(a > b){

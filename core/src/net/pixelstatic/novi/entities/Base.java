@@ -161,7 +161,7 @@ public class Base extends Enemy implements Syncable{
 				block.getMaterial().draw(block, this, x, y);
 			}
 		}
-		if(texture != null) renderer.layer(texture, x, y).setLayer( -2).setRotation(rotation);
+		if(texture != null) renderer.layer(texture, x, y).setLayer( -2).setRotation(rotation).addShadow();
 	}
 
 	@Override

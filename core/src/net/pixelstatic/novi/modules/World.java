@@ -7,7 +7,7 @@ import com.badlogic.gdx.maps.tiled.*;
 
 public class World extends Module{
 	public static final int tileSize = 14;
-	public static final int worldSize = 100 * tileSize;
+	public static final int worldSize = 300 * tileSize;
 	public TiledMap map;
 
 	@Override

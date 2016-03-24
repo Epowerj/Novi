@@ -1,11 +1,14 @@
 package net.pixelstatic.novi.sprites;
 
+import net.pixelstatic.novi.entities.Entity;
 import net.pixelstatic.novi.modules.Renderer;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.*;
 
 public class Layer implements Comparable<Layer>{
+	public static final float shadowlayer = -10, shadowoffset = -10;
+	public static final Color shadowcolor = new Color(0,0,0,0.14f);
 	public Color color = Color.WHITE;
 	public float layer, x, y, rotation, scale = 1f;
 	public String region;
@@ -40,9 +43,22 @@ public class Layer implements Comparable<Layer>{
 			renderer.batch.draw(texture, x - texture.getRegionWidth() / 2, y - texture.getRegionHeight() / 2, texture.getRegionHeight() / 2, texture.getRegionWidth() / 2, texture.getRegionWidth(), texture.getRegionHeight(), 1f, 1f, rotation);
 		}
 	}
+	
+	public Layer addShadow(){
+		Entity.renderer.layer(x, y).set(this).setColor(shadowcolor.cpy().mul(1, 1, 1, this.color.a)).setLayer(shadowlayer).translate(0, shadowoffset);
+		return this;
+	}
 
 	public Layer(){
-
+		
+	}
+	
+	public Layer set(Layer layer){
+		return this.set(layer.region, layer.x, layer.y)
+		.setColor(layer.color).setScale(layer.scale)
+		.setType(layer.type)
+		.setTexture(layer.texture)
+		.setRotation(layer.rotation);
 	}
 
 	public Layer(String region, float x, float y){

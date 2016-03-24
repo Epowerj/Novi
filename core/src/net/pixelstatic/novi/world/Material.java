@@ -131,7 +131,7 @@ public enum Material{
 	}
 
 	public Layer defaultDraw(String region, Block block, Base base, int x, int y){
-		return Entity.renderer.layer(region, worldx(base, x, y), worldy(base, x, y)).setRotation(base.rotation).setLayer( -1f).setColor(new Color(block.healthfrac() + 0.3f, block.healthfrac() + 0.3f, block.healthfrac() + 0.3f, 1f));
+		return Entity.renderer.layer(region, worldx(base, x, y), worldy(base, x, y)).setRotation(base.rotation).setLayer( -1f).setColor(new Color(block.healthfrac() + 0.3f, block.healthfrac() + 0.3f, block.healthfrac() + 0.3f, 1f)).addShadow();
 	}
 
 	public Layer defaultDraw(String region, Block block, Base base, int x, int y, float offsetx, float offsety){

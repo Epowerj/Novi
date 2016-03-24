@@ -104,7 +104,6 @@ public class Renderer extends Module{
 			font.setColor(Color.ORANGE);
 			font.draw(batch, "FPS: " + Gdx.graphics.getFramesPerSecond(), 0, gheight());
 			font.draw(batch, "Ping: " + (network.client.getReturnTripTime() + Network.ping * 2), 0, gheight() - 5);
-			font.draw(batch, "crep: " + WorldUtils.relative3(player.x, f), 0, gheight() - 10);
 		}
 
 		if( !network.connected() || !network.initialconnect()){

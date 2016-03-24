@@ -10,9 +10,9 @@ public abstract class SolidEntity extends Entity{
 	transient public MaterialData material = new MaterialData(this, 6,6);
 	
 	//returns whether this entity collides with the other solid entity
+	//yes I know it's a mess
 	public boolean collides(SolidEntity other){
 		if(other instanceof Bullet && this.equals(((Bullet)other).shooter)) return false;
-		boolean collide = false;
 		material.updateHitbox();
 		if(material.doubleCheckCollision(other.material)) return true;
 		material.updateHitboxWrap();

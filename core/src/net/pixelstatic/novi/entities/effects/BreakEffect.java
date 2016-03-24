@@ -84,6 +84,7 @@ public class BreakEffect extends Effect{
 			Layer layer = renderer.layer(x + effect.x, y + effect.y).setType(LayerType.TEXTURE).setLayer(1.5f).setRotation(rotation).setTexture(chunk.region);
 			float scl = 6f;
 			if(effect.life > effect.lifetime / scl) layer.setColor(new Color(1, 1, 1, 1f - (effect.life - effect.lifetime / 2f) / (effect.lifetime / scl)));
+			layer.addShadow();
 			x += velocity.x * delta();
 			y += velocity.y * delta();
 			velocity.scl((float)Math.pow(1f - drag, delta()));

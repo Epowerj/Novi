@@ -25,7 +25,7 @@ public class Drone extends Enemy{
 	
 	@Override
 	public void Draw(){
-		renderer.layer("drone", x, y).setRotation(velocity.angle() - 90);
+		renderer.layer("drone", x, y).setRotation(velocity.angle() - 90).addShadow();
 	}
 	
 	public void deathEvent(){
