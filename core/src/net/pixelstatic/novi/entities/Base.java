@@ -45,12 +45,12 @@ public class Base extends Enemy implements Syncable{
 			}
 		}
 		int o = 3;
-		blocks[o][o].setMaterial(Material.turret);
-		blocks[size - o][o].setMaterial(Material.turret);
-		blocks[o][size - o].setMaterial(Material.turret);
-		blocks[size - o][size - o].setMaterial(Material.turret);
+		blocks[o-1][o].setMaterial(Material.turret);
+		blocks[size - o+1][o].setMaterial(Material.turret);
+		blocks[o][size - o-1].setMaterial(Material.turret);
+		blocks[size - o][size - o-1].setMaterial(Material.turret);
 		blocks[size / 2][2].setMaterial(Material.dronemaker);
-		blocks[size / 2][size / 2].setMaterial(Material.bigturret);
+		blocks[size / 2][size / 2-1].setMaterial(Material.bigturret);
 	}
 
 	void updateHealth(){
@@ -151,6 +151,7 @@ public class Base extends Enemy implements Syncable{
 				}
 			}
 		}
+		//if(texture != null)new BreakEffect(texture).setPosition(x, y).SendSelf();
 		new ExplosionEmitter(120, 1.1f, size * Material.blocksize / 2f).setPosition(x, y).AddSelf();
 		new Shockwave().setPosition(x, y).SendSelf();
 		Effects.shake(80f, 60f, x, y);

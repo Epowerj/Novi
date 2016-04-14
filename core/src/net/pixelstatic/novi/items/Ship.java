@@ -12,7 +12,7 @@ public enum Ship{
 			turnspeed = 10f;
 			maxvelocity = 4f;
 			shootspeed = 5;
-			kiteDebuffMultiplier = 0.7f;
+			kiteDebuffMultiplier = 0.5f;
 			maxHealth = 300;
 		}
 		

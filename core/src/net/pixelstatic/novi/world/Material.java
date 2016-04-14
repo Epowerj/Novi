@@ -1,6 +1,7 @@
 package net.pixelstatic.novi.world;
 
-import net.pixelstatic.novi.entities.*;
+import net.pixelstatic.novi.entities.Base;
+import net.pixelstatic.novi.entities.Entity;
 import net.pixelstatic.novi.entities.effects.*;
 import net.pixelstatic.novi.entities.enemies.Drone;
 import net.pixelstatic.novi.items.ProjectileType;
@@ -9,7 +10,8 @@ import net.pixelstatic.novi.utils.Angles;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.math.*;
+import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector2;
 
 public enum Material{
 	air, ironblock{
@@ -135,7 +137,7 @@ public enum Material{
 	}
 
 	public Layer defaultDraw(String region, Block block, Base base, int x, int y, float offsetx, float offsety){
-		return defaultDraw(region, block, base, x, y).translate(offsetx, offsety);
+		return defaultDraw(region, block, base, x, y, false).translate(offsetx, offsety);
 	}
 
 	public Layer defaultDraw(String region, Block block, Base base, int x, int y, boolean damage){
