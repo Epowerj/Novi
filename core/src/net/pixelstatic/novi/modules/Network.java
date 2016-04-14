@@ -2,12 +2,15 @@ package net.pixelstatic.novi.modules;
 
 import net.pixelstatic.novi.Novi;
 import net.pixelstatic.novi.entities.Entity;
-import net.pixelstatic.novi.network.*;
+import net.pixelstatic.novi.network.Registrator;
+import net.pixelstatic.novi.network.Syncable;
 import net.pixelstatic.novi.network.packets.*;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.MathUtils;
-import com.esotericsoftware.kryonet.*;
+import com.esotericsoftware.kryonet.Client;
+import com.esotericsoftware.kryonet.Connection;
+import com.esotericsoftware.kryonet.Listener;
 
 public class Network extends Module{
 	public static final String ip = System.getProperty("user.name").equals("cobalt") ? "localhost" : "75.179.181.100";
@@ -26,7 +29,7 @@ public class Network extends Module{
 			client.start();
 			client.connect(12000, ip, port, port);
 			ConnectPacket packet = new ConnectPacket();
-			packet.name = shuffle(System.getProperty("user.name"));
+			packet.name = (System.getProperty("user.name"));
 			client.sendTCP(packet);
 			initialconnect = true;
 			Novi.log("Connecting to server..");

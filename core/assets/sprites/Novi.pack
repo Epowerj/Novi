@@ -102,23 +102,30 @@ Novi4.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
+enemies/titanship
+  rotate: false
+  xy: 1, 47
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
 enemies/bigturret
   rotate: false
-  xy: 1, 1
+  xy: 1, 15
   size: 30, 30
   orig: 30, 30
   offset: 0, 0
   index: -1
 enemies/turret
   rotate: false
-  xy: 33, 11
+  xy: 131, 155
   size: 20, 20
   orig: 20, 20
   offset: 0, 0
   index: -1
 enemies/drone
   rotate: false
-  xy: 55, 19
+  xy: 1, 1
   size: 12, 12
   orig: 12, 12
   offset: 0, 0

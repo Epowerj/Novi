@@ -1,10 +1,10 @@
 package net.pixelstatic.novi.sprites;
 
-import net.pixelstatic.novi.entities.Entity;
 import net.pixelstatic.novi.modules.Renderer;
 
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.*;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class Layer implements Comparable<Layer>{
 	public static final float shadowlayer = -10, shadowoffset = -10;
@@ -22,8 +22,9 @@ public class Layer implements Comparable<Layer>{
 
 	public void Draw(Renderer renderer){
 		renderer.batch.setColor(color);
-		x = renderer.overlapx(x);
-		y = renderer.overlapy(y);
+		//renderer.atlas.findRegion(region).getRegionWidth();
+		x = renderer.overlapx(x, renderer.atlas.findRegion(region).getRegionWidth());
+		y = renderer.overlapy(y, renderer.atlas.findRegion(region).getRegionHeight());
 		if(type == LayerType.SPRITE){
 			if(scale != 1f){
 				renderer.drawscl(region, x, y, scale);
@@ -43,9 +44,9 @@ public class Layer implements Comparable<Layer>{
 			renderer.batch.draw(texture, x - texture.getRegionWidth() / 2, y - texture.getRegionHeight() / 2, texture.getRegionHeight() / 2, texture.getRegionWidth() / 2, texture.getRegionWidth(), texture.getRegionHeight(), 1f, 1f, rotation);
 		}
 	}
-	
+
 	public Layer addShadow(){
-		Entity.renderer.layer(x, y).set(this).setColor(shadowcolor.cpy().mul(1, 1, 1, this.color.a)).setLayer(shadowlayer).translate(0, shadowoffset);
+		//Entity.renderer.layer(x, y).set(this).setColor(shadowcolor.cpy().mul(1, 1, 1, this.color.a)).setLayer(shadowlayer).translate(0, shadowoffset);
 		return this;
 	}
 

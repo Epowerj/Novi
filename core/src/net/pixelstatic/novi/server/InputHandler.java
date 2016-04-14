@@ -8,9 +8,9 @@ import com.badlogic.gdx.utils.Queue;
 public class InputHandler{
 	public Player player;
 	public Queue<InputType> inputqueue = new Queue<InputType>(6);
-	private InputType lastinput;
+	//private InputType lastinput;
 	private boolean leftmousedown, rightmousedown;
-	private int mousehold = 0;
+	//private int mousehold = 0;
 	
 	public InputHandler(Player player){
 		this.player = player;
@@ -27,7 +27,7 @@ public class InputHandler{
 		}else if (type == InputType.LEFT_CLICK_UP){
 			leftmousedown = false;
 		}
-		lastinput = type;
+		//lastinput = type;
 	}
 	
 	public boolean leftMouseDown(){

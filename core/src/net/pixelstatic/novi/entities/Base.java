@@ -10,9 +10,12 @@ import net.pixelstatic.novi.entities.effects.*;
 import net.pixelstatic.novi.network.*;
 import net.pixelstatic.novi.network.Syncable.GlobalSyncable;
 import net.pixelstatic.novi.utils.Angles;
-import net.pixelstatic.novi.world.*;
+import net.pixelstatic.novi.world.Block;
+import net.pixelstatic.novi.world.BlockUpdate;
+import net.pixelstatic.novi.world.Material;
 
-import com.badlogic.gdx.math.*;
+import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 
 @GlobalSyncable
 public class Base extends Enemy implements Syncable{
@@ -23,9 +26,10 @@ public class Base extends Enemy implements Syncable{
 	public Block[][] blocks;
 	public boolean[][] updated;
 	public int spawned;
-	private String texture;
+	private String texture= "titanship";
 
-	{
+	{	
+		velocity = new Vector2(0,1);
 		blocks = new Block[size][size];
 		updated = new boolean[size][size];
 		generateBlocks();
@@ -37,7 +41,7 @@ public class Base extends Enemy implements Syncable{
 		for(int x = 0;x < size;x ++){
 			for(int y = 0;y < size;y ++){
 				blocks[x][y] = new Block(x, y, Material.air);
-				if(Vector2.dst(x, y, size / 2f, size / 2f) < 4.5f) blocks[x][y].setMaterial(Material.ironblock);
+				//if(Vector2.dst(x, y, size / 2f, size / 2f) < 4.5f) blocks[x][y].setMaterial(Material.ironblock);
 			}
 		}
 		int o = 3;
@@ -45,7 +49,7 @@ public class Base extends Enemy implements Syncable{
 		blocks[size - o][o].setMaterial(Material.turret);
 		blocks[o][size - o].setMaterial(Material.turret);
 		blocks[size - o][size - o].setMaterial(Material.turret);
-		blocks[size / 2][1].setMaterial(Material.dronemaker);
+		blocks[size / 2][2].setMaterial(Material.dronemaker);
 		blocks[size / 2][size / 2].setMaterial(Material.bigturret);
 	}
 
@@ -161,7 +165,7 @@ public class Base extends Enemy implements Syncable{
 				block.getMaterial().draw(block, this, x, y);
 			}
 		}
-		if(texture != null) renderer.layer(texture, x, y).setLayer( -2).setRotation(rotation).addShadow();
+		if(texture != null) renderer.layer(texture, x , y).setLayer( -2).setRotation(rotation).addShadow();
 	}
 
 	@Override
@@ -174,12 +178,14 @@ public class Base extends Enemy implements Syncable{
 				updates.add(new BlockUpdate(block));
 			}
 		}
-		return new BaseSyncBuffer(updates, rotation);
+		return new BaseSyncBuffer(updates, rotation, x, y);
 	}
 
 	@Override
 	public void readSync(SyncBuffer buffer){
 		this.rotation = ((BaseSyncBuffer)buffer).rotation;
+		this.x = buffer.x;
+		this.y = buffer.y;
 		for(BlockUpdate update : ((BaseSyncBuffer)buffer).updates){
 			update.apply(blocks);
 		}
@@ -195,6 +201,10 @@ public class Base extends Enemy implements Syncable{
 				block.getMaterial().update(block, this);
 			}
 		}
+		
+		velocity.setLength(1f);
+		velocity.rotate(0.1f);
+		rotation = velocity.angle()-90;
 	}
 
 	public void setTexture(String texture){
@@ -206,8 +216,8 @@ public class Base extends Enemy implements Syncable{
 	}
 
 	public Vector2 world(int x, int y){
-		float relx = (x * Material.blocksize - size / 2f * Material.blocksize + Material.blocksize / 2f);
-		float rely = (y * Material.blocksize - size / 2f * Material.blocksize + Material.blocksize / 2f);
+		float relx = (x * Material.blocksize - size / 2f * Material.blocksize);
+		float rely = (y * Material.blocksize - size / 2f * Material.blocksize);
 		Vector2 v = Angles.rotate(relx, rely, rotation);
 		v.add(this.x, this.y);
 		return v;

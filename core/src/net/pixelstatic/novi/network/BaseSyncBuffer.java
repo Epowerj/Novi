@@ -12,8 +12,10 @@ public class BaseSyncBuffer extends SyncBuffer{
 		
 	}
 	
-	public BaseSyncBuffer(ArrayList<BlockUpdate> updates, float rotation){
+	public BaseSyncBuffer(ArrayList<BlockUpdate> updates, float rotation, float x, float y){
 		this.updates = updates;
 		this.rotation = rotation;
+		this.x = x;
+		this.y = y;
 	}
 }

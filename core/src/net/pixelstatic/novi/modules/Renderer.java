@@ -3,10 +3,12 @@ package net.pixelstatic.novi.modules;
 import java.util.Random;
 
 import net.pixelstatic.novi.Novi;
-import net.pixelstatic.novi.entities.*;
+import net.pixelstatic.novi.entities.Entity;
+import net.pixelstatic.novi.entities.Player;
 import net.pixelstatic.novi.entities.effects.BreakEffect;
-import net.pixelstatic.novi.sprites.*;
-import net.pixelstatic.novi.utils.WorldUtils;
+import net.pixelstatic.novi.sprites.Layer;
+import net.pixelstatic.novi.sprites.LayerList;
+import net.pixelstatic.novi.sprites.NoviAtlas;
 import net.pixelstatic.novi.world.NoviMapRenderer;
 
 import com.badlogic.gdx.Gdx;
@@ -16,7 +18,8 @@ import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
-import com.badlogic.gdx.math.*;
+import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Matrix4;
 
 public class Renderer extends Module{
 	private float cameraShakeDuration, cameraShakeIntensity, cameraDrag;
@@ -72,6 +75,7 @@ public class Renderer extends Module{
 		clearScreen();
 		maprenderer.setView(camera);
 		renderMap();
+		
 		batch.begin();
 		drawLayers();
 		batch.end();
@@ -100,7 +104,7 @@ public class Renderer extends Module{
 		batch.draw(region, 1, 1);
 
 		if(debug){
-			float f = ((WorldUtils.bound(camera.unproject(new Vector3(Gdx.input.getX(),Gdx.graphics.getHeight()/2,0)).x)));
+		//	float f = ((WorldUtils.bound(camera.unproject(new Vector3(Gdx.input.getX(),Gdx.graphics.getHeight()/2,0)).x)));
 			font.setColor(Color.ORANGE);
 			font.draw(batch, "FPS: " + Gdx.graphics.getFramesPerSecond(), 0, gheight());
 			font.draw(batch, "Ping: " + (network.client.getReturnTripTime() + Network.ping * 2), 0, gheight() - 5);
@@ -219,6 +223,22 @@ public class Renderer extends Module{
 
 	public void color(float r, float g, float b, float a){
 		batch.setColor(new Color(r, g, b, a));
+	}
+	
+	public float overlapx(float i, float r){
+		if(MathUtils.isEqual(i, camera.position.x, (camera.viewportWidth * camera.zoom) / 2f + 10f + r)){
+			return i;
+		}else{
+			return i < World.worldSize/2f ? i + World.worldSize : i - World.worldSize;
+		}
+	}
+	
+	public float overlapy(float i, float r){
+		if(MathUtils.isEqual(i, camera.position.y, (camera.viewportHeight * camera.zoom) / 2f + 10 + r)){
+			return i;
+		}else{
+			return i < World.worldSize/2f ? i + World.worldSize : i - World.worldSize;
+		}
 	}
 	
 	public float overlapx(float i){

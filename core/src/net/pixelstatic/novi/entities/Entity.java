@@ -6,7 +6,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import net.pixelstatic.novi.Novi;
 import net.pixelstatic.novi.modules.Renderer;
 import net.pixelstatic.novi.server.NoviServer;
-import net.pixelstatic.novi.systems.*;
+import net.pixelstatic.novi.systems.EmptySystem;
+import net.pixelstatic.novi.systems.EntitySystem;
 import net.pixelstatic.novi.utils.WorldUtils;
 
 import com.badlogic.gdx.Gdx;
@@ -42,7 +43,7 @@ public abstract class Entity{
 	//whether or not this entity is loaded (is drawn/updated on screen)
 	//AAAAAAAggggg
 	public boolean loaded(float playerx, float playery){
-		return WorldUtils.loopDist(x, playerx, y, playery, 1000f);
+		return WorldUtils.loopDist(x, playerx, y, playery, 1300f);
 	}
 
 	//called when this entity object is recieved

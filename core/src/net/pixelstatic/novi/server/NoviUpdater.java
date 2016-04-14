@@ -3,10 +3,7 @@ package net.pixelstatic.novi.server;
 import java.util.HashSet;
 
 import net.pixelstatic.novi.Novi;
-import net.pixelstatic.novi.entities.*;
-import net.pixelstatic.novi.network.*;
-import net.pixelstatic.novi.network.Syncable.GlobalSyncable;
-import net.pixelstatic.novi.network.packets.WorldUpdatePacket;
+import net.pixelstatic.novi.entities.Entity;
 
 public class NoviUpdater{
 	NoviServer server;
@@ -24,43 +21,6 @@ public class NoviUpdater{
 			e.printStackTrace();
 			Novi.log("Entity update loop error!");
 		}
-	}
-
-	void checkCollisions(SolidEntity entity){
-		for(Entity other : Entity.entities.values()){
-			if( !inRange(entity, other, 10 + entity.material.getRectangle().width) || other.equals(entity) || !(other instanceof SolidEntity)) continue;
-			if( !collided.contains(other.GetID())){
-				SolidEntity othersolid = (SolidEntity)other;
-				if(othersolid.collides(entity) && entity.collides(othersolid)){
-					collisionEvent(entity, othersolid);
-					collided.add(entity.GetID());
-				}
-			}
-		}
-	}
-
-	boolean inRange(Entity a, Entity b, float rad){
-		return Math.abs(a.x - b.x) < rad && Math.abs(a.y - b.y) < rad;
-	}
-
-	void collisionEvent(SolidEntity entitya, SolidEntity entityb){
-		entitya.collisionEvent(entityb);
-		entityb.collisionEvent(entitya);
-	}
-
-	void sendSync(Player player){
-		WorldUpdatePacket worldupdate = new WorldUpdatePacket();
-		worldupdate.health = player.health;
-		for(Entity other : Entity.entities.values()){
-			if(other.equals(player) || !(other instanceof Syncable) || (other instanceof TimedSyncable && !((TimedSyncable)other).sync()) || (!other.getClass().isAnnotationPresent(GlobalSyncable.class) && !other.loaded(player.x, player.y))) continue;
-			Syncable sync = (Syncable)other;
-			worldupdate.updates.put(other.GetID(), sync.writeSync());
-		}
-		server.server.sendToTCP(player.connectionID(), worldupdate);
-	}
-
-	public void pingPlayer(Player player){
-		player.connection.updateReturnTripTime();
 	}
 	
 	public long frameID(){
