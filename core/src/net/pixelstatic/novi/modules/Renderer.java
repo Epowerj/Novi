@@ -10,8 +10,10 @@ import net.pixelstatic.novi.sprites.Layer;
 import net.pixelstatic.novi.sprites.LayerList;
 import net.pixelstatic.novi.sprites.NoviAtlas;
 import net.pixelstatic.novi.world.NoviMapRenderer;
+import net.pixelstatic.utils.GifRecorder;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
@@ -38,7 +40,8 @@ public class Renderer extends Module{
 	public Player player; //player object from ClientData module
 	World world; // world module
 	FrameBuffer buffer;
-	boolean debug = true;
+	GifRecorder recorder;
+	boolean debug = true, recorderopen;
 
 	public Renderer(Novi novi){
 		super(novi);
@@ -51,6 +54,7 @@ public class Renderer extends Module{
 		layout = new GlyphLayout();
 		buffer = new FrameBuffer(Format.RGBA8888, Gdx.graphics.getWidth() / pixelscale, Gdx.graphics.getHeight() / pixelscale, false);
 		buffer.getColorBufferTexture().setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
+		recorder = new GifRecorder(batch, 0.2f);
 		Entity.renderer = this;
 		BreakEffect.createChunks();
 	}
@@ -115,6 +119,26 @@ public class Renderer extends Module{
 			batch.draw(atlas.findRegion("blank"), 0, 0, gwidth(), gheight());
 			color(Color.WHITE);
 			drawFont(network.initialconnect() ? "Connecting..." : "Failed to connect to server.", gwidth() / 2, gheight() / 2);
+		}
+		
+		if(Gdx.input.isKeyJustPressed(Keys.R)){
+			if(recorder.isRecording()){
+				recorder.finishRecording();
+				recorder.clearFrames();
+			}
+			recorderopen = !recorderopen;
+		}
+		
+		if(recorderopen){
+			recorder.update(atlas.findRegion("blank"), Gdx.graphics.getDeltaTime() * 60f);
+			if(Gdx.input.isKeyJustPressed(Keys.T)){
+				if(!recorder.isRecording()){
+					recorder.startRecording();
+				}else{
+					recorder.finishRecording();
+					recorder.writeGIF(Gdx.files.local("gifimages"), Gdx.files.local("gifexport"));
+				}
+			}
 		}
 	}
 
