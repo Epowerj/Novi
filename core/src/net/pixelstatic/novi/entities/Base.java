@@ -10,6 +10,7 @@ import net.pixelstatic.novi.entities.effects.*;
 import net.pixelstatic.novi.network.*;
 import net.pixelstatic.novi.network.Syncable.GlobalSyncable;
 import net.pixelstatic.novi.utils.Angles;
+import net.pixelstatic.novi.utils.InterpolationData;
 import net.pixelstatic.novi.world.Block;
 import net.pixelstatic.novi.world.BlockUpdate;
 import net.pixelstatic.novi.world.Material;
@@ -27,6 +28,7 @@ public class Base extends Enemy implements Syncable{
 	public boolean[][] updated;
 	public int spawned;
 	private String texture= "titanship";
+	transient private InterpolationData data = new InterpolationData();
 
 	{	
 		velocity = new Vector2(0,1);
@@ -159,6 +161,7 @@ public class Base extends Enemy implements Syncable{
 
 	@Override
 	public void Draw(){
+		data.update(this);
 		for(int x = 0;x < size;x ++){
 			for(int y = 0;y < size;y ++){
 				Block block = blocks[x][y];
@@ -185,8 +188,7 @@ public class Base extends Enemy implements Syncable{
 	@Override
 	public void readSync(SyncBuffer buffer){
 		this.rotation = ((BaseSyncBuffer)buffer).rotation;
-		this.x = buffer.x;
-		this.y = buffer.y;
+		data.push(this, buffer.x, buffer.y, 0f);
 		for(BlockUpdate update : ((BaseSyncBuffer)buffer).updates){
 			update.apply(blocks);
 		}

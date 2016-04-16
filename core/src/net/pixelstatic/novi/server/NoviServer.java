@@ -3,15 +3,21 @@ package net.pixelstatic.novi.server;
 import java.util.HashMap;
 
 import net.pixelstatic.novi.Novi;
-import net.pixelstatic.novi.entities.*;
-import net.pixelstatic.novi.modules.*;
+import net.pixelstatic.novi.entities.Base;
+import net.pixelstatic.novi.entities.Entity;
+import net.pixelstatic.novi.entities.Player;
+import net.pixelstatic.novi.modules.Network;
+import net.pixelstatic.novi.modules.World;
 import net.pixelstatic.novi.network.Registrator;
 import net.pixelstatic.novi.network.packets.*;
-import net.pixelstatic.novi.systems.*;
+import net.pixelstatic.novi.systems.CollisionSystem;
+import net.pixelstatic.novi.systems.SyncSystem;
 import net.pixelstatic.novi.utils.Loggy;
 
 import com.badlogic.gdx.math.MathUtils;
-import com.esotericsoftware.kryonet.*;
+import com.esotericsoftware.kryonet.Connection;
+import com.esotericsoftware.kryonet.Listener;
+import com.esotericsoftware.kryonet.Server;
 import com.esotericsoftware.minlog.Log;
 
 public class NoviServer{
@@ -143,7 +149,7 @@ public class NoviServer{
 
 	private void addEntities(){
 		//new Base().setPosition(10, 100).AddSelf();
-		for(int i = 1;i < 20;i ++){
+		for(int i = 1;i < 40;i ++){
 			new Base().setPosition(100+ MathUtils.random(World.worldSize-100), 100 + MathUtils.random(World.worldSize-100)).AddSelf();
 		}
 	}

@@ -13,7 +13,7 @@ import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 
 public class Network extends Module{
-	public static final String ip = System.getProperty("user.name").equals("cobalt") ? "localhost" : "75.179.181.100";
+	public static final String ip = System.getProperty("user.name").equals("cobalt") ? "localhost" : "107.11.48.79";
 	public static final int port = 7576;
 	public static final int ping = 0;
 	private boolean connected = true;

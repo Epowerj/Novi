@@ -6,8 +6,12 @@ import static net.pixelstatic.novi.utils.WorldUtils.relative3;
 import static net.pixelstatic.novi.utils.WorldUtils.wrap;
 import net.pixelstatic.novi.entities.effects.ExplosionEffect;
 import net.pixelstatic.novi.items.ProjectileType;
-import net.pixelstatic.novi.network.*;
-import net.pixelstatic.novi.utils.*;
+import net.pixelstatic.novi.network.EnemySyncBuffer;
+import net.pixelstatic.novi.network.SyncBuffer;
+import net.pixelstatic.novi.network.Syncable;
+import net.pixelstatic.novi.server.NoviServer;
+import net.pixelstatic.novi.utils.InterpolationData;
+import net.pixelstatic.novi.utils.WorldUtils;
 
 import com.badlogic.gdx.math.MathUtils;
 
@@ -92,6 +96,7 @@ public abstract class Enemy extends DestructibleEntity implements Syncable{
 
 	public void Update(){
 		UpdateVelocity();
+		if(!NoviServer.active)data.update(this);
 	}
 
 	@Override

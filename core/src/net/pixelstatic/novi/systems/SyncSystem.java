@@ -1,14 +1,17 @@
 package net.pixelstatic.novi.systems;
 
-import net.pixelstatic.novi.entities.*;
-import net.pixelstatic.novi.network.*;
+import net.pixelstatic.novi.entities.Entity;
+import net.pixelstatic.novi.entities.Player;
+import net.pixelstatic.novi.network.Syncable;
 import net.pixelstatic.novi.network.Syncable.GlobalSyncable;
+import net.pixelstatic.novi.network.TimedSyncable;
 import net.pixelstatic.novi.network.packets.WorldUpdatePacket;
 
 public class SyncSystem extends EntitySystem{
 
 	@Override
 	public void update(Entity entity){
+		if(entity.server.updater.frameID() % 3 != 0) return;
 		Player player = (Player)entity;
 		WorldUpdatePacket worldupdate = new WorldUpdatePacket();
 		worldupdate.health = player.health;

@@ -1,11 +1,15 @@
 package net.pixelstatic.novi.utils;
 
-import net.pixelstatic.novi.entities.*;
+import net.pixelstatic.novi.entities.Entity;
+import net.pixelstatic.novi.entities.FlyingEntity;
+import net.pixelstatic.novi.entities.Player;
 
-import com.badlogic.gdx.math.*;
+import com.badlogic.gdx.math.Interpolation;
+import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector2;
 
 public class InterpolationData{
-	static final float correctrange = 100f;
+	static final float correctrange = 40f;
 	static Vector2 temp1 = new Vector2();
 	static Vector2 temp2 = new Vector2();
 	long lastupdate = -1;
@@ -20,12 +24,19 @@ public class InterpolationData{
 		lastrotation = rotation;
 		if(Math.abs(e.x - x) > correctrange || Math.abs(e.y - y) > correctrange){
 			e.setPosition(x, y);
+			lastx = 0;
+			lasty = 0;
 		}
 	}
 	
 	public void update(Entity entity){
+		
 		temp1.set(entity.x, entity.y);
 		temp2.set(lastx + entity.x,lasty + entity.y);
+		if(entity instanceof FlyingEntity){
+		//	temp2.add(((FlyingEntity)entity).velocity.cpy());
+	//		if(entity instanceof Drone)Novi.log("!!!!");
+		}
 		if(entity instanceof Player){
 			Player player =(Player)entity;
 			if(player.velocity != null)
